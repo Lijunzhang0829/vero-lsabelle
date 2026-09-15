@@ -1,0 +1,139 @@
+{
+  "benchmark_id": "4a9653c8e4b28ccd9a68e0c9f2b35cd1a6a6d3fe0b664670bdb6ecdd44f18be8",
+  "status": "budget_exhausted",
+  "iterations": [
+    {
+      "iteration": 0,
+      "agent": {
+        "elapsed_seconds": 1796.874832391739,
+        "event_count": 349,
+        "model": "gpt-6-astra",
+        "num_turns": 1,
+        "ok": true,
+        "reasoning_effort": "medium",
+        "returncode": 0,
+        "timed_out": false,
+        "total_cost_usd": null,
+        "usage": {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 14098176,
+          "input_tokens": 14379716,
+          "output_tokens": 35482,
+          "reasoning_output_tokens": 9967
+        }
+      },
+      "proved": 56,
+      "disproved": 0,
+      "total": 287,
+      "complete": false,
+      "evaluation_seconds": 280.7620017337613,
+      "modules": {
+        "Vero_Refine_ArchAcc_R": {
+          "total": 24,
+          "proved": 3,
+          "unfilled": 21
+        },
+        "Vero_Refine_Arch_R": {
+          "total": 6,
+          "unfilled": 5,
+          "proved": 1
+        },
+        "Vero_Refine_Bits_R": {
+          "total": 2,
+          "proved": 2
+        },
+        "Vero_Refine_CNodeInv_R": {
+          "total": 7,
+          "unfilled": 4,
+          "proved": 3
+        },
+        "Vero_Refine_CSpace1_R": {
+          "total": 12,
+          "unfilled": 12
+        },
+        "Vero_Refine_CSpace_R": {
+          "total": 8,
+          "unfilled": 8
+        },
+        "Vero_Refine_Detype_R": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_Refine_Finalise_R": {
+          "total": 13,
+          "unfilled": 10,
+          "proved": 3
+        },
+        "Vero_Refine_InterruptAcc_R": {
+          "total": 3,
+          "proved": 3
+        },
+        "Vero_Refine_Interrupt_R": {
+          "total": 14,
+          "unfilled": 7,
+          "proved": 7
+        },
+        "Vero_Refine_IpcCancel_R": {
+          "total": 5,
+          "unfilled": 5
+        },
+        "Vero_Refine_Ipc_R": {
+          "total": 31,
+          "unfilled": 29,
+          "proved": 2
+        },
+        "Vero_Refine_KHeap_R": {
+          "total": 5,
+          "proved": 2,
+          "unfilled": 3
+        },
+        "Vero_Refine_Refine": {
+          "total": 10,
+          "proved": 4,
+          "unfilled": 6
+        },
+        "Vero_Refine_Retype_R": {
+          "total": 4,
+          "unfilled": 3,
+          "proved": 1
+        },
+        "Vero_Refine_Schedule_R": {
+          "total": 20,
+          "unfilled": 15,
+          "proved": 5
+        },
+        "Vero_Refine_Syscall_R": {
+          "total": 16,
+          "proved": 2,
+          "unfilled": 14
+        },
+        "Vero_Refine_TcbAcc_R": {
+          "total": 34,
+          "proved": 10,
+          "unfilled": 24
+        },
+        "Vero_Refine_Tcb_R": {
+          "total": 33,
+          "proved": 6,
+          "unfilled": 27
+        },
+        "Vero_Refine_Untyped_R": {
+          "total": 6,
+          "unfilled": 6
+        },
+        "Vero_Refine_VSpace_R": {
+          "total": 33,
+          "unfilled": 31,
+          "proved": 2
+        }
+      },
+      "shell_commands": {
+        "completed": 167,
+        "succeeded": 116,
+        "shell_commands_mentioning_check_tool": 70,
+        "failed": 51
+      },
+      "cli_errors": []
+    }
+  ]
+}

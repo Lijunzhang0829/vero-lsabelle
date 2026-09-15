@@ -1,0 +1,2305 @@
+{
+  "backend": "isabelle",
+  "benchmark_id": "4a9653c8e4b28ccd9a68e0c9f2b35cd1a6a6d3fe0b664670bdb6ecdd44f18be8",
+  "extras": [],
+  "file_errors": {},
+  "schema_version": 1,
+  "slots": {
+    "c0001:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0001:prove": {
+      "body": "by (cases c; auto simp: arch_derive_cap_def ArchRetype_H.ARM_H.deriveCap_def isPageTableCap_def isPageDirectoryCap_def isPageCap_def isASIDControlCap_def isASIDPoolCap_def corres_underlying_def throwError_def returnOk_def return_def split: option.splits)",
+      "found": true
+    },
+    "c0002:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0002:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0003:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0003:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0004:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0004:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0005:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0005:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0006:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0006:prove": {
+      "body": "proof -\n  have gap: \"\\<And>s p n q. \\<lbrakk>ps_clear p n s; is_aligned p n; q \\<in> dom (ksPSpace s); p < q\\<rbrakk> \\<Longrightarrow> \\<not> q - p < (2::word32)^n\"\n  proof -\n    fix s p n q\n    assume clear: \"ps_clear p n s\" and al: \"is_aligned p n\" and mem: \"q \\<in> dom (ksPSpace s)\" and lt: \"p < q\"\n    show \"\\<not> q - p < (2::word32)^n\"\n    proof\n      assume less: \"q - p < (2::word32)^n\"\n      have le: \"q \\<le> p + 2^n - 1\"\n        using word_plus_mono_right[OF word_le_minus_one_leq[OF less] is_aligned_no_overflow'[OF al]] by (simp add: algebra_simps)\n      have inside: \"q \\<in> ({p .. p + 2^n - 1} - {p}) \\<inter> dom (ksPSpace s)\"\n        using mem lt le by (simp add: atLeastAtMost_iff less_imp_le)\n      show False using clear inside by (simp add: ps_clear_def shiftl_t2n)\n    qed\n  qed\n  have min_gap: \"\\<And>s p n. \\<lbrakk>ps_clear p n s; is_aligned p n; {k \\<in> dom (ksPSpace s). p < k} \\<noteq> {}\\<rbrakk> \\<Longrightarrow> \\<not> Min {k \\<in> dom (ksPSpace s). p < k} - p < (2::word32)^n\"\n  proof -\n    fix s p n\n    assume c: \"ps_clear p n s\" and a: \"is_aligned p n\" and ne: \"{k \\<in> dom (ksPSpace s). p < k} \\<noteq> {}\"\n    have m: \"Min {k \\<in> dom (ksPSpace s). p < k} \\<in> {k \\<in> dom (ksPSpace s). p < k}\"\n      by (rule Min_in[OF finite_class.finite ne])\n    show \"\\<not> Min {k \\<in> dom (ksPSpace s). p < k} - p < (2::word32)^n\"\n      using gap[OF c a] m by blast\n  qed\n  have get: \"\\<And>s ep. \\<lbrakk>ksPSpace s p = Some (KOArch (KOASIDPool ep)); is_aligned p (objBitsKO (KOArch (KOASIDPool ep))); ps_clear p (objBitsKO (KOArch (KOASIDPool ep))) s\\<rbrakk> \\<Longrightarrow> getObject p s = ({(ep,s)},False)\"\n    using min_gap\n    apply (simp add: objBits_def getObject_def lookupAround2_def lookupAround_def psMap_def Let_def loadObject_asidpool loadObject_default_def projectKO_def projectKO_opts_defs alignCheck_def magnitudeCheck_def maybeToMonad_def maybe_def gets_def get_def bind_def return_def assert_def when_def unless_def is_aligned_mask)\n    apply (auto simp: objBits_def)\n    apply blast\n    done\n  have abs: \"\\<And>s. asid_pool_at p s \\<Longrightarrow> \\<exists>ep. kheap s p = Some (ArchObj (ARM_A.ASIDPool ep))\"\n    by (clarsimp simp: obj_at_def)\n  have con: \"\\<And>s s' ep. \\<lbrakk>(s,s') \\<in> state_relation; kheap s p = Some (ArchObj (ARM_A.ASIDPool ep)); pspace_aligned' s'; pspace_distinct' s'\\<rbrakk> \\<Longrightarrow> \\<exists>ep'. ksPSpace s' p = Some (KOArch (KOASIDPool ep')) \\<and> is_aligned p (objBitsKO (KOArch (KOASIDPool ep'))) \\<and> ps_clear p (objBitsKO (KOArch (KOASIDPool ep'))) s'\"\n  proof -\n    fix s s' ep\n    assume sr: \"(s,s') \\<in> state_relation\" and kh: \"kheap s p = Some (ArchObj (ARM_A.ASIDPool ep))\" and al: \"pspace_aligned' s'\" and di: \"pspace_distinct' s'\"\n    have ps: \"pspace_relation (kheap s) (ksPSpace s')\" using sr by (simp add: state_relation_def)\n    have dp: \"p \\<in> pspace_dom (kheap s)\"\n      unfolding pspace_dom_def\n      apply (rule UN_I[where a=p])\n      using kh by (auto simp: dom_def)\n    have d: \"p \\<in> dom (ksPSpace s')\"\n      using ps dp by (simp add: pspace_relation_def)\n    obtain ko where ko: \"ksPSpace s' p = Some ko\" using d by auto\n    have rr: \"\\<forall>x\\<in>dom (kheap s). \\<forall>(y,P)\\<in>obj_relation_cuts (the (kheap s x)) x. P (the (kheap s x)) (the (ksPSpace s' y))\"\n      using ps by (simp add: pspace_relation_def)\n    have r: \"other_obj_relation (ArchObj (ARM_A.ASIDPool ep)) ko\"\n      using rr[rule_format, of p \"(p,other_obj_relation)\"] kh ko by (auto simp: dom_def)\n    have k: \"\\<exists>ep'. ko = KOArch (KOASIDPool ep')\"\n      using r\n      apply (cases ko; simp add: other_obj_relation_def)\n      subgoal for ao by (cases ao; auto)\n      done\n    show \"\\<exists>ep'. ksPSpace s' p = Some (KOArch (KOASIDPool ep')) \\<and> is_aligned p (objBitsKO (KOArch (KOASIDPool ep'))) \\<and> ps_clear p (objBitsKO (KOArch (KOASIDPool ep'))) s'\"\n      using k ko al[unfolded pspace_aligned'_def, rule_format, OF d] di[unfolded pspace_distinct'_def, rule_format, OF d] by auto\n  qed\n  have rel: \"\\<And>s s' ep ep'. \\<lbrakk>(s,s') \\<in> state_relation; kheap s p = Some (ArchObj (ARM_A.ASIDPool ep)); ksPSpace s' p = Some (KOArch (KOASIDPool ep'))\\<rbrakk> \\<Longrightarrow> asid_pool_relation ep ep'\"\n  proof -\n    fix s s' ep ep'\n    assume sr: \"(s,s') \\<in> state_relation\" and kh: \"kheap s p = Some (ArchObj (ARM_A.ASIDPool ep))\" and ch: \"ksPSpace s' p = Some (KOArch (KOASIDPool ep'))\"\n    have ps: \"pspace_relation (kheap s) (ksPSpace s')\" using sr by (simp add: state_relation_def)\n    have rr: \"\\<forall>x\\<in>dom (kheap s). \\<forall>(y,P)\\<in>obj_relation_cuts (the (kheap s x)) x. P (the (kheap s x)) (the (ksPSpace s' y))\"\n      using ps by (simp add: pspace_relation_def)\n    have \"other_obj_relation (ArchObj (ARM_A.ASIDPool ep)) (KOArch (KOASIDPool ep'))\"\n      using rr[rule_format, of p \"(p,other_obj_relation)\"] kh ch by (auto simp: dom_def)\n    then show \"asid_pool_relation ep ep'\" by (simp add: other_obj_relation_def)\n  qed\n  have aget: \"\\<And>s ep. kheap s p = Some (ArchObj (ARM_A.ASIDPool ep)) \\<Longrightarrow> get_asid_pool p s = ({(ep,s)},False)\"\n    by (simp add: get_asid_pool_def get_arch_obj_def get_object_def gets_def get_def bind_def return_def assert_def partial_inv_def a_type_def)\n  show ?thesis using abs con rel get aget by (fastforce simp: corres_underlying_def asid_pool_relation_def)\nqed",
+      "found": true
+    },
+    "c0007:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0007:prove": {
+      "body": "proof -\n  assume eq: \"p = p'\"\n  have gap: \"\\<And>s p n q. \\<lbrakk>ps_clear p n s; is_aligned p n; q \\<in> dom (ksPSpace s); p < q\\<rbrakk> \\<Longrightarrow> \\<not> q - p < (2::word32)^n\"\n  proof -\n    fix s p n q\n    assume clear: \"ps_clear p n s\" and al: \"is_aligned p n\" and mem: \"q \\<in> dom (ksPSpace s)\" and lt: \"p < q\"\n    show \"\\<not> q - p < (2::word32)^n\"\n    proof\n      assume less: \"q - p < (2::word32)^n\"\n      have le: \"q \\<le> p + 2^n - 1\"\n        using word_plus_mono_right[OF word_le_minus_one_leq[OF less] is_aligned_no_overflow'[OF al]] by (simp add: algebra_simps)\n      have inside: \"q \\<in> ({p .. p + 2^n - 1} - {p}) \\<inter> dom (ksPSpace s)\"\n        using mem lt le by (simp add: atLeastAtMost_iff less_imp_le)\n      show False using clear inside by (simp add: ps_clear_def shiftl_t2n)\n    qed\n  qed\n  have min_gap: \"\\<And>s p n. \\<lbrakk>ps_clear p n s; is_aligned p n; {k \\<in> dom (ksPSpace s). p < k} \\<noteq> {}\\<rbrakk> \\<Longrightarrow> \\<not> Min {k \\<in> dom (ksPSpace s). p < k} - p < (2::word32)^n\"\n  proof -\n    fix s p n\n    assume c: \"ps_clear p n s\" and a: \"is_aligned p n\" and ne: \"{k \\<in> dom (ksPSpace s). p < k} \\<noteq> {}\"\n    have m: \"Min {k \\<in> dom (ksPSpace s). p < k} \\<in> {k \\<in> dom (ksPSpace s). p < k}\"\n      by (rule Min_in[OF finite_class.finite ne])\n    show \"\\<not> Min {k \\<in> dom (ksPSpace s). p < k} - p < (2::word32)^n\"\n      using gap[OF c a] m by blast\n  qed\n  have get: \"\\<And>s ep. \\<lbrakk>ksPSpace s p = Some (KOArch (KOASIDPool ep)); is_aligned p (objBitsKO (KOArch (KOASIDPool ep))); ps_clear p (objBitsKO (KOArch (KOASIDPool ep))) s\\<rbrakk> \\<Longrightarrow> getObject p s = ({(ep,s)},False)\"\n    using min_gap\n    apply (simp add: objBits_def getObject_def lookupAround2_def lookupAround_def psMap_def Let_def loadObject_asidpool loadObject_default_def projectKO_def projectKO_opts_defs alignCheck_def magnitudeCheck_def maybeToMonad_def maybe_def gets_def get_def bind_def return_def assert_def when_def unless_def is_aligned_mask)\n    apply (auto simp: objBits_def)\n    apply blast\n    done\n  have abs: \"\\<And>s. asid_pool_at p s \\<Longrightarrow> \\<exists>ep. kheap s p = Some (ArchObj (ARM_A.ASIDPool ep))\"\n    by (clarsimp simp: obj_at_def)\n  have con: \"\\<And>s. asid_pool_at' p s \\<Longrightarrow> \\<exists>ep. ksPSpace s p = Some (KOArch (KOASIDPool ep)) \\<and> is_aligned p (objBitsKO (KOArch (KOASIDPool ep))) \\<and> ps_clear p (objBitsKO (KOArch (KOASIDPool ep))) s\"\n        apply (clarsimp simp: typ_at'_def ko_wp_at'_def)\n    subgoal for s ko\n      apply (cases ko; simp add: koTypeOf_def)\n      subgoal for ao by (cases ao; auto simp: koTypeOf_def archTypeOf_def)\n      done\n    done\n  have rel: \"\\<And>s s' ep ep'. \\<lbrakk>(s,s') \\<in> state_relation; kheap s p = Some (ArchObj (ARM_A.ASIDPool ep)); ksPSpace s' p = Some (KOArch (KOASIDPool ep'))\\<rbrakk> \\<Longrightarrow> asid_pool_relation ep ep'\"\n  proof -\n    fix s s' ep ep'\n    assume sr: \"(s,s') \\<in> state_relation\" and kh: \"kheap s p = Some (ArchObj (ARM_A.ASIDPool ep))\" and ch: \"ksPSpace s' p = Some (KOArch (KOASIDPool ep'))\"\n    have ps: \"pspace_relation (kheap s) (ksPSpace s')\" using sr by (simp add: state_relation_def)\n    have rr: \"\\<forall>x\\<in>dom (kheap s). \\<forall>(y,P)\\<in>obj_relation_cuts (the (kheap s x)) x. P (the (kheap s x)) (the (ksPSpace s' y))\"\n      using ps by (simp add: pspace_relation_def)\n    have \"other_obj_relation (ArchObj (ARM_A.ASIDPool ep)) (KOArch (KOASIDPool ep'))\"\n      using rr[rule_format, of p \"(p,other_obj_relation)\"] kh ch by (auto simp: dom_def)\n    then show \"asid_pool_relation ep ep'\" by (simp add: other_obj_relation_def)\n  qed\n  have aget: \"\\<And>s ep. kheap s p = Some (ArchObj (ARM_A.ASIDPool ep)) \\<Longrightarrow> get_asid_pool p s = ({(ep,s)},False)\"\n    by (simp add: get_asid_pool_def get_arch_obj_def get_object_def gets_def get_def bind_def return_def assert_def partial_inv_def a_type_def)\n  show ?thesis using eq abs con rel get aget by (fastforce simp: corres_underlying_def asid_pool_relation_def)\nqed",
+      "found": true
+    },
+    "c0008:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0008:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0009:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0009:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0010:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0010:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0011:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0011:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0012:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0012:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0013:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0013:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0014:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0014:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0015:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0015:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0016:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0016:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0017:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0017:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0018:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0018:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0019:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0019:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0020:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0020:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0021:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0021:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0022:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0022:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0023:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0023:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0024:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0024:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0025:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0025:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0026:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0026:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0027:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0027:prove": {
+      "body": "by (simp add: check_vp_alignment_def checkVPAlignment_def is_aligned_mask unlessE_def whenE_def throwError_def returnOk_def corres_underlying_def return_def dc_def)",
+      "found": true
+    },
+    "c0028:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0028:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0029:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0029:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0030:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0030:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0031:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0031:prove": {
+      "body": "by (simp add: getCurThread_def corres_gets state_relation_def)",
+      "found": true
+    },
+    "c0032:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0032:prove": {
+      "body": "by (simp add: getIdleThread_def corres_gets state_relation_def)",
+      "found": true
+    },
+    "c0033:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0033:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0034:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0034:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0035:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0035:prove": {
+      "body": "by (auto simp: spec_corres_def corres_underlying_def)",
+      "found": true
+    },
+    "c0036:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0036:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0037:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0037:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0038:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0038:prove": {
+      "body": "using x by (fastforce simp: spec_corres_def corres_underlying_def)",
+      "found": true
+    },
+    "c0039:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0039:prove": {
+      "body": "using P Q R by (fastforce simp: corres_underlying_def whenE_def throwError_def returnOk_def bindE_def lift_def bind_def return_def split: if_splits sum.splits)",
+      "found": true
+    },
+    "c0040:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0040:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0041:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0041:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0042:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0042:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0043:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0043:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0044:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0044:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0045:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0045:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0046:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0046:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0047:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0047:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0048:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0048:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0049:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0049:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0050:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0050:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0051:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0051:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0052:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0052:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0053:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0053:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0054:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0054:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0055:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0055:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0056:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0056:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0057:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0057:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0058:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0058:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0059:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0059:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0060:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0060:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0061:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0061:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0062:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0062:prove": {
+      "body": "by (simp add: arch_post_cap_deletion_def ArchRetype_H.ARM_H.postCapDeletion_def)",
+      "found": true
+    },
+    "c0063:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0063:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0064:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0064:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0065:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0065:prove": {
+      "body": "proof -\n  have [simp]: \"irq_state_relation irq_state.IRQInactive irqstate.IRQInactive\" by (simp add: irq_state_relation_def)\n  show ?thesis\n\nby (auto simp: deleted_irq_handler_def deletedIRQHandler_def set_irq_state_def setIRQState_def getInterruptState_def setInterruptState_def interrupt_state_relation_def do_machine_op_def doMachineOp_def maskInterrupt_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases dc_def)\nqed",
+      "found": true
+    },
+    "c0066:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0066:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0067:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0067:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0068:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0068:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0069:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0069:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0070:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0070:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0071:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0071:prove": {
+      "body": "by (cases cap; auto simp: post_cap_deletion_def Retype_H.postCapDeletion_def arch_post_cap_deletion_def ArchRetype_H.ARM_H.postCapDeletion_def intro: c0065_prove)",
+      "found": true
+    },
+    "c0072:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0072:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0073:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0073:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0074:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0074:prove": {
+      "body": "by (auto simp: get_irq_slot_def getIRQSlot_def getInterruptState_def locateSlotBasic_def liftM_def corres_underlying_def gets_def get_def bind_def return_def state_relation_def interrupt_state_relation_def cte_map_def shiftl_t2n objBits_def objBitsKO_def cte_level_bits_def cteSizeBits_def wordSizeCase_def ARM_H.wordBits_def word_size ARM_H.PPtr_def ARM_H.fromPPtr_def)",
+      "found": true
+    },
+    "c0075:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0075:prove": {
+      "body": "unfolding preemption_point_def update_work_units_ext_extended.dxo_eq reset_work_units_ext_extended.dxo_eq\nby (auto simp: preemptionPoint_def OR_choiceE_def wrap_ext_bool_det_ext_ext_def work_units_limit_reached_def update_work_units_def reset_work_units_def modifyWorkUnits_def getWorkUnits_def setWorkUnits_def work_units_limit_def FaultMonad_H.workUnitsLimit_def Kernel_Config.workUnitsLimit_def mk_ef_def whenE_def liftE_def bindE_def lift_def throwError_def returnOk_def do_machine_op_def doMachineOp_def getActiveIRQ_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases dc_def split: option.splits if_splits)",
+      "found": true
+    },
+    "c0076:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0076:prove": {
+      "body": "proof -\n  assume r: \"irq_state_relation state state'\"\n  have eq: \"(state = irq_state.IRQInactive) = (state' = irqstate.IRQInactive)\"\n    using r by (cases state; cases state'; simp add: irq_state_relation_def)\n  show ?thesis using r eq\n\nby (auto simp: set_irq_state_def setIRQState_def getInterruptState_def setInterruptState_def interrupt_state_relation_def do_machine_op_def doMachineOp_def maskInterrupt_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases dc_def)\nqed",
+      "found": true
+    },
+    "c0077:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0077:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0078:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0078:prove": {
+      "body": "by (cases i; auto simp: ArchInterrupt_H.ARM_H.invokeIRQHandler_def do_machine_op_def doMachineOp_def maskInterrupt_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases dc_def)",
+      "found": true
+    },
+    "c0079:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0079:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0080:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0080:prove": {
+      "body": "by (auto simp: arch_check_irq_def ArchInterrupt_H.ARM_H.checkIRQ_def rangeCheck_def minIRQ_def maxIRQ_def unlessE_def whenE_def throwError_def returnOk_def return_def corres_underlying_def dc_def)",
+      "found": true
+    },
+    "c0081:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0081:prove": {
+      "body": "by (auto simp: dec_domain_time_def decDomainTime_def intro!: corres_modify simp: state_relation_def swp_def cte_wp_at_cases)",
+      "found": true
+    },
+    "c0082:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0082:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0083:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0083:prove": {
+      "body": "proof -\n  have ex: \"\\<And>n. (\\<exists>v::invocation_label. fromEnum v = n) = (n \\<le> fromEnum (maxBound::invocation_label))\"\n  proof\n    fix n\n    assume \"\\<exists>v::invocation_label. fromEnum v = n\"\n    then obtain v :: invocation_label where \"fromEnum v = n\" by blast\n    then show \"n \\<le> fromEnum (maxBound::invocation_label)\" using maxBound_is_bound[of v] by simp\n  next\n    fix n\n    assume \"n \\<le> fromEnum (maxBound::invocation_label)\"\n    then have \"fromEnum (toEnum n :: invocation_label) = n\" by (rule from_to_enum)\n    then show \"\\<exists>v::invocation_label. fromEnum v = n\" by blast\n  qed\n  have labels: \"gen_invocation_type label = genInvocationType label\"\n    by (simp add: gen_invocation_type_def genInvocationType_def invocation_type_def invocationType_def data_to_nat_def Let_def ex)\n  assume r: \"list_all2 cap_relation (map fst caps) (map fst caps')\"\n  assume sl: \"list_all2 (\\<lambda>p pa. snd pa = cte_map (snd p)) caps caps'\"\n  show ?thesis\n  proof (cases caps)\n    case Nil\n    then have cs: \"caps' = []\" using r by simp\n    show ?thesis using Nil cs labels\n      by (cases \"genInvocationType label\"; auto simp: decode_irq_handler_invocation_def decodeIRQHandlerInvocation_def corres_underlying_def returnOk_def throwError_def return_def dc_def)\n  next\n    case (Cons x xs)\n    obtain c p where xp: \"x = (c,p)\" by (cases x)\n    obtain c' p' ys where cs: \"caps' = (c',p')#ys\" and cp: \"cap_relation c c'\" and pp: \"p' = cte_map p\"\n      using r sl Cons xp by (cases caps'; auto)\n    show ?thesis using Cons xp cs cp pp labels\n      by (cases \"genInvocationType label\"; cases c; auto simp: decode_irq_handler_invocation_def decodeIRQHandlerInvocation_def Let_def corres_underlying_def returnOk_def throwError_def return_def dc_def split: bool.splits)\n  qed\nqed",
+      "found": true
+    },
+    "c0084:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0084:prove": {
+      "body": "by (auto simp: get_irq_state_def getIRQState_def getInterruptState_def liftM_def corres_underlying_def gets_def get_def bind_def return_def state_relation_def interrupt_state_relation_def)",
+      "found": true
+    },
+    "c0085:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0085:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0086:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0086:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0087:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0087:prove": {
+      "body": "proof -\n  have rel: \"\\<And>a b. irq_state_relation a b \\<Longrightarrow> (a = irq_state.IRQInactive) = (b = irqstate.IRQInactive)\"\n    by (case_tac a; case_tac b; simp add: irq_state_relation_def)\n  show ?thesis\n    unfolding fun_app_def is_irq_active_def isIRQActive_def corres_liftM_simp corres_liftM2_simp\n    by (rule corres_rel_imp[OF c0084_prove]; auto dest: rel)\nqed",
+      "found": true
+    },
+    "c0088:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0088:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0089:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0089:prove": {
+      "body": "using no_fail_machine_op_lift[of \"setIRQTrigger_impl irq t\"]\nby (auto simp: do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases dc_def no_fail_def setIRQTrigger_def split: prod.splits)",
+      "found": true
+    },
+    "c0090:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0090:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0091:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0091:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0092:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0092:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0093:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0093:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0094:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0094:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0095:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0095:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0096:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0096:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0097:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0097:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0098:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0098:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0099:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0099:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0100:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0100:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0101:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0101:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0102:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0102:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0103:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0103:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0104:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0104:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0105:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0105:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0106:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0106:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0107:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0107:prove": {
+      "body": "using P by (auto simp: corres_underlying_def gets_the_def gets_def get_def bind_def assert_opt_def return_def fail_def dc_def split: option.splits)",
+      "found": true
+    },
+    "c0108:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0108:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0109:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0109:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0110:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0110:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0111:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0111:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0112:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0112:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0113:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0113:prove": {
+      "body": "proof -\n  assume y: \"y < unat max_ipc_words\" and eq: \"y' = of_nat y * 4\"\n  have bound: \"y < 128\"\n    using y by (simp add: max_ipc_words_def capTransferDataSize_def msgMaxLength_def msgMaxExtraCaps_def msgExtraCapBits_def HaskellLib_H.bit_def)\n  have small: \"y * 4 < 512\" using bound by arith\n  have off': \"(word_of_nat (y*4)::word32) < 512\"\n    apply (rule word_of_nat_less)\n    using small by simp\n  have off: \"(of_nat y * 4 :: word32) < 2 ^ msg_align_bits\"\n    using off' by (simp add: msg_align_bits)\n  have mask: \"\\<And>a::word32. is_aligned a msg_align_bits \\<Longrightarrow> (a + of_nat y * 4) && ~~ mask pageBits = a && ~~ mask pageBits\"\n    using mask_out_first_mask_some[OF neg_mask_add_aligned[OF _ off]] by (simp add: msg_align_bits pageBits_def)\n  have al: \"\\<And>a::word32. is_aligned a msg_align_bits \\<Longrightarrow> is_aligned (a + of_nat y * 4) 2\"\n    by (rule is_aligned_add_multI[where n=2, simplified]; simp add: msg_align_bits; arith)\n  show ?thesis using eq\n    by (auto simp: load_word_offs_def word_size_def loadWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def loadWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases valid_ipc_buffer_ptr'_def mask al al[unfolded is_aligned_mask] is_aligned_mask)\nqed",
+      "found": true
+    },
+    "c0114:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0114:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0115:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0115:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0116:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0116:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0117:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0117:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0118:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0118:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0119:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0119:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0120:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0120:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0121:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0121:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0122:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0122:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0123:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0123:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0124:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0124:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0125:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0125:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0126:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0126:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0127:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0127:prove": {
+      "body": "proof -\n  have gap: \"\\<And>s p n q. \\<lbrakk>ps_clear p n s; is_aligned p n; q \\<in> dom (ksPSpace s); p < q\\<rbrakk> \\<Longrightarrow> \\<not> q - p < (2::word32)^n\"\n  proof -\n    fix s p n q\n    assume clear: \"ps_clear p n s\" and al: \"is_aligned p n\" and mem: \"q \\<in> dom (ksPSpace s)\" and lt: \"p < q\"\n    show \"\\<not> q - p < (2::word32)^n\"\n    proof\n      assume less: \"q - p < (2::word32)^n\"\n      have le: \"q \\<le> p + 2^n - 1\"\n        using word_plus_mono_right[OF word_le_minus_one_leq[OF less] is_aligned_no_overflow'[OF al]] by (simp add: algebra_simps)\n      have inside: \"q \\<in> ({p .. p + 2^n - 1} - {p}) \\<inter> dom (ksPSpace s)\"\n        using mem lt le by (simp add: atLeastAtMost_iff less_imp_le)\n      show False using clear inside by (simp add: ps_clear_def shiftl_t2n)\n    qed\n  qed\n  have min_gap: \"\\<And>s p n. \\<lbrakk>ps_clear p n s; is_aligned p n; {k \\<in> dom (ksPSpace s). p < k} \\<noteq> {}\\<rbrakk> \\<Longrightarrow> \\<not> Min {k \\<in> dom (ksPSpace s). p < k} - p < (2::word32)^n\"\n  proof -\n    fix s p n\n    assume c: \"ps_clear p n s\" and a: \"is_aligned p n\" and ne: \"{k \\<in> dom (ksPSpace s). p < k} \\<noteq> {}\"\n    have m: \"Min {k \\<in> dom (ksPSpace s). p < k} \\<in> {k \\<in> dom (ksPSpace s). p < k}\"\n      by (rule Min_in[OF finite_class.finite ne])\n    show \"\\<not> Min {k \\<in> dom (ksPSpace s). p < k} - p < (2::word32)^n\"\n      using gap[OF c a] m by blast\n  qed\n  have get: \"\\<And>s ep. \\<lbrakk>ksPSpace s ptr = Some (KOEndpoint ep); is_aligned ptr (objBitsKO (KOEndpoint ep)); ps_clear ptr (objBitsKO (KOEndpoint ep)) s\\<rbrakk> \\<Longrightarrow> getEndpoint ptr s = ({(ep,s)},False)\"\n    using min_gap\n    apply (simp add: objBits_def getEndpoint_def getObject_def lookupAround2_def lookupAround_def psMap_def Let_def loadObject_endpoint loadObject_default_def projectKO_def projectKO_opts_defs alignCheck_def magnitudeCheck_def maybeToMonad_def maybe_def gets_def get_def bind_def return_def assert_def when_def unless_def is_aligned_mask)\n    apply (auto simp: objBits_def)\n    apply blast\n    done\n  have abs: \"\\<And>s. ep_at ptr s \\<Longrightarrow> \\<exists>ep. kheap s ptr = Some (Endpoint ep)\"\n    by (auto simp: ep_at_def2 obj_at_def dest: proj_inj_ep[THEN iffD1] split: option.splits)\n  have con: \"\\<And>s. ep_at' ptr s \\<Longrightarrow> \\<exists>ep. ksPSpace s ptr = Some (KOEndpoint ep) \\<and> is_aligned ptr (objBitsKO (KOEndpoint ep)) \\<and> ps_clear ptr (objBitsKO (KOEndpoint ep)) s\"\n        apply (clarsimp simp: obj_at'_real_def ko_wp_at'_def)\n    subgoal for s ko obj by (cases ko; auto simp: projectKO_opts_defs)\n    done\n  have rel: \"\\<And>s s' ep ep'. \\<lbrakk>(s,s') \\<in> state_relation; kheap s ptr = Some (Endpoint ep); ksPSpace s' ptr = Some (KOEndpoint ep')\\<rbrakk> \\<Longrightarrow> ep_relation ep ep'\"\n  proof -\n    fix s s' ep ep'\n    assume sr: \"(s,s') \\<in> state_relation\" and kh: \"kheap s ptr = Some (Endpoint ep)\" and ch: \"ksPSpace s' ptr = Some (KOEndpoint ep')\"\n    have ps: \"pspace_relation (kheap s) (ksPSpace s')\" using sr by (simp add: state_relation_def)\n    have rr: \"\\<forall>x\\<in>dom (kheap s). \\<forall>(y,P)\\<in>obj_relation_cuts (the (kheap s x)) x. P (the (kheap s x)) (the (ksPSpace s' y))\"\n      using ps by (simp add: pspace_relation_def)\n    have \"other_obj_relation (Endpoint ep) (KOEndpoint ep')\"\n      using rr[rule_format, of ptr \"(ptr,other_obj_relation)\"] kh ch by (auto simp: dom_def)\n    then show \"ep_relation ep ep'\" by (simp add: other_obj_relation_def)\n  qed\n  have aget: \"\\<And>s ep. kheap s ptr = Some (Endpoint ep) \\<Longrightarrow> get_endpoint ptr s = ({(ep,s)},False)\"\n    by (simp add: get_simple_ko_def get_object_def gets_def get_def bind_def return_def assert_def partial_inv_def a_type_def)\n  show ?thesis using abs con rel get aget by (fastforce simp: corres_underlying_def)\nqed",
+      "found": true
+    },
+    "c0128:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0128:prove": {
+      "body": "proof -\n  have gap: \"\\<And>s p n q. \\<lbrakk>ps_clear p n s; is_aligned p n; q \\<in> dom (ksPSpace s); p < q\\<rbrakk> \\<Longrightarrow> \\<not> q - p < (2::word32)^n\"\n  proof -\n    fix s p n q\n    assume clear: \"ps_clear p n s\" and al: \"is_aligned p n\" and mem: \"q \\<in> dom (ksPSpace s)\" and lt: \"p < q\"\n    show \"\\<not> q - p < (2::word32)^n\"\n    proof\n      assume less: \"q - p < (2::word32)^n\"\n      have le: \"q \\<le> p + 2^n - 1\"\n        using word_plus_mono_right[OF word_le_minus_one_leq[OF less] is_aligned_no_overflow'[OF al]] by (simp add: algebra_simps)\n      have inside: \"q \\<in> ({p .. p + 2^n - 1} - {p}) \\<inter> dom (ksPSpace s)\"\n        using mem lt le by (simp add: atLeastAtMost_iff less_imp_le)\n      show False using clear inside by (simp add: ps_clear_def shiftl_t2n)\n    qed\n  qed\n  have min_gap: \"\\<And>s p n. \\<lbrakk>ps_clear p n s; is_aligned p n; {k \\<in> dom (ksPSpace s). p < k} \\<noteq> {}\\<rbrakk> \\<Longrightarrow> \\<not> Min {k \\<in> dom (ksPSpace s). p < k} - p < (2::word32)^n\"\n  proof -\n    fix s p n\n    assume c: \"ps_clear p n s\" and a: \"is_aligned p n\" and ne: \"{k \\<in> dom (ksPSpace s). p < k} \\<noteq> {}\"\n    have m: \"Min {k \\<in> dom (ksPSpace s). p < k} \\<in> {k \\<in> dom (ksPSpace s). p < k}\"\n      by (rule Min_in[OF finite_class.finite ne])\n    show \"\\<not> Min {k \\<in> dom (ksPSpace s). p < k} - p < (2::word32)^n\"\n      using gap[OF c a] m by blast\n  qed\n  have get: \"\\<And>s ep. \\<lbrakk>ksPSpace s ptr = Some (KONotification ep); is_aligned ptr (objBitsKO (KONotification ep)); ps_clear ptr (objBitsKO (KONotification ep)) s\\<rbrakk> \\<Longrightarrow> getNotification ptr s = ({(ep,s)},False)\"\n    using min_gap\n    apply (simp add: objBits_def getNotification_def getObject_def lookupAround2_def lookupAround_def psMap_def Let_def loadObject_notification loadObject_default_def projectKO_def projectKO_opts_defs alignCheck_def magnitudeCheck_def maybeToMonad_def maybe_def gets_def get_def bind_def return_def assert_def when_def unless_def is_aligned_mask)\n    apply (auto simp: objBits_def)\n    apply blast\n    done\n  have abs: \"\\<And>s. ntfn_at ptr s \\<Longrightarrow> \\<exists>ep. kheap s ptr = Some (Notification ep)\"\n    by (auto simp: ntfn_at_def2 obj_at_def dest: proj_inj_ntfn[THEN iffD1] split: option.splits)\n  have con: \"\\<And>s. ntfn_at' ptr s \\<Longrightarrow> \\<exists>ep. ksPSpace s ptr = Some (KONotification ep) \\<and> is_aligned ptr (objBitsKO (KONotification ep)) \\<and> ps_clear ptr (objBitsKO (KONotification ep)) s\"\n        apply (clarsimp simp: obj_at'_real_def ko_wp_at'_def)\n    subgoal for s ko obj by (cases ko; auto simp: projectKO_opts_defs)\n    done\n  have rel: \"\\<And>s s' ep ep'. \\<lbrakk>(s,s') \\<in> state_relation; kheap s ptr = Some (Notification ep); ksPSpace s' ptr = Some (KONotification ep')\\<rbrakk> \\<Longrightarrow> ntfn_relation ep ep'\"\n  proof -\n    fix s s' ep ep'\n    assume sr: \"(s,s') \\<in> state_relation\" and kh: \"kheap s ptr = Some (Notification ep)\" and ch: \"ksPSpace s' ptr = Some (KONotification ep')\"\n    have ps: \"pspace_relation (kheap s) (ksPSpace s')\" using sr by (simp add: state_relation_def)\n    have rr: \"\\<forall>x\\<in>dom (kheap s). \\<forall>(y,P)\\<in>obj_relation_cuts (the (kheap s x)) x. P (the (kheap s x)) (the (ksPSpace s' y))\"\n      using ps by (simp add: pspace_relation_def)\n    have \"other_obj_relation (Notification ep) (KONotification ep')\"\n      using rr[rule_format, of ptr \"(ptr,other_obj_relation)\"] kh ch by (auto simp: dom_def)\n    then show \"ntfn_relation ep ep'\" by (simp add: other_obj_relation_def)\n  qed\n  have aget: \"\\<And>s ep. kheap s ptr = Some (Notification ep) \\<Longrightarrow> get_notification ptr s = ({(ep,s)},False)\"\n    by (simp add: get_simple_ko_def get_object_def gets_def get_def bind_def return_def assert_def partial_inv_def a_type_def)\n  show ?thesis using abs con rel get aget by (fastforce simp: corres_underlying_def)\nqed",
+      "found": true
+    },
+    "c0129:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0129:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0130:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0130:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0131:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0131:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0132:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0132:prove": {
+      "body": "by (auto simp: check_active_irq_def checkActiveIRQ_def do_machine_op_def doMachineOp_def getActiveIRQ_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases split: if_splits)",
+      "found": true
+    },
+    "c0133:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0133:prove": {
+      "body": "by (auto simp: check_active_irq_def checkActiveIRQ_def do_machine_op_def doMachineOp_def getActiveIRQ_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases split: if_splits)",
+      "found": true
+    },
+    "c0134:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0134:prove": {
+      "body": "by (auto simp: check_active_irq_def checkActiveIRQ_def do_machine_op_def doMachineOp_def getActiveIRQ_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases split: if_splits)",
+      "found": true
+    },
+    "c0135:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0135:prove": {
+      "body": "by (rule corres_guard_imp[OF c0134_prove]; simp)",
+      "found": true
+    },
+    "c0136:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0136:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0137:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0137:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0138:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0138:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0139:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0139:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0140:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0140:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0141:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0141:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0142:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0142:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0143:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0143:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0144:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0144:prove": {
+      "body": "by (simp add: curDomain_def state_relation_def)",
+      "found": true
+    },
+    "c0145:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0145:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0146:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0146:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0147:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0147:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0148:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0148:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0149:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0149:prove": {
+      "body": "by (simp add: Kernel_Config.numDomains_def curDomain_def state_relation_def)",
+      "found": true
+    },
+    "c0150:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0150:prove": {
+      "body": "by (simp add: curDomain_def state_relation_def)",
+      "found": true
+    },
+    "c0151:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0151:prove": {
+      "body": "proof -\n  have gap: \"\\<And>s p n q. \\<lbrakk>ps_clear p n s; is_aligned p n; q \\<in> dom (ksPSpace s); p < q\\<rbrakk> \\<Longrightarrow> \\<not> q - p < (2::word32)^n\"\n  proof -\n    fix s p n q\n    assume clear: \"ps_clear p n s\" and al: \"is_aligned p n\" and mem: \"q \\<in> dom (ksPSpace s)\" and lt: \"p < q\"\n    show \"\\<not> q - p < (2::word32)^n\"\n    proof\n      assume less: \"q - p < (2::word32)^n\"\n      have le: \"q \\<le> p + 2^n - 1\"\n        using word_plus_mono_right[OF word_le_minus_one_leq[OF less] is_aligned_no_overflow'[OF al]] by (simp add: algebra_simps)\n      have inside: \"q \\<in> ({p .. p + 2^n - 1} - {p}) \\<inter> dom (ksPSpace s)\"\n        using mem lt le by (simp add: atLeastAtMost_iff less_imp_le)\n      show False using clear inside by (simp add: ps_clear_def shiftl_t2n)\n    qed\n  qed\n  have min_gap: \"\\<And>s p n. \\<lbrakk>ps_clear p n s; is_aligned p n; {k \\<in> dom (ksPSpace s). p < k} \\<noteq> {}\\<rbrakk> \\<Longrightarrow> \\<not> Min {k \\<in> dom (ksPSpace s). p < k} - p < (2::word32)^n\"\n  proof -\n    fix s p n\n    assume c: \"ps_clear p n s\" and a: \"is_aligned p n\" and ne: \"{k \\<in> dom (ksPSpace s). p < k} \\<noteq> {}\"\n    have m: \"Min {k \\<in> dom (ksPSpace s). p < k} \\<in> {k \\<in> dom (ksPSpace s). p < k}\"\n      by (rule Min_in[OF finite_class.finite ne])\n    show \"\\<not> Min {k \\<in> dom (ksPSpace s). p < k} - p < (2::word32)^n\"\n      using gap[OF c a] m by blast\n  qed\n  have get: \"\\<And>s ep. \\<lbrakk>ksPSpace s t = Some (KOTCB ep); is_aligned t (objBitsKO (KOTCB ep)); ps_clear t (objBitsKO (KOTCB ep)) s\\<rbrakk> \\<Longrightarrow> getObject t s = ({(ep,s)},False)\"\n    using min_gap\n    apply (simp add: objBits_def getObject_def lookupAround2_def lookupAround_def psMap_def Let_def loadObject_tcb loadObject_default_def projectKO_def projectKO_opts_defs alignCheck_def magnitudeCheck_def maybeToMonad_def maybe_def gets_def get_def bind_def return_def assert_def when_def unless_def is_aligned_mask)\n    apply (auto simp: objBits_def)\n    apply blast\n    done\n  have con: \"\\<And>s. tcb_at' t s \\<Longrightarrow> \\<exists>ep. ksPSpace s t = Some (KOTCB ep) \\<and> is_aligned t (objBitsKO (KOTCB ep)) \\<and> ps_clear t (objBitsKO (KOTCB ep)) s\"\n        apply (clarsimp simp: obj_at'_real_def ko_wp_at'_def)\n    subgoal for s ko obj by (cases ko; auto simp: projectKO_opts_defs)\n    done\n  have abs: \"\\<And>s. is_etcb_at t s \\<Longrightarrow> \\<exists>ep. ekheap s t = Some ep\"\n    by (auto simp: is_etcb_at_def)\n  have rel: \"\\<And>s s' ep ep'. \\<lbrakk>(s,s') \\<in> state_relation; ekheap s t = Some ep; ksPSpace s' t = Some (KOTCB ep')\\<rbrakk> \\<Longrightarrow> etcb_relation ep ep'\"\n  proof -\n    fix s s' ep ep'\n    assume sr: \"(s,s') \\<in> state_relation\" and kh: \"ekheap s t = Some ep\" and ch: \"ksPSpace s' t = Some (KOTCB ep')\"\n    have er: \"ekheap_relation (ekheap s) (ksPSpace s')\" using sr by (simp add: state_relation_def)\n    show \"etcb_relation ep ep'\" using er kh ch by (auto simp: ekheap_relation_def dom_def)\n  qed\n  have aget: \"\\<And>s ep. ekheap s t = Some ep \\<Longrightarrow> ethread_get f t s = ({(f ep,s)},False)\"\n    by (simp add: ethread_get_def gets_the_def get_etcb_def gets_def get_def bind_def return_def assert_opt_def)\n  have cget: \"\\<And>s ep. \\<lbrakk>ksPSpace s t = Some (KOTCB ep); is_aligned t (objBitsKO (KOTCB ep)); ps_clear t (objBitsKO (KOTCB ep)) s\\<rbrakk> \\<Longrightarrow> threadGet f' t s = ({(f' ep,s)},False)\"\n    by (simp add: threadGet_def liftM_def bind_def get return_def)\n  show ?thesis using abs con rel aget cget x by (cases b; fastforce simp: ethread_get_when_def corres_underlying_def return_def)\nqed",
+      "found": true
+    },
+    "c0152:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0152:prove": {
+      "body": "by (simp add: getDomainTime_def state_relation_def)",
+      "found": true
+    },
+    "c0153:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0153:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0154:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0154:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0155:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0155:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0156:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0156:prove": {
+      "body": "by (auto simp: next_domain_def nextDomain_def Let_def dschDomain_def dschLength_def intro!: corres_modify simp: state_relation_def swp_def cte_wp_at_cases)",
+      "found": true
+    },
+    "c0157:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0157:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0158:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0158:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0159:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0159:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0160:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0160:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0161:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0161:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0162:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0162:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0163:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0163:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0164:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0164:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0165:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0165:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0166:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0166:prove": {
+      "body": "proof -\n  have ex: \"\\<And>n. (\\<exists>v::invocation_label. fromEnum v = n) = (n \\<le> fromEnum (maxBound::invocation_label))\"\n  proof\n    fix n\n    assume \"\\<exists>v::invocation_label. fromEnum v = n\"\n    then obtain v :: invocation_label where \"fromEnum v = n\" by blast\n    then show \"n \\<le> fromEnum (maxBound::invocation_label)\" using maxBound_is_bound[of v] by simp\n  next\n    fix n\n    assume \"n \\<le> fromEnum (maxBound::invocation_label)\"\n    then have \"fromEnum (toEnum n :: invocation_label) = n\" by (rule from_to_enum)\n    then show \"\\<exists>v::invocation_label. fromEnum v = n\" by blast\n  qed\n  have labels: \"gen_invocation_type label = genInvocationType label\"\n    by (simp add: gen_invocation_type_def genInvocationType_def invocation_type_def invocationType_def data_to_nat_def Let_def ex)\n  assume r: \"list_all2 cap_relation (map fst cs) (map fst cs')\"\n  assume sl: \"list_all2 (\\<lambda>p pa. snd pa = cte_map (snd p)) cs cs'\"\n  show ?thesis\n  proof (cases cs)\n    case Nil\n    then have eq: \"cs' = []\" using r by simp\n    show ?thesis using Nil eq labels\n      by (cases args; auto simp: decode_domain_invocation_def decodeDomainInvocation_def uncurry_def null_def whenE_def throwError_def returnOk_def bindE_def lift_def bind_def return_def corres_underlying_def dc_def split: if_splits)\n  next\n    case (Cons x xs)\n    obtain c p where xp: \"x = (c,p)\" by (cases x)\n    obtain c' p' ys where eq: \"cs' = (c',p')#ys\" and cp: \"cap_relation c c'\"\n      using r Cons xp by (cases cs'; auto)\n    show ?thesis using Cons xp eq cp labels\n      by (cases args; cases c; auto simp: decode_domain_invocation_def decodeDomainInvocation_def uncurry_def null_def whenE_def throwError_def returnOk_def bindE_def lift_def bind_def return_def corres_underlying_def dc_def split: if_splits)\n  qed\nqed",
+      "found": true
+    },
+    "c0167:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0167:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0168:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0168:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0169:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0169:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0170:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0170:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0171:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0171:prove": {
+      "body": "by (cases fault; simp add: handleHypervisorFault_def)",
+      "found": true
+    },
+    "c0172:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0172:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0173:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0173:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0174:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0174:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0175:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0175:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0176:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0176:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0177:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0177:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0178:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0178:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0179:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0179:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0180:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0180:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0181:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0181:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0182:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0182:prove": {
+      "body": "by (auto simp: addToBitmap_def modifyReadyQueuesL1Bitmap_def modifyReadyQueuesL2Bitmap_def getReadyQueuesL1Bitmap_def getReadyQueuesL2Bitmap_def corres_underlying_def gets_def get_def bind_def return_def modify_def put_def state_relation_def dc_def split: if_splits)",
+      "found": true
+    },
+    "c0183:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0183:prove": {
+      "body": "by (auto simp: addToBitmap_def modifyReadyQueuesL1Bitmap_def modifyReadyQueuesL2Bitmap_def getReadyQueuesL1Bitmap_def getReadyQueuesL2Bitmap_def corres_underlying_def gets_def get_def bind_def return_def modify_def put_def state_relation_def dc_def)",
+      "found": true
+    },
+    "c0184:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0184:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0185:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0185:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0186:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0186:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0187:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0187:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0188:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0188:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0189:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0189:prove": {
+      "body": "proof -\n  have gap: \"\\<And>s p n q. \\<lbrakk>ps_clear p n s; is_aligned p n; q \\<in> dom (ksPSpace s); p < q\\<rbrakk> \\<Longrightarrow> \\<not> q - p < (2::word32)^n\"\n  proof -\n    fix s p n q\n    assume clear: \"ps_clear p n s\" and al: \"is_aligned p n\" and mem: \"q \\<in> dom (ksPSpace s)\" and lt: \"p < q\"\n    show \"\\<not> q - p < (2::word32)^n\"\n    proof\n      assume less: \"q - p < (2::word32)^n\"\n      have le: \"q \\<le> p + 2^n - 1\"\n        using word_plus_mono_right[OF word_le_minus_one_leq[OF less] is_aligned_no_overflow'[OF al]] by (simp add: algebra_simps)\n      have inside: \"q \\<in> ({p .. p + 2^n - 1} - {p}) \\<inter> dom (ksPSpace s)\"\n        using mem lt le by (simp add: atLeastAtMost_iff less_imp_le)\n      show False using clear inside by (simp add: ps_clear_def shiftl_t2n)\n    qed\n  qed\n  have min_gap: \"\\<And>s p n. \\<lbrakk>ps_clear p n s; is_aligned p n; {k \\<in> dom (ksPSpace s). p < k} \\<noteq> {}\\<rbrakk> \\<Longrightarrow> \\<not> Min {k \\<in> dom (ksPSpace s). p < k} - p < (2::word32)^n\"\n  proof -\n    fix s p n\n    assume c: \"ps_clear p n s\" and a: \"is_aligned p n\" and ne: \"{k \\<in> dom (ksPSpace s). p < k} \\<noteq> {}\"\n    have m: \"Min {k \\<in> dom (ksPSpace s). p < k} \\<in> {k \\<in> dom (ksPSpace s). p < k}\"\n      by (rule Min_in[OF finite_class.finite ne])\n    show \"\\<not> Min {k \\<in> dom (ksPSpace s). p < k} - p < (2::word32)^n\"\n      using gap[OF c a] m by blast\n  qed\n  have get: \"\\<And>s ep. \\<lbrakk>ksPSpace s t = Some (KOTCB ep); is_aligned t (objBitsKO (KOTCB ep)); ps_clear t (objBitsKO (KOTCB ep)) s\\<rbrakk> \\<Longrightarrow> getObject t s = ({(ep,s)},False)\"\n    using min_gap\n    apply (simp add: objBits_def getObject_def lookupAround2_def lookupAround_def psMap_def Let_def loadObject_tcb loadObject_default_def projectKO_def projectKO_opts_defs alignCheck_def magnitudeCheck_def maybeToMonad_def maybe_def gets_def get_def bind_def return_def assert_def when_def unless_def is_aligned_mask)\n    apply (auto simp: objBits_def)\n    apply blast\n    done\n  have con: \"\\<And>s. tcb_at' t s \\<Longrightarrow> \\<exists>ep. ksPSpace s t = Some (KOTCB ep) \\<and> is_aligned t (objBitsKO (KOTCB ep)) \\<and> ps_clear t (objBitsKO (KOTCB ep)) s\"\n        apply (clarsimp simp: obj_at'_real_def ko_wp_at'_def)\n    subgoal for s ko obj by (cases ko; auto simp: projectKO_opts_defs)\n    done\n  have abs: \"\\<And>s. is_etcb_at t s \\<Longrightarrow> \\<exists>ep. ekheap s t = Some ep\"\n    by (auto simp: is_etcb_at_def)\n  have rel: \"\\<And>s s' ep ep'. \\<lbrakk>(s,s') \\<in> state_relation; ekheap s t = Some ep; ksPSpace s' t = Some (KOTCB ep')\\<rbrakk> \\<Longrightarrow> etcb_relation ep ep'\"\n  proof -\n    fix s s' ep ep'\n    assume sr: \"(s,s') \\<in> state_relation\" and kh: \"ekheap s t = Some ep\" and ch: \"ksPSpace s' t = Some (KOTCB ep')\"\n    have er: \"ekheap_relation (ekheap s) (ksPSpace s')\" using sr by (simp add: state_relation_def)\n    show \"etcb_relation ep ep'\" using er kh ch by (auto simp: ekheap_relation_def dom_def)\n  qed\n  have aget: \"\\<And>s ep. ekheap s t = Some ep \\<Longrightarrow> ethread_get f t s = ({(f ep,s)},False)\"\n    by (simp add: ethread_get_def gets_the_def get_etcb_def gets_def get_def bind_def return_def assert_opt_def)\n  have cget: \"\\<And>s ep. \\<lbrakk>ksPSpace s t = Some (KOTCB ep); is_aligned t (objBitsKO (KOTCB ep)); ps_clear t (objBitsKO (KOTCB ep)) s\\<rbrakk> \\<Longrightarrow> threadGet f' t s = ({(f' ep,s)},False)\"\n    by (simp add: threadGet_def liftM_def bind_def get return_def)\n  show ?thesis using abs con rel aget cget x by (fastforce simp: corres_underlying_def)\nqed",
+      "found": true
+    },
+    "c0190:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0190:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0191:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0191:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0192:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0192:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0193:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0193:prove": {
+      "body": "proof -\n  have h: \"\\<And>ls q ns ps. list_queue_relation ls q ns ps \\<Longrightarrow> (ls = [] \\<longleftrightarrow> tcbQueueEmpty q) \\<and> (ls \\<noteq> [] \\<longrightarrow> tcbQueueHead q = Some (hd ls)) \\<and> queue_end_valid ls q\"\n    by (case_tac ls; auto simp: list_queue_relation_def tcbQueueEmpty_def)\n  show ?thesis\n    by (fastforce simp: get_tcb_queue_def getQueue_def corres_underlying_def gets_def get_def bind_def return_def state_relation_def ready_queues_relation_2_def ready_queue_relation_def Let_def dest: h)\nqed",
+      "found": true
+    },
+    "c0194:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0194:prove": {
+      "body": "by (simp add: getSchedulerAction_def state_relation_def)",
+      "found": true
+    },
+    "c0195:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0195:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0196:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0196:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0197:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0197:prove": {
+      "body": "proof -\n  have bound: \"y < 128\"\n    using y by (simp add: max_ipc_words_def capTransferDataSize_def msgMaxLength_def msgMaxExtraCaps_def msgExtraCapBits_def HaskellLib_H.bit_def)\n  have small: \"y * 4 < 512\" using bound by arith\n  have off': \"(word_of_nat (y*4)::word32) < 512\"\n    apply (rule word_of_nat_less)\n    using small by simp\n  have off: \"(of_nat y * 4 :: word32) < 2 ^ msg_align_bits\"\n    using off' by (simp add: msg_align_bits)\n  have mask: \"\\<And>a::word32. is_aligned a msg_align_bits \\<Longrightarrow> (a + of_nat y * 4) && ~~ mask pageBits = a && ~~ mask pageBits\"\n    using mask_out_first_mask_some[OF neg_mask_add_aligned[OF _ off]] by (simp add: msg_align_bits pageBits_def)\n  have al: \"\\<And>a::word32. is_aligned a msg_align_bits \\<Longrightarrow> is_aligned (a + of_nat y * 4) 2\"\n    by (rule is_aligned_add_multI[where n=2, simplified]; simp add: msg_align_bits; arith)\n  show ?thesis\n    by (auto simp: load_word_offs_def word_size_def loadWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def loadWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases valid_ipc_buffer_ptr'_def mask al al[unfolded is_aligned_mask] is_aligned_mask)\nqed",
+      "found": true
+    },
+    "c0198:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0198:prove": {
+      "body": "by (auto simp: loadWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def loadWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases is_aligned_mask)",
+      "found": true
+    },
+    "c0199:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0199:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0200:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0200:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0201:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0201:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0202:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0202:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0203:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0203:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0204:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0204:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0205:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0205:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0206:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0206:prove": {
+      "body": "by (auto simp: set_scheduler_action_def setSchedulerAction_def intro!: corres_modify simp: state_relation_def swp_def cte_wp_at_cases)",
+      "found": true
+    },
+    "c0207:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0207:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0208:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0208:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0209:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0209:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0210:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0210:prove": {
+      "body": "proof -\n  have bound: \"y < 128\"\n    using y by (simp add: max_ipc_words_def capTransferDataSize_def msgMaxLength_def msgMaxExtraCaps_def msgExtraCapBits_def HaskellLib_H.bit_def)\n  have small: \"y * 4 < 512\" using bound by arith\n  have off': \"(word_of_nat (y*4)::word32) < 512\"\n    apply (rule word_of_nat_less)\n    using small by simp\n  have off: \"(of_nat y * 4 :: word32) < 2 ^ msg_align_bits\"\n    using off' by (simp add: msg_align_bits)\n  have mask: \"\\<And>a::word32. is_aligned a msg_align_bits \\<Longrightarrow> (a + of_nat y * 4) && ~~ mask pageBits = a && ~~ mask pageBits\"\n    using mask_out_first_mask_some[OF neg_mask_add_aligned[OF _ off]] by (simp add: msg_align_bits pageBits_def)\n  have al: \"\\<And>a::word32. is_aligned a msg_align_bits \\<Longrightarrow> is_aligned (a + of_nat y * 4) 2\"\n    by (rule is_aligned_add_multI[where n=2, simplified]; simp add: msg_align_bits; arith)\n  have sz: \"\\<And>sz. msg_align_bits \\<le> pageBitsForSize sz\"\n    by (case_tac sz; simp add: msg_align_bits; arith)\n  have mask2: \"\\<And>a::word32. \\<And>sz. is_aligned a msg_align_bits \\<Longrightarrow> (a + of_nat y * 4) && ~~ mask (pageBitsForSize sz) = a && ~~ mask (pageBitsForSize sz)\"\n    using mask_out_first_mask_some[OF neg_mask_add_aligned[OF _ off] sz] by (simp add: word_bw_assocs neg_mask_combine max_def sz)\n  have frame: \"\\<And>a s. \\<lbrakk>is_aligned a msg_align_bits; in_user_frame a s\\<rbrakk> \\<Longrightarrow> in_user_frame (a + of_nat y * 4) s\"\n    by (simp add: in_user_frame_def mask2)\n  show ?thesis\n    by (auto simp: store_word_offs_def word_size_def storeWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def storeWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases valid_ipc_buffer_ptr'_def mask al al[unfolded is_aligned_mask] frame frame[unfolded is_aligned_mask] is_aligned_mask dc_def)\nqed",
+      "found": true
+    },
+    "c0211:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0211:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0212:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0212:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0213:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0213:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0214:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0214:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0215:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0215:prove": {
+      "body": "using x y z a b unfolding zipWithM_x_mapM_x by (fastforce intro!: corres_mapM_x[where S=S] split: prod.splits)",
+      "found": true
+    },
+    "c0216:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0216:prove": {
+      "body": "by (simp add: arch_activate_idle_thread_def activateIdleThread_def)",
+      "found": true
+    },
+    "c0217:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0217:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0218:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0218:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0219:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0219:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0220:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0220:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0221:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0221:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0222:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0222:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0223:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0223:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0224:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0224:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0225:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0225:prove": {
+      "body": "by (cases cap; auto simp: check_valid_ipc_buffer_def checkValidIPCBuffer_def is_aligned_mask msg_align_bits msgAlignBits_def wordSizeCase_def ARM_H.wordBits_def word_size whenE_def throwError_def returnOk_def bindE_def lift_def bind_def return_def corres_underlying_def dc_def split: cap.splits arch_cap.splits bool.splits if_splits)",
+      "found": true
+    },
+    "c0226:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0226:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0227:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0227:prove": {
+      "body": "proof -\n  assume r: \"list_all2 cap_relation extras extras'\"\n  assume len: \"length args < 2 ^ word_bits\"\n  show ?thesis\n  proof (cases extras)\n    case Nil\n    then have eq: \"extras' = []\" using r by simp\n    show ?thesis using Nil eq\n      by (cases args; auto simp: decode_copy_registers_def decodeCopyRegisters_def decodeTransfer_def null_def whenE_def throwError_def returnOk_def bindE_def lift_def bind_def return_def corres_underlying_def dc_def)\n  next\n    case (Cons c xs)\n    obtain c' ys where eq: \"extras' = c'#ys\" and cp: \"cap_relation c c'\"\n      using r Cons by (cases extras'; auto)\n    show ?thesis using Cons eq cp\n      by (cases \"copyregsets_map ArchDefaultExtraRegisters\"; cases args; cases c; auto simp: decode_copy_registers_def decodeCopyRegisters_def decodeTransfer_def null_def whenE_def throwError_def returnOk_def bindE_def lift_def bind_def return_def corres_underlying_def dc_def)\n  qed\nqed",
+      "found": true
+    },
+    "c0228:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0228:prove": {
+      "body": "by (cases \"copyregsets_map ArchDefaultExtraRegisters\"; cases args; auto simp: decode_read_registers_def decodeReadRegisters_def decodeTransfer_def range_check_def rangeCheck_def unlessE_def ARM_H.frameRegisters_def ARM_H.gpRegisters_def getCurThread_def gets_def get_def state_relation_def whenE_def throwError_def returnOk_def bindE_def lift_def liftE_def bind_def return_def corres_underlying_def dc_def split: if_splits list.splits)",
+      "found": true
+    },
+    "c0229:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0229:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0230:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0230:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0231:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0231:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0232:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0232:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0233:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0233:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0234:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0234:prove": {
+      "body": "by (cases w; auto simp: decode_set_tls_base_def decodeSetTLSBase_def whenE_def throwError_def returnOk_def bindE_def lift_def liftE_def bind_def return_def corres_underlying_def dc_def)",
+      "found": true
+    },
+    "c0235:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0235:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0236:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0236:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0237:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0237:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0238:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0238:prove": {
+      "body": "by (cases \"copyregsets_map ArchDefaultExtraRegisters\"; cases args; auto simp: decode_write_registers_def decodeWriteRegisters_def decodeTransfer_def genericLength_def genericTake_def word_less_nat_alt unat_of_nat word_bits_def getCurThread_def gets_def get_def state_relation_def whenE_def throwError_def returnOk_def bindE_def lift_def liftE_def bind_def return_def corres_underlying_def dc_def split: if_splits list.splits)",
+      "found": true
+    },
+    "c0239:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0239:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0240:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0240:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0241:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0241:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0242:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0242:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0243:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0243:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0244:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0244:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0245:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0245:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0246:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0246:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0247:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0247:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0248:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0248:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0249:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0249:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0250:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0250:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0251:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0251:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0252:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0252:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0253:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0253:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0254:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0254:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0255:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0255:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0256:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0256:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0257:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0257:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0258:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0258:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0259:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0259:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0260:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0260:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0261:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0261:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0262:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0262:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0263:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0263:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0264:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0264:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0265:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0265:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0266:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0266:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0267:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0267:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0268:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0268:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0269:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0269:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0270:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0270:prove": {
+      "body": "by (auto simp: invalidate_hw_asid_entry_def invalidateHWASIDEntry_def corres_underlying_def gets_def get_def bind_def return_def modify_def put_def state_relation_def swp_def cte_wp_at_cases arch_state_relation_def dc_def)",
+      "found": true
+    },
+    "c0271:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0271:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0272:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0272:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0273:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0273:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0274:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0274:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0275:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0275:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0276:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0276:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0277:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0277:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0278:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0278:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0279:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0279:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0280:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0280:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0281:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0281:prove": {
+      "body": "proof -\n  have nf: \"no_fail (\\<lambda>_. True) (setCurrentPD addr)\"\n    unfolding setCurrentPD_def writeTTBR0Ptr_def by (wp no_fail_machine_op_lift | simp add: dsb_def isb_def writeTTBR0_def)+\n  show ?thesis using nf\n  by (auto simp: do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases dc_def no_fail_def split: prod.splits)\nqed",
+      "found": true
+    },
+    "c0282:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0282:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0283:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0283:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0284:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0284:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0285:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0285:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0286:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0286:prove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0287:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0287:prove": {
+      "body": "oops",
+      "found": true
+    }
+  }
+}

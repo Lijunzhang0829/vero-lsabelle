@@ -1,0 +1,113 @@
+{
+  "benchmark_id": "4a9653c8e4b28ccd9a68e0c9f2b35cd1a6a6d3fe0b664670bdb6ecdd44f18be8",
+  "config": {
+    "agent": {
+      "codex": "/opt/vero/codex",
+      "command_prefix": [
+        "runuser",
+        "-u",
+        "agent",
+        "--"
+      ],
+      "env": {
+        "http_proxy": "http://127.0.0.1:18894",
+        "https_proxy": "http://127.0.0.1:18894"
+      },
+      "external_isolation": "docker-nonroot",
+      "home": "/home/agent",
+      "model": "gpt-6-astra",
+      "reasoning_effort": "medium",
+      "sandbox_mode": "danger-full-access",
+      "timeout_seconds": 1800,
+      "user": "agent"
+    },
+    "checker": {
+      "command_prefix": [
+        "runuser",
+        "-u",
+        "checker",
+        "--"
+      ],
+      "env": {
+        "HOME": "/home/checker",
+        "L4V_ARCH": "ARM",
+        "USER_HOME": "/home/checker"
+      },
+      "isabelle": "/workspace/verification/isabelle/bin/isabelle",
+      "session": "Semantic_Base",
+      "session_dirs": [
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "/sel4-project/verification/l4v/lib",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "/sel4-project/verification/l4v/spec",
+        "/sel4-project/verification/l4v/proof",
+        "/semantic-base"
+      ],
+      "threads": 4,
+      "timeout_seconds": 120
+    },
+    "continuation_provenance": {
+      "artifact_sha256": "61ac3d85a55a9a1163e907450f8611f5f28b5ed699254d220818998bd973b53c",
+      "evaluation_file_sha256": "ce762c228d5740aded291a14f593dc7e040b9bc416d697ea474c5441d852b620",
+      "prior_agent_seconds": 1800.009822845459,
+      "reason": "user requested retry after network disruption",
+      "seed_count": 39,
+      "source_run": "refine-001/trial-001"
+    },
+    "feedback": true,
+    "initial_proofs": {
+      "c0001:prove": "by (cases c; auto simp: arch_derive_cap_def ArchRetype_H.ARM_H.deriveCap_def isPageTableCap_def isPageDirectoryCap_def isPageCap_def isASIDControlCap_def isASIDPoolCap_def corres_underlying_def throwError_def returnOk_def return_def split: option.splits)",
+      "c0027:prove": "by (simp add: check_vp_alignment_def checkVPAlignment_def is_aligned_mask unlessE_def whenE_def throwError_def returnOk_def corres_underlying_def return_def dc_def)",
+      "c0031:prove": "by (simp add: getCurThread_def corres_gets state_relation_def)",
+      "c0032:prove": "by (simp add: getIdleThread_def corres_gets state_relation_def)",
+      "c0035:prove": "by (auto simp: spec_corres_def corres_underlying_def)",
+      "c0038:prove": "using x by (fastforce simp: spec_corres_def corres_underlying_def)",
+      "c0039:prove": "using P Q R by (fastforce simp: corres_underlying_def whenE_def throwError_def returnOk_def bindE_def lift_def bind_def return_def split: if_splits sum.splits)",
+      "c0062:prove": "by (simp add: arch_post_cap_deletion_def ArchRetype_H.ARM_H.postCapDeletion_def)",
+      "c0065:prove": "proof -\n  have [simp]: \"irq_state_relation irq_state.IRQInactive irqstate.IRQInactive\" by (simp add: irq_state_relation_def)\n  show ?thesis\n\nby (auto simp: deleted_irq_handler_def deletedIRQHandler_def set_irq_state_def setIRQState_def getInterruptState_def setInterruptState_def interrupt_state_relation_def do_machine_op_def doMachineOp_def maskInterrupt_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases dc_def)\nqed",
+      "c0071:prove": "by (cases cap; auto simp: post_cap_deletion_def Retype_H.postCapDeletion_def arch_post_cap_deletion_def ArchRetype_H.ARM_H.postCapDeletion_def intro: c0065_prove)",
+      "c0074:prove": "by (auto simp: get_irq_slot_def getIRQSlot_def getInterruptState_def locateSlotBasic_def liftM_def corres_underlying_def gets_def get_def bind_def return_def state_relation_def interrupt_state_relation_def cte_map_def shiftl_t2n objBits_def objBitsKO_def cte_level_bits_def cteSizeBits_def wordSizeCase_def ARM_H.wordBits_def word_size ARM_H.PPtr_def ARM_H.fromPPtr_def)",
+      "c0076:prove": "proof -\n  assume r: \"irq_state_relation state state'\"\n  have eq: \"(state = irq_state.IRQInactive) = (state' = irqstate.IRQInactive)\"\n    using r by (cases state; cases state'; simp add: irq_state_relation_def)\n  show ?thesis using r eq\n\nby (auto simp: set_irq_state_def setIRQState_def getInterruptState_def setInterruptState_def interrupt_state_relation_def do_machine_op_def doMachineOp_def maskInterrupt_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases dc_def)\nqed",
+      "c0078:prove": "by (cases i; auto simp: ArchInterrupt_H.ARM_H.invokeIRQHandler_def do_machine_op_def doMachineOp_def maskInterrupt_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases dc_def)",
+      "c0080:prove": "by (auto simp: arch_check_irq_def ArchInterrupt_H.ARM_H.checkIRQ_def rangeCheck_def minIRQ_def maxIRQ_def unlessE_def whenE_def throwError_def returnOk_def return_def corres_underlying_def dc_def)",
+      "c0081:prove": "by (auto simp: dec_domain_time_def decDomainTime_def intro!: corres_modify simp: state_relation_def swp_def cte_wp_at_cases)",
+      "c0084:prove": "by (auto simp: get_irq_state_def getIRQState_def getInterruptState_def liftM_def corres_underlying_def gets_def get_def bind_def return_def state_relation_def interrupt_state_relation_def)",
+      "c0087:prove": "proof -\n  have rel: \"\\<And>a b. irq_state_relation a b \\<Longrightarrow> (a = irq_state.IRQInactive) = (b = irqstate.IRQInactive)\"\n    by (case_tac a; case_tac b; simp add: irq_state_relation_def)\n  show ?thesis\n    unfolding fun_app_def is_irq_active_def isIRQActive_def corres_liftM_simp corres_liftM2_simp\n    by (rule corres_rel_imp[OF c0084_prove]; auto dest: rel)\nqed",
+      "c0089:prove": "using no_fail_machine_op_lift[of \"setIRQTrigger_impl irq t\"]\nby (auto simp: do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases dc_def no_fail_def setIRQTrigger_def split: prod.splits)",
+      "c0107:prove": "using P by (auto simp: corres_underlying_def gets_the_def gets_def get_def bind_def assert_opt_def return_def fail_def dc_def split: option.splits)",
+      "c0132:prove": "by (auto simp: check_active_irq_def checkActiveIRQ_def do_machine_op_def doMachineOp_def getActiveIRQ_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases split: if_splits)",
+      "c0133:prove": "by (auto simp: check_active_irq_def checkActiveIRQ_def do_machine_op_def doMachineOp_def getActiveIRQ_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases split: if_splits)",
+      "c0134:prove": "by (auto simp: check_active_irq_def checkActiveIRQ_def do_machine_op_def doMachineOp_def getActiveIRQ_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases split: if_splits)",
+      "c0135:prove": "by (rule corres_guard_imp[OF c0134_prove]; simp)",
+      "c0144:prove": "by (simp add: curDomain_def state_relation_def)",
+      "c0149:prove": "by (simp add: Kernel_Config.numDomains_def curDomain_def state_relation_def)",
+      "c0150:prove": "by (simp add: curDomain_def state_relation_def)",
+      "c0152:prove": "by (simp add: getDomainTime_def state_relation_def)",
+      "c0171:prove": "by (cases fault; simp add: handleHypervisorFault_def)",
+      "c0182:prove": "by (auto simp: addToBitmap_def modifyReadyQueuesL1Bitmap_def modifyReadyQueuesL2Bitmap_def getReadyQueuesL1Bitmap_def getReadyQueuesL2Bitmap_def corres_underlying_def gets_def get_def bind_def return_def modify_def put_def state_relation_def dc_def split: if_splits)",
+      "c0183:prove": "by (auto simp: addToBitmap_def modifyReadyQueuesL1Bitmap_def modifyReadyQueuesL2Bitmap_def getReadyQueuesL1Bitmap_def getReadyQueuesL2Bitmap_def corres_underlying_def gets_def get_def bind_def return_def modify_def put_def state_relation_def dc_def)",
+      "c0193:prove": "proof -\n  have h: \"\\<And>ls q ns ps. list_queue_relation ls q ns ps \\<Longrightarrow> (ls = [] \\<longleftrightarrow> tcbQueueEmpty q) \\<and> (ls \\<noteq> [] \\<longrightarrow> tcbQueueHead q = Some (hd ls)) \\<and> queue_end_valid ls q\"\n    by (case_tac ls; auto simp: list_queue_relation_def tcbQueueEmpty_def)\n  show ?thesis\n    by (fastforce simp: get_tcb_queue_def getQueue_def corres_underlying_def gets_def get_def bind_def return_def state_relation_def ready_queues_relation_2_def ready_queue_relation_def Let_def dest: h)\nqed",
+      "c0194:prove": "by (simp add: getSchedulerAction_def state_relation_def)",
+      "c0198:prove": "by (auto simp: loadWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def loadWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases is_aligned_mask)",
+      "c0206:prove": "by (auto simp: set_scheduler_action_def setSchedulerAction_def intro!: corres_modify simp: state_relation_def swp_def cte_wp_at_cases)",
+      "c0215:prove": "using x y z a b unfolding zipWithM_x_mapM_x by (fastforce intro!: corres_mapM_x[where S=S] split: prod.splits)",
+      "c0216:prove": "by (simp add: arch_activate_idle_thread_def activateIdleThread_def)",
+      "c0225:prove": "by (cases cap; auto simp: check_valid_ipc_buffer_def checkValidIPCBuffer_def is_aligned_mask msg_align_bits msgAlignBits_def wordSizeCase_def ARM_H.wordBits_def word_size whenE_def throwError_def returnOk_def bindE_def lift_def bind_def return_def corres_underlying_def dc_def split: cap.splits arch_cap.splits bool.splits if_splits)",
+      "c0270:prove": "by (auto simp: invalidate_hw_asid_entry_def invalidateHWASIDEntry_def corres_underlying_def gets_def get_def bind_def return_def modify_def put_def state_relation_def swp_def cte_wp_at_cases arch_state_relation_def dc_def)",
+      "c0281:prove": "proof -\n  have nf: \"no_fail (\\<lambda>_. True) (setCurrentPD addr)\"\n    unfolding setCurrentPD_def writeTTBR0Ptr_def by (wp no_fail_machine_op_lift | simp add: dsb_def isb_def writeTTBR0_def)+\n  show ?thesis using nf\n  by (auto simp: do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases dc_def no_fail_def split: prod.splits)\nqed"
+    },
+    "max_iterations": 1,
+    "resume_artifact": false,
+    "sandbox": "/sandbox",
+    "sandbox_uid": 1001,
+    "total_agent_seconds": 1800
+  },
+  "implementation_id": "c612024776509600ae0cacb967b7ce34e4eebcbdb8683d6d72a65d2cc06ed8a9"
+}

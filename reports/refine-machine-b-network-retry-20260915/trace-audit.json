@@ -1,0 +1,10 @@
+{
+  "events": 349,
+  "cli_error_events": 0,
+  "transport_diagnostic_lines": [
+    "2026-09-15T20:25:50.658818Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: URL error: Proxy connection failed: HTTP CONNECT response missing status line, url: wss://chatgpt.com/backend-api/codex/responses"
+  ],
+  "collaboration_events": 0,
+  "agent_trace_sha256": "f2a378320444192a1b3578ee4428934b2c713704c8b59720f7cd44fffa103916",
+  "stderr_sha256": "975891a99ae79ec46b3aaa7ac6afd71414a1bcf5b653138fc2134ff5171754ca"
+}
