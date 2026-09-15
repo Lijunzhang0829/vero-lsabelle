@@ -6,9 +6,9 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from vero.isabelle.benchmark import prepare, render, save
+from vero.isabelle.benchmark import extract, prepare, render, save
 from vero.isabelle.checker import Checker
-from vero.isabelle.runner import recover_iteration
+from vero.isabelle.runner import recover_iteration, run
 
 
 class RecoveryTests(unittest.TestCase):
@@ -51,6 +51,61 @@ class RecoveryTests(unittest.TestCase):
                     iteration,
                     workspace,
                     {"iterations": []},
+                )
+
+    def test_continuation_seed_is_bound_and_rendered(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            contracts = root / "input.jsonl"
+            contracts.write_text(
+                json.dumps(
+                    {
+                        "contract_id": "t",
+                        "name": "t",
+                        "owner_theory": "T",
+                        "exact_statement": 'lemma t: "True"',
+                    }
+                )
+                + "\n"
+            )
+            bench = prepare(contracts, root / "bench", base_import="Main")
+            cfg = {
+                "sandbox": str(root / "source"),
+                "total_agent_seconds": 10,
+                "agent": {"timeout_seconds": 10},
+                "checker": {},
+                "initial_proofs": {"c0001:prove": "by simp"},
+            }
+            save(root / "config.json", cfg)
+
+            def fake_run(**kwargs):
+                artifact = extract(bench, kwargs["sandbox_dir"])
+                self.assertEqual(artifact["slots"]["c0001:prove"]["body"], "by simp")
+                return {"ok": True, "elapsed_seconds": 1}
+
+            with (
+                patch("vero.isabelle.runner.CodexAgent.run", side_effect=fake_run),
+                patch(
+                    "vero.isabelle.runner.evaluate",
+                    return_value={
+                        "proved_specs": 1,
+                        "disproved_specs": 0,
+                        "complete": True,
+                    },
+                ),
+            ):
+                result = run(
+                    root / "bench/benchmark.json", root / "config.json", root / "trial"
+                )
+            self.assertEqual(result["status"], "complete")
+            cfg["initial_proofs"]["c0001:prove"] = "by auto"
+            save(root / "config.json", cfg)
+            with self.assertRaisesRegex(ValueError, "configuration changed"):
+                run(
+                    root / "bench/benchmark.json",
+                    root / "config.json",
+                    root / "trial",
+                    resume=True,
                 )
 
     def test_running_process_cannot_be_recovered(self):

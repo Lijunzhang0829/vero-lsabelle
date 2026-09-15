@@ -59,12 +59,16 @@ honestly; only independently checked positive proofs complete the Refine task.
 
 
 def run(benchmark_path, config_path, run_dir, *, resume=False):
-    bench = validate(read(benchmark_path))
-    cfg = read(config_path)
     root = Path(run_dir)
     root.mkdir(parents=True, exist_ok=True)
-    lock = (root / "run.lock").open("a")
-    fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    with (root / "run.lock").open("a") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        return _run_locked(benchmark_path, config_path, root, resume=resume)
+
+
+def _run_locked(benchmark_path, config_path, root, *, resume):
+    bench = validate(read(benchmark_path))
+    cfg = read(config_path)
     identity = {
         "benchmark_id": bench["benchmark_id"],
         "config": cfg,
@@ -113,7 +117,16 @@ def run(benchmark_path, config_path, run_dir, *, resume=False):
                 return journal
             continue
         iteration.mkdir()
-        seed = {}
+        seed = dict(cfg.get("initial_proofs", {}))
+        allowed = {
+            c["id"] + ":" + polarity
+            for c in bench["contracts"]
+            for polarity in ("prove", "disprove")
+        }
+        if set(seed) - allowed or any(
+            not isinstance(body, str) for body in seed.values()
+        ):
+            raise ValueError("invalid initial proof slots")
         if cfg.get("resume_artifact", False) and journal["iterations"]:
             previous = read(root / journal["iterations"][-1]["artifact"])
             seed = {k: v["body"] for k, v in previous["slots"].items() if v["found"]}
