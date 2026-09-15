@@ -1,0 +1,2912 @@
+{
+  "backend": "isabelle",
+  "base_import": "Semantic_Base.Semantic_Root",
+  "benchmark_id": "4a9653c8e4b28ccd9a68e0c9f2b35cd1a6a6d3fe0b664670bdb6ecdd44f18be8",
+  "contracts": [
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0001",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "arch_deriveCap_corres",
+      "source_id": "contract:Refine.ArchAcc_R:arch_deriveCap_corres:1b4387adff89",
+      "statement": "lemma arch_deriveCap_corres [corres]:\n \"cap_relation (cap.ArchObjectCap c) (ArchObjectCap c') \\<Longrightarrow>\n  corres (ser \\<oplus> (\\<lambda>c c'. cap_relation c c'))\n         \\<top> \\<top>\n         (arch_derive_cap c)\n         (Arch.deriveCap slot c')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0002",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "createMappingEntries_corres",
+      "source_id": "contract:Refine.ArchAcc_R:createMappingEntries_corres:c7a4b50030fe",
+      "statement": "lemma createMappingEntries_corres [corres]:\n  \"\\<lbrakk> vm_rights' = vmrights_map vm_rights;\n     attrib' = vmattributes_map attrib; base = base'; vptr = vptr'; pgsz = pgsz'; pd = pd' \\<rbrakk>\n  \\<Longrightarrow> corres (ser \\<oplus> mapping_map)\n          (\\<lambda>s. (pgsz = ARMSmallPage \\<or> pgsz = ARMLargePage \\<longrightarrow> pde_at (lookup_pd_slot pd vptr) s)\n           \\<and> (is_aligned pd pd_bits \\<and> vmsz_aligned vptr pgsz \\<and> vptr < kernel_base \\<and> vm_rights \\<in> valid_vm_rights)\n           \\<and> valid_vspace_objs s \\<and> pspace_aligned s \\<and> (\\<exists>\\<rhd> (lookup_pd_slot pd vptr && ~~ mask pd_bits)) s)\n          (pspace_aligned' and pspace_distinct')\n          (create_mapping_entries base vptr pgsz vm_rights attrib pd)\n          (createMappingEntries base' vptr' pgsz' vm_rights' attrib' pd')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0003",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "ensureSafeMapping_corres",
+      "source_id": "contract:Refine.ArchAcc_R:ensureSafeMapping_corres:eb07ee3c5aea",
+      "statement": "lemma ensureSafeMapping_corres [corres]:\n  \"mapping_map m m' \\<Longrightarrow>\n  corres (ser \\<oplus> dc) (valid_mapping_entries m)\n                    (pspace_aligned' and pspace_distinct'\n                    and (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)))\n                    (ensure_safe_mapping m) (ensureSafeMapping m')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0004",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "find_pd_for_asid_corres'",
+      "source_id": "contract:Refine.ArchAcc_R:find_pd_for_asid_corres':6ec00f2ba00e",
+      "statement": "lemma find_pd_for_asid_corres':\n  \"corres (lfr \\<oplus> (=)) (vspace_at_asid asid pd and valid_vspace_objs\n                           and pspace_aligned and  K (0 < asid \\<and> asid \\<le> mask asidBits))\n                       (pspace_aligned' and pspace_distinct' and no_0_obj')\n                       (find_pd_for_asid asid) (findPDForASID asid)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0005",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "find_pd_for_asid_corres",
+      "source_id": "contract:Refine.ArchAcc_R:find_pd_for_asid_corres:91fa1fd2f2ee",
+      "statement": "lemma find_pd_for_asid_corres [corres]:\n  \"asid = asid' \\<Longrightarrow> corres (lfr \\<oplus> (=)) ((\\<lambda>s. valid_arch_state s \\<or> vspace_at_asid asid pd s)\n                           and valid_vspace_objs and pspace_aligned\n                           and K (0 < asid \\<and> asid \\<le> mask asidBits))\n                       (pspace_aligned' and pspace_distinct' and no_0_obj')\n                       (find_pd_for_asid asid) (findPDForASID asid')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0006",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "getObject_ASIDPool_corres'",
+      "source_id": "contract:Refine.ArchAcc_R:getObject_ASIDPool_corres':f1ec31335680",
+      "statement": "lemma getObject_ASIDPool_corres':\n  \"corres (\\<lambda>p p'. p = inv ASIDPool p' o ucast)\n          (asid_pool_at p) (pspace_aligned' and pspace_distinct')\n          (get_asid_pool p) (getObject p)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0007",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "getObject_ASIDPool_corres",
+      "source_id": "contract:Refine.ArchAcc_R:getObject_ASIDPool_corres:10b7ab045685",
+      "statement": "lemma getObject_ASIDPool_corres [corres]:\n  \"p = p' \\<Longrightarrow> corres (\\<lambda>p p'. p = inv ASIDPool p' o ucast)\n          (asid_pool_at p) (asid_pool_at' p')\n          (get_asid_pool p) (getObject p')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0008",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "getObject_PDE_corres'",
+      "source_id": "contract:Refine.ArchAcc_R:getObject_PDE_corres':42b913eeae66",
+      "statement": "lemma getObject_PDE_corres' :\n  \"corres (pde_relation_aligned (p >> 2)) (pde_at p)\n     (pspace_aligned' and pspace_distinct')\n     (get_pde p) (getObject p)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0009",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "getObject_PDE_corres",
+      "source_id": "contract:Refine.ArchAcc_R:getObject_PDE_corres:348be908d811",
+      "statement": "lemma getObject_PDE_corres [corres]:\n  \"p = p' \\<Longrightarrow> corres (pde_relation_aligned (p >> 2)) (pde_at p) (pde_at' p')\n     (get_pde p) (getObject p')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0010",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "getObject_PTE_corres'",
+      "source_id": "contract:Refine.ArchAcc_R:getObject_PTE_corres':8e5109091cdc",
+      "statement": "lemma getObject_PTE_corres':\n  \"corres (pte_relation_aligned (p >> 2)) (pte_at p)\n     (pspace_aligned' and pspace_distinct')\n     (get_pte p) (getObject p)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0011",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "getObject_PTE_corres",
+      "source_id": "contract:Refine.ArchAcc_R:getObject_PTE_corres:90c5476d6aca",
+      "statement": "lemma getObject_PTE_corres [corres]:\n  \"p = p' \\<Longrightarrow> corres (pte_relation_aligned (p >> 2)) (pte_at p) (pte_at' p')\n     (get_pte p) (getObject p')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0012",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "get_master_pde_corres'",
+      "source_id": "contract:Refine.ArchAcc_R:get_master_pde_corres':fce925937240",
+      "statement": "lemma get_master_pde_corres':\n  \"corres pde_relation' (pde_at p)\n     ((\\<lambda>s. vs_valid_duplicates' (ksPSpace s)) and\n      pspace_aligned' and pspace_distinct')\n     (get_master_pde p) (getObject p)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0013",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "get_master_pde_corres",
+      "source_id": "contract:Refine.ArchAcc_R:get_master_pde_corres:f7c0f8c199ae",
+      "statement": "lemma get_master_pde_corres [@lift_corres_args, corres]:\n  \"corres pde_relation' (pde_at p)\n     (pde_at' p and (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)) and\n      pspace_aligned' and pspace_distinct')\n     (get_master_pde p) (getObject p)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0014",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "get_master_pte_corres'",
+      "source_id": "contract:Refine.ArchAcc_R:get_master_pte_corres':0295baa78f47",
+      "statement": "lemma get_master_pte_corres':\n  \"corres pte_relation' (pte_at p)\n     ((\\<lambda>s. vs_valid_duplicates' (ksPSpace s)) and\n      pspace_aligned' and pspace_distinct')\n     (get_master_pte p) (getObject p)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0015",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "get_master_pte_corres",
+      "source_id": "contract:Refine.ArchAcc_R:get_master_pte_corres:1250bd7bdf9c",
+      "statement": "lemma get_master_pte_corres [@lift_corres_args, corres]:\n  \"corres pte_relation' (pte_at p)\n     (pte_at' p and (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)) and\n      pspace_aligned' and pspace_distinct')\n     (get_master_pte p) (getObject p)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0016",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "lookupPTSlot_corres",
+      "source_id": "contract:Refine.ArchAcc_R:lookupPTSlot_corres:de168421551b",
+      "statement": "lemma lookupPTSlot_corres [@lift_corres_args, corres]:\n  \"corres (lfr \\<oplus> (=))\n          (pde_at (lookup_pd_slot pd vptr) and pspace_aligned and valid_vspace_objs\n          and (\\<exists>\\<rhd> (lookup_pd_slot pd vptr && ~~ mask pd_bits)) and\n          K (is_aligned pd pd_bits \\<and> vptr < kernel_base\n          \\<and> ucast (lookup_pd_slot pd vptr && mask pd_bits >> 2) \\<notin> kernel_mapping_slots))\n          (pspace_aligned' and pspace_distinct')\n          (lookup_pt_slot pd vptr) (lookupPTSlot pd vptr)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0017",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "setObject_ASIDPool_corres'",
+      "source_id": "contract:Refine.ArchAcc_R:setObject_ASIDPool_corres':42202f9935db",
+      "statement": "lemma setObject_ASIDPool_corres':\n  \"a = inv ASIDPool a' o ucast \\<Longrightarrow>\n  corres dc (asid_pool_at p and valid_etcbs) (pspace_aligned' and pspace_distinct')\n            (set_asid_pool p a) (setObject p a')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0018",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "setObject_ASIDPool_corres",
+      "source_id": "contract:Refine.ArchAcc_R:setObject_ASIDPool_corres:e759c97c7fe6",
+      "statement": "lemma setObject_ASIDPool_corres [corres]:\n  \"p = p' \\<Longrightarrow> a = inv ASIDPool a' o ucast \\<Longrightarrow>\n  corres dc (asid_pool_at p and valid_etcbs) (asid_pool_at' p')\n            (set_asid_pool p a) (setObject p' a')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0019",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "setObject_PD_corres",
+      "source_id": "contract:Refine.ArchAcc_R:setObject_PD_corres:a57c093fc61c",
+      "statement": "lemma setObject_PD_corres [@lift_corres_args, corres]:\n  \"pde_relation_aligned (p>>2) pde pde' \\<Longrightarrow>\n         corres dc  (ko_at (ArchObj (PageDirectory pd)) (p && ~~ mask pd_bits)\n                     and pspace_aligned and valid_etcbs)\n                    (pde_at' p)\n          (set_pd (p && ~~ mask pd_bits) (pd(ucast (p && mask pd_bits >> 2) := pde)))\n          (setObject p pde')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0020",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "setObject_PT_corres",
+      "source_id": "contract:Refine.ArchAcc_R:setObject_PT_corres:1836f619d5c9",
+      "statement": "lemma setObject_PT_corres [@lift_corres_args, corres]:\n  \"pte_relation_aligned (p >> 2) pte pte' \\<Longrightarrow>\n         corres dc  (ko_at (ArchObj (PageTable pt)) (p && ~~ mask pt_bits)\n                     and pspace_aligned and valid_etcbs)\n                    (pte_at' p)\n          (set_pt (p && ~~ mask pt_bits) (pt(ucast (p && mask pt_bits >> 2) := pte)))\n          (setObject p pte')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0021",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "storePDE_corres'",
+      "source_id": "contract:Refine.ArchAcc_R:storePDE_corres':09944999fa6e",
+      "statement": "lemma storePDE_corres':\n  \"pde_relation_aligned (p >> 2) pde pde' \\<Longrightarrow>\n  corres dc\n     (pde_at p and pspace_aligned and valid_etcbs) (pspace_aligned' and pspace_distinct')\n     (store_pde p pde) (storePDE p pde')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0022",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "storePDE_corres",
+      "source_id": "contract:Refine.ArchAcc_R:storePDE_corres:c631a2da0f7f",
+      "statement": "lemma storePDE_corres [@lift_corres_args, corres]:\n  \"pde_relation_aligned (p >> 2) pde pde' \\<Longrightarrow>\n  corres dc (pde_at p and pspace_aligned and valid_etcbs) (pde_at' p) (store_pde p pde) (storePDE p pde')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0023",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "storePTE_corres'",
+      "source_id": "contract:Refine.ArchAcc_R:storePTE_corres':fdb26f50d4e1",
+      "statement": "lemma storePTE_corres':\n  \"pte_relation_aligned (p >> 2) pte pte' \\<Longrightarrow>\n  corres dc (pte_at p and pspace_aligned and valid_etcbs)\n            (pspace_aligned' and pspace_distinct')\n            (store_pte p pte) (storePTE p pte')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0024",
+      "module": "Vero_Refine_ArchAcc_R",
+      "name": "storePTE_corres",
+      "source_id": "contract:Refine.ArchAcc_R:storePTE_corres:a2459eeca180",
+      "statement": "lemma storePTE_corres [@lift_corres_args, corres]:\n  \"pte_relation_aligned (p>>2) pte pte' \\<Longrightarrow>\n  corres dc (pte_at p and pspace_aligned and valid_etcbs) (pte_at' p) (store_pte p pte) (storePTE p pte')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0025",
+      "module": "Vero_Refine_Arch_R",
+      "name": "arch_decodeInvocation_corres",
+      "source_id": "contract:Refine.Arch_R:arch_decodeInvocation_corres:6bb42af54f4f",
+      "statement": "lemma arch_decodeInvocation_corres:\nshows\n  \"\\<lbrakk> acap_relation arch_cap arch_cap';\n     list_all2 cap_relation (map fst excaps) (map fst excaps');\n     list_all2 (\\<lambda>s s'. s' = cte_map s) (map snd excaps) (map snd excaps') \\<rbrakk> \\<Longrightarrow>\n   corres\n   (ser \\<oplus> archinv_relation)\n   (invs and valid_cap (cap.ArchObjectCap arch_cap) and\n        cte_wp_at ((=) (cap.ArchObjectCap arch_cap)) slot and\n     (\\<lambda>s. \\<forall>x\\<in>set excaps. s \\<turnstile> fst x \\<and> cte_at (snd x) s))\n   (invs' and valid_cap' (capability.ArchObjectCap arch_cap') and\n     (\\<lambda>s. \\<forall>x\\<in>set excaps'. s \\<turnstile>' fst x \\<and> cte_at' (snd x) s) and\n     (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)))\n   (arch_decode_invocation (mi_label mi) args (to_bl cptr') slot\n      arch_cap excaps)\n   (Arch.decodeInvocation (mi_label mi) args cptr'\n     (cte_map slot) arch_cap' excaps')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0026",
+      "module": "Vero_Refine_Arch_R",
+      "name": "arch_performInvocation_corres",
+      "source_id": "contract:Refine.Arch_R:arch_performInvocation_corres:3641e4b0ba8e",
+      "statement": "lemma arch_performInvocation_corres:\n  \"archinv_relation ai ai' \\<Longrightarrow>\n   corres (dc \\<oplus> (=))\n     (einvs and ct_active and valid_arch_inv ai and schact_is_rct)\n     (invs' and ct_active' and valid_arch_inv' ai' and (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)))\n     (arch_perform_invocation ai) (Arch.performInvocation ai')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0027",
+      "module": "Vero_Refine_Arch_R",
+      "name": "checkVPAlignment_corres",
+      "source_id": "contract:Refine.Arch_R:checkVPAlignment_corres:021c4ba9f5d6",
+      "statement": "lemma checkVPAlignment_corres:\n  \"corres (ser \\<oplus> dc) \\<top> \\<top>\n          (check_vp_alignment sz w)\n          (checkVPAlignment sz w)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0028",
+      "module": "Vero_Refine_Arch_R",
+      "name": "decodeARMPageFlush_corres",
+      "source_id": "contract:Refine.Arch_R:decodeARMPageFlush_corres:2290cd669936",
+      "statement": "lemma decodeARMPageFlush_corres:\n  \"ARM_H.isPageFlushLabel (invocation_type (mi_label mi)) \\<Longrightarrow>\n   corres (ser \\<oplus> archinv_relation)\n           (invs and\n            valid_cap (cap.ArchObjectCap (arch_cap.PageCap d word seta vmpage_size option)) and\n            cte_wp_at\n             ((=) (cap.ArchObjectCap (arch_cap.PageCap d word seta vmpage_size option)))\n             slot and\n            (\\<lambda>s. \\<forall>x\\<in>set excaps. s \\<turnstile> fst x \\<and> cte_wp_at (\\<lambda>_. True) (snd x) s))\n           (invs' and\n            valid_cap'\n             (capability.ArchObjectCap\n               (arch_capability.PageCap d word (vmrights_map seta) vmpage_size option)) and\n            (\\<lambda>s. \\<forall>x\\<in>set excaps'. valid_cap' (fst x) s \\<and> cte_wp_at' (\\<lambda>_. True) (snd x) s) and\n            (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)))\n           (if Suc 0 < length args\n            then let start = args ! 0; end = args ! 1\n                 in doE (asid, vaddr) \\<leftarrow>\n                        case option of\n                        None \\<Rightarrow> throwError ExceptionTypes_A.syscall_error.IllegalOperation\n                        | Some x \\<Rightarrow> returnOk x;\n                        pd \\<leftarrow> lookup_error_on_failure False $ find_pd_for_asid asid;\n                        whenE (end \\<le> start) $\n                        throwError $ ExceptionTypes_A.syscall_error.InvalidArgument 1;\n                        page_size \\<leftarrow> returnOk $ 1 << pageBitsForSize vmpage_size;\n                        whenE (page_size \\<le> start \\<or> page_size < end) $\n                        throwError $ ExceptionTypes_A.syscall_error.InvalidArgument 0;\n                        returnOk $\n                        arch_invocation.InvokePage $\n                        ARM_A.page_invocation.PageFlush\n                         (label_to_flush_type (invocation_type (mi_label mi))) (start + vaddr)\n                         (end + vaddr - 1) (addrFromPPtr word + start) pd asid\n                    odE\n            else throwError ExceptionTypes_A.syscall_error.TruncatedMessage)\n           (decodeARMPageFlush (mi_label mi) args\n             (arch_capability.PageCap d word (vmrights_map seta) vmpage_size option))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0029",
+      "module": "Vero_Refine_Arch_R",
+      "name": "performASIDControlInvocation_corres",
+      "source_id": "contract:Refine.Arch_R:performASIDControlInvocation_corres:5a8191fa3307",
+      "statement": "lemma performASIDControlInvocation_corres:\n  \"asid_ci_map i = i' \\<Longrightarrow>\n  corres dc\n         (einvs and ct_active and valid_aci i and schact_is_rct)\n         (invs' and ct_active' and valid_aci' i')\n         (perform_asid_control_invocation i)\n         (performASIDControlInvocation i')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0030",
+      "module": "Vero_Refine_Arch_R",
+      "name": "resolveVAddr_corres",
+      "source_id": "contract:Refine.Arch_R:resolveVAddr_corres:86db94c70b42",
+      "statement": "lemma resolveVAddr_corres:\n  \"\\<lbrakk> is_aligned pd pd_bits; vaddr < kernel_base \\<rbrakk> \\<Longrightarrow>\n  corres (=) (pspace_aligned and valid_vspace_objs and page_directory_at pd\n                 and (\\<exists>\\<rhd> (lookup_pd_slot pd vaddr && ~~ mask pd_bits)))\n                (\\<lambda>s. pspace_aligned' s \\<and> pspace_distinct' s \\<and> vs_valid_duplicates' (ksPSpace s))\n          (resolve_vaddr pd vaddr) (resolveVAddr pd vaddr)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0031",
+      "module": "Vero_Refine_Bits_R",
+      "name": "getCurThread_corres",
+      "source_id": "contract:Refine.Bits_R:getCurThread_corres:58b28316d551",
+      "statement": "lemma getCurThread_corres [corres]: \"corres (=) \\<top> \\<top> (gets cur_thread) getCurThread\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0032",
+      "module": "Vero_Refine_Bits_R",
+      "name": "getIdleThread_corres",
+      "source_id": "contract:Refine.Bits_R:getIdleThread_corres:0432613089b9",
+      "statement": "lemma getIdleThread_corres [corres]:\n  \"corres (=) \\<top> \\<top> (gets idle_thread) getIdleThread\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0033",
+      "module": "Vero_Refine_CNodeInv_R",
+      "name": "cteDelete_corres",
+      "source_id": "contract:Refine.CNodeInv_R:cteDelete_corres:75dba6338305",
+      "statement": "lemma cteDelete_corres:\n  \"corres (dc \\<oplus> dc)\n      (einvs and simple_sched_action and cte_at ptr and emptyable ptr)\n      (invs' and sch_act_simple and cte_at' (cte_map ptr))\n      (cap_delete ptr) (cteDelete (cte_map ptr) True)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0034",
+      "module": "Vero_Refine_CNodeInv_R",
+      "name": "decodeCNodeInvocation_corres",
+      "source_id": "contract:Refine.CNodeInv_R:decodeCNodeInvocation_corres:0cfdf0305ee0",
+      "statement": "lemma decodeCNodeInvocation_corres:\n  \"\\<lbrakk> cap_relation (cap.CNodeCap w n list) cap'; list_all2 cap_relation cs cs';\n     length list \\<le> 32 \\<rbrakk> \\<Longrightarrow>\n  corres\n  (ser \\<oplus> cnodeinv_relation)\n  (invs and cap_table_at n w and K (n \\<noteq> 0) and (\\<lambda>s. \\<forall>x \\<in> set cs. s \\<turnstile> x)) (invs' and valid_cap' cap' and (\\<lambda>s. \\<forall>x \\<in> set cs'. s \\<turnstile>' x))\n  (decode_cnode_invocation (mi_label mi) args\n    (cap.CNodeCap w n list) cs)\n  (decodeCNodeInvocation (mi_label mi) args\n    cap' cs')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0035",
+      "module": "Vero_Refine_CNodeInv_R",
+      "name": "drop_spec_corres",
+      "source_id": "contract:Refine.CNodeInv_R:drop_spec_corres:81e7c71fbd12",
+      "statement": "lemma drop_spec_corres:\n  \"corres r P P' f f' \\<Longrightarrow> spec_corres s r P P' f f'\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0036",
+      "module": "Vero_Refine_CNodeInv_R",
+      "name": "get_cap_corres'",
+      "source_id": "contract:Refine.CNodeInv_R:get_cap_corres':14f3b532588b",
+      "statement": "lemma get_cap_corres':\n  \"cte_ptr' = cte_map cte_ptr \\<Longrightarrow>\n   corres (\\<lambda>x y. cap_relation x (cteCap y)) (cte_at cte_ptr)\n    (pspace_aligned' and pspace_distinct') (get_cap cte_ptr)\n    (getCTE cte_ptr')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0037",
+      "module": "Vero_Refine_CNodeInv_R",
+      "name": "invokeCNode_corres",
+      "source_id": "contract:Refine.CNodeInv_R:invokeCNode_corres:419ba2e32ad6",
+      "statement": "lemma invokeCNode_corres:\n  \"cnodeinv_relation ci ci' \\<Longrightarrow>\n   corres (dc \\<oplus> dc)\n     (einvs and simple_sched_action and valid_cnode_inv ci)\n     (invs' and sch_act_simple and valid_cnode_inv' ci')\n     (invoke_cnode ci) (invokeCNode ci')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0038",
+      "module": "Vero_Refine_CNodeInv_R",
+      "name": "use_spec_corres'",
+      "source_id": "contract:Refine.CNodeInv_R:use_spec_corres':1ab3c896162b",
+      "statement": "lemma use_spec_corres':\nassumes x: \"\\<And>s. Q s \\<Longrightarrow> spec_corres s r P P' f f'\"\nshows      \"corres r (P and Q) P' f f'\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0039",
+      "module": "Vero_Refine_CNodeInv_R",
+      "name": "whenE_throwError_corres'",
+      "source_id": "contract:Refine.CNodeInv_R:whenE_throwError_corres':cd82b77f5d99",
+      "statement": "lemma whenE_throwError_corres':\nassumes P: \"frel f f'\"\nassumes Q: \"\\<And>s s'. \\<lbrakk>(s, s') \\<in> state_relation; R s; R' s'\\<rbrakk> \\<Longrightarrow> P = P'\"\nassumes R: \"\\<not> P \\<Longrightarrow> corres (frel \\<oplus> rvr) Q Q' m m'\"\nshows      \"corres (frel \\<oplus> rvr) (R and Q) (R' and Q')\n                     (whenE P  (throwError f ) >>=E (\\<lambda>_. m ))\n                     (whenE P' (throwError f') >>=E (\\<lambda>_. m'))\""
+    },
+    {
+      "context": [],
+      "id": "c0040",
+      "module": "Vero_Refine_CSpace1_R",
+      "name": "capSwapForDelete_corres",
+      "source_id": "contract:Refine.CSpace1_R:capSwapForDelete_corres:3317bb379849",
+      "statement": "lemma capSwapForDelete_corres:\nassumes \"src' = cte_map src\" \"dest' = cte_map dest\"\nshows \"corres dc\n         (valid_objs and pspace_aligned and pspace_distinct and\n          valid_mdb and valid_list and cte_at src and cte_at dest\n          and (\\<lambda>s. \\<forall>cap. tcb_cap_valid cap src s)\n          and (\\<lambda>s. \\<forall>cap. tcb_cap_valid cap dest s))\n         (valid_mdb' and pspace_distinct' and pspace_aligned')\n         (cap_swap_for_delete src dest) (capSwapForDelete src' dest')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0041",
+      "module": "Vero_Refine_CSpace1_R",
+      "name": "cteInsert_corres",
+      "source_id": "contract:Refine.CSpace1_R:cteInsert_corres:a3335bb6145b",
+      "statement": "lemma cteInsert_corres:\nassumes \"cap_relation c c'\" \"src' = cte_map src\" \"dest' = cte_map dest\"\nshows \"corres dc\n        (valid_objs and pspace_distinct and pspace_aligned and\n         valid_mdb and valid_list and K (src\\<noteq>dest) and\n         cte_wp_at (\\<lambda>c. c=Structures_A.NullCap) dest and\n         (\\<lambda>s. cte_wp_at (is_derived (cdt s) src c) src s))\n        (pspace_distinct' and pspace_aligned' and valid_mdb' and valid_cap' c' and\n         cte_wp_at' (\\<lambda>c. cteCap c=NullCap) dest')\n        (cap_insert c src dest)\n        (cteInsert c' src' dest')\""
+    },
+    {
+      "context": [],
+      "id": "c0042",
+      "module": "Vero_Refine_CSpace1_R",
+      "name": "cteSwap_corres",
+      "source_id": "contract:Refine.CSpace1_R:cteSwap_corres:854eb79cf932",
+      "statement": "lemma cteSwap_corres:\nassumes srcdst: \"src' = cte_map src\" \"dest' = cte_map dest\"\nassumes scr: \"cap_relation scap scap'\"\nassumes dcr: \"cap_relation dcap dcap'\"\nassumes wf_caps: \"wellformed_cap scap\" \"wellformed_cap dcap\"\nshows \"corres dc\n         (valid_objs and pspace_aligned and pspace_distinct and\n          valid_mdb and valid_list and\n          (\\<lambda>s. cte_wp_at (weak_derived scap) src s \\<and>\n               cte_wp_at (weak_derived dcap) dest s \\<and>\n               src \\<noteq> dest \\<and> (\\<forall>cap. tcb_cap_valid cap src s)\n                  \\<and> (\\<forall>cap. tcb_cap_valid cap dest s)))\n         (valid_mdb' and pspace_aligned' and pspace_distinct' and\n          (\\<lambda>s. cte_wp_at' (weak_derived' scap' o cteCap) src' s \\<and>\n               cte_wp_at' (weak_derived' dcap' o cteCap) dest' s))\n         (cap_swap scap src dcap dest) (cteSwap scap' src' dcap' dest')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0043",
+      "module": "Vero_Refine_CSpace1_R",
+      "name": "ensureNoChildren_corres",
+      "source_id": "contract:Refine.CSpace1_R:ensureNoChildren_corres:4a2db4455ebf",
+      "statement": "lemma ensureNoChildren_corres:\n  \"p' = cte_map p \\<Longrightarrow>\n  corres (ser \\<oplus> dc) (cte_at p) (pspace_aligned' and pspace_distinct' and cte_at' p' and valid_mdb')\n         (ensure_no_children p) (ensureNoChildren p')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0044",
+      "module": "Vero_Refine_CSpace1_R",
+      "name": "getSlotCap_corres",
+      "source_id": "contract:Refine.CSpace1_R:getSlotCap_corres:c6b6fec33d46",
+      "statement": "lemma getSlotCap_corres:\n  \"cte_ptr' = cte_map cte_ptr \\<Longrightarrow>\n   corres cap_relation\n     (cte_at cte_ptr)\n     (pspace_distinct' and pspace_aligned')\n     (get_cap cte_ptr)\n     (getSlotCap cte_ptr')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0045",
+      "module": "Vero_Refine_CSpace1_R",
+      "name": "getSlotCap_tcb_corres",
+      "source_id": "contract:Refine.CSpace1_R:getSlotCap_tcb_corres:990bac708f24",
+      "statement": "lemma getSlotCap_tcb_corres:\n  \"corres (\\<lambda>t c. cap_relation (tcb_ctable t) c)\n          (tcb_at t and valid_objs and pspace_aligned)\n          (pspace_distinct' and pspace_aligned')\n          (gets_the (get_tcb t))\n          (getSlotCap t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0046",
+      "module": "Vero_Refine_CSpace1_R",
+      "name": "lookupCap_corres",
+      "source_id": "contract:Refine.CSpace1_R:lookupCap_corres:941a3f864266",
+      "statement": "lemma lookupCap_corres:\n \"corres (lfr \\<oplus> cap_relation)\n         (valid_objs and pspace_aligned and tcb_at t)\n         (valid_objs' and pspace_aligned' and pspace_distinct' and tcb_at' t)\n         (lookup_cap t (to_bl ref)) (lookupCap t ref)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0047",
+      "module": "Vero_Refine_CSpace1_R",
+      "name": "lookupSlotForThread_corres",
+      "source_id": "contract:Refine.CSpace1_R:lookupSlotForThread_corres:c846450a2a02",
+      "statement": "lemma lookupSlotForThread_corres:\n  \"corres (lfr \\<oplus> (\\<lambda>(cref, bits) cref'. cref' = cte_map cref))\n        (valid_objs and pspace_aligned and tcb_at t)\n        (valid_objs' and pspace_aligned' and pspace_distinct' and tcb_at' t)\n        (lookup_slot_for_thread t (to_bl cptr))\n        (lookupSlotForThread t cptr)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0048",
+      "module": "Vero_Refine_CSpace1_R",
+      "name": "rab_corres'",
+      "source_id": "contract:Refine.CSpace1_R:rab_corres':fc5286f43bb2",
+      "statement": "lemma rab_corres':\n  \"\\<lbrakk> cap_relation (fst a) c'; drop (32-bits) (to_bl cref') = snd a;\n     bits = length (snd a) \\<rbrakk> \\<Longrightarrow>\n  corres (lfr \\<oplus> (\\<lambda>(cte, bits) (cte', bits').\n                   cte' = cte_map cte \\<and> length bits = bits'))\n          (valid_objs and pspace_aligned and valid_cap (fst a))\n          (valid_objs' and pspace_distinct' and pspace_aligned' and valid_cap' c')\n          (resolve_address_bits a)\n          (resolveAddressBits c' cref' bits)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0049",
+      "module": "Vero_Refine_CSpace1_R",
+      "name": "setCTE_UntypedCap_corres",
+      "source_id": "contract:Refine.CSpace1_R:setCTE_UntypedCap_corres:a66b701f7e95",
+      "statement": "lemma setCTE_UntypedCap_corres:\n  \"\\<lbrakk>cap_relation cap (cteCap cte); is_untyped_cap cap; idx' = idx\\<rbrakk>\n   \\<Longrightarrow> corres dc (cte_wp_at ((=) cap) src and valid_objs and\n                  pspace_aligned and pspace_distinct)\n                 (cte_wp_at' ((=) cte) (cte_map src) and\n                  pspace_distinct' and pspace_aligned')\n                 (set_cap (free_index_update (\\<lambda>_. idx) cap) src)\n                 (setCTE (cte_map src) (cteCap_update\n                    (\\<lambda>cap. (capFreeIndex_update (\\<lambda>_. idx') (cteCap cte))) cte))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0050",
+      "module": "Vero_Refine_CSpace1_R",
+      "name": "setUntypedCapAsFull_corres",
+      "source_id": "contract:Refine.CSpace1_R:setUntypedCapAsFull_corres:33b52f584332",
+      "statement": "lemma setUntypedCapAsFull_corres:\n  \"\\<lbrakk>cap_relation c c'; src' = cte_map src;\n    cap_relation src_cap (cteCap srcCTE); rv = cap.NullCap;\n    cteCap rv' = capability.NullCap; mdbPrev (cteMDBNode rv') = nullPointer \\<and>\n    mdbNext (cteMDBNode rv') = nullPointer\\<rbrakk>\n   \\<Longrightarrow> corres dc (cte_wp_at ((=) src_cap) src and valid_objs and\n                  pspace_aligned and pspace_distinct)\n                 (cte_wp_at' ((=) srcCTE) (cte_map src) and\n                  pspace_aligned' and pspace_distinct')\n                 (set_untyped_cap_as_full src_cap c src)\n                 (setUntypedCapAsFull (cteCap srcCTE) c' (cte_map src))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0051",
+      "module": "Vero_Refine_CSpace1_R",
+      "name": "updateCap_corres",
+      "source_id": "contract:Refine.CSpace1_R:updateCap_corres:fe4602b9b0c7",
+      "statement": "lemma updateCap_corres:\n  \"\\<lbrakk>cap_relation cap cap';\n    is_zombie cap \\<or> is_cnode_cap cap \\<or> is_thread_cap cap \\<rbrakk>\n   \\<Longrightarrow> corres dc (\\<lambda>s. invs s \\<and>\n                      cte_wp_at (\\<lambda>c. (is_zombie c \\<or> is_cnode_cap c \\<or>\n                                      is_thread_cap c) \\<and>\n                                     is_final_cap' c s \\<and>\n                                     obj_ref_of c = obj_ref_of cap \\<and>\n                                     obj_size c = obj_size cap) slot s)\n                 invs'\n                 (set_cap cap slot) (updateCap (cte_map slot) cap')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0052",
+      "module": "Vero_Refine_CSpace_R",
+      "name": "create_reply_master_corres",
+      "source_id": "contract:Refine.CSpace_R:create_reply_master_corres:c30e61eec6f7",
+      "statement": "lemma create_reply_master_corres:\n  \"\\<lbrakk> sl' = cte_map sl ; AllowGrant \\<in> rights \\<rbrakk> \\<Longrightarrow>\n   corres dc\n      (cte_wp_at ((=) cap.NullCap) sl and valid_pspace and valid_mdb and valid_list)\n      (cte_wp_at' (\\<lambda>c. cteCap c = NullCap \\<and> mdbPrev (cteMDBNode c) = 0) sl'\n       and valid_mdb' and valid_pspace')\n      (do\n         y \\<leftarrow> set_original sl True;\n         set_cap (cap.ReplyCap thread True rights) sl\n       od)\n      (setCTE sl' (CTE (capability.ReplyCap thread True True) initMDBNode))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0053",
+      "module": "Vero_Refine_CSpace_R",
+      "name": "cteInsert_simple_corres",
+      "source_id": "contract:Refine.CSpace_R:cteInsert_simple_corres:ae37f589f03c",
+      "statement": "lemma cteInsert_simple_corres:\nassumes \"cap_relation c c'\" \"src' = cte_map src\" \"dest' = cte_map dest\"\nshows \"corres dc\n        (valid_objs and pspace_distinct and pspace_aligned and\n         valid_mdb and valid_list and K (src\\<noteq>dest) and\n         cte_wp_at (\\<lambda>c. c=cap.NullCap) dest and\n         K (is_simple_cap c) and\n         (\\<lambda>s. cte_wp_at (safe_parent_for (cdt s) src c) src s))\n        (pspace_distinct' and pspace_aligned' and valid_mdb' and valid_cap' c' and\n         K (is_simple_cap' c') and\n         cte_wp_at' (\\<lambda>c. cteCap c=NullCap) dest' and\n         (\\<lambda>s. safe_parent_for' (ctes_of s) src' c'))\n        (cap_insert c src dest)\n        (cteInsert c' src' dest')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0054",
+      "module": "Vero_Refine_CSpace_R",
+      "name": "cteMove_corres",
+      "source_id": "contract:Refine.CSpace_R:cteMove_corres:878f1791b2ce",
+      "statement": "lemma cteMove_corres:\nassumes cr: \"cap_relation cap cap'\"\nshows\n  \"corres dc (einvs and\n              cte_at ptr and\n              cte_wp_at (\\<lambda>c. c = cap.NullCap) ptr' and\n              valid_cap cap and tcb_cap_valid cap ptr' and K (ptr \\<noteq> ptr'))\n             (invs' and\n              cte_wp_at' (\\<lambda>c. weak_derived' cap' (cteCap c) \\<and> cteCap c \\<noteq> NullCap) (cte_map ptr) and\n              cte_wp_at' (\\<lambda>c. cteCap c = NullCap) (cte_map ptr'))\n          (cap_move cap ptr ptr') (cteMove cap' (cte_map ptr) (cte_map ptr'))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0055",
+      "module": "Vero_Refine_CSpace_R",
+      "name": "deriveCap_corres",
+      "source_id": "contract:Refine.CSpace_R:deriveCap_corres:74119b5b8045",
+      "statement": "lemma deriveCap_corres:\n \"\\<lbrakk>cap_relation c c'; cte = cte_map slot \\<rbrakk> \\<Longrightarrow>\n  corres (ser \\<oplus> cap_relation)\n         (cte_at slot)\n         (pspace_aligned' and pspace_distinct' and cte_at' cte and valid_mdb')\n         (derive_cap slot c) (deriveCap cte c')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0056",
+      "module": "Vero_Refine_CSpace_R",
+      "name": "ensureEmptySlot_corres",
+      "source_id": "contract:Refine.CSpace_R:ensureEmptySlot_corres:df17fb0307a8",
+      "statement": "lemma ensureEmptySlot_corres:\n  \"q = cte_map p \\<Longrightarrow>\n   corres (ser \\<oplus> dc) (invs and cte_at p) invs'\n                     (ensure_empty p) (ensureEmptySlot q)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0057",
+      "module": "Vero_Refine_CSpace_R",
+      "name": "lookupSlotForCNodeOp_corres",
+      "source_id": "contract:Refine.CSpace_R:lookupSlotForCNodeOp_corres:1d659cfc5c75",
+      "statement": "lemma lookupSlotForCNodeOp_corres:\n  \"\\<lbrakk>cap_relation c c'; ptr = to_bl ptr'\\<rbrakk>\n  \\<Longrightarrow> corres (ser \\<oplus> (\\<lambda>cref cref'. cref' = cte_map cref))\n            (valid_objs and pspace_aligned and valid_cap c)\n            (valid_objs' and pspace_aligned' and pspace_distinct' and valid_cap' c')\n            (lookup_slot_for_cnode_op s c ptr depth)\n            (lookupSlotForCNodeOp s c' ptr' depth)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0058",
+      "module": "Vero_Refine_CSpace_R",
+      "name": "lookup_cap_corres",
+      "source_id": "contract:Refine.CSpace_R:lookup_cap_corres:53de88241662",
+      "statement": "lemma lookup_cap_corres:\n  \"\\<lbrakk> epcptr = to_bl epcptr' \\<rbrakk> \\<Longrightarrow>\n   corres (lfr \\<oplus> cap_relation)\n     (valid_objs and pspace_aligned and tcb_at thread)\n     (valid_objs' and pspace_distinct' and pspace_aligned' and tcb_at' thread)\n     (lookup_cap thread epcptr)\n     (lookupCap thread epcptr')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0059",
+      "module": "Vero_Refine_CSpace_R",
+      "name": "setupReplyMaster_corres",
+      "source_id": "contract:Refine.CSpace_R:setupReplyMaster_corres:1c16b730dde8",
+      "statement": "lemma setupReplyMaster_corres:\n  \"corres dc (einvs and tcb_at t) (invs' and tcb_at' t)\n       (setup_reply_master t) (setupReplyMaster t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0060",
+      "module": "Vero_Refine_Detype_R",
+      "name": "deleteObjects_corres",
+      "source_id": "contract:Refine.Detype_R:deleteObjects_corres:5ee4763a2f70",
+      "statement": "lemma deleteObjects_corres:\n  \"is_aligned base magnitude \\<Longrightarrow> magnitude \\<ge> 2 \\<Longrightarrow>\n   corres dc\n      (\\<lambda>s. einvs s\n           \\<and> s \\<turnstile> (cap.UntypedCap d base magnitude idx)\n           \\<and> (\\<exists>cref. cte_wp_at ((=) (cap.UntypedCap d base magnitude idx)) cref s\n                     \\<and> descendants_range (cap.UntypedCap d base magnitude idx) cref s)\n           \\<and> untyped_children_in_mdb s \\<and> if_unsafe_then_cap s\n           \\<and> valid_mdb s \\<and> valid_global_refs s \\<and> ct_active s\n           \\<and> schact_is_rct s)\n      (\\<lambda>s'. invs' s'\n           \\<and> cte_wp_at' (\\<lambda>cte. cteCap cte = UntypedCap d base magnitude idx) ptr s'\n           \\<and> descendants_range' (UntypedCap d base magnitude idx) ptr (ctes_of s')\n           \\<and> ct_active' s'\n           \\<and> s' \\<turnstile>' (UntypedCap d base magnitude idx))\n      (delete_objects base magnitude) (deleteObjects base magnitude)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0061",
+      "module": "Vero_Refine_Finalise_R",
+      "name": "arch_finaliseCap_corres",
+      "source_id": "contract:Refine.Finalise_R:arch_finaliseCap_corres:b57e8d59e3f1",
+      "statement": "lemma arch_finaliseCap_corres:\n  \"\\<lbrakk> final_matters' (ArchObjectCap cap') \\<Longrightarrow> final = final'; acap_relation cap cap' \\<rbrakk>\n     \\<Longrightarrow> corres (\\<lambda>r r'. cap_relation (fst r) (fst r') \\<and> cap_relation (snd r) (snd r'))\n           (\\<lambda>s. invs s \\<and> valid_etcbs s\n                       \\<and> s \\<turnstile> cap.ArchObjectCap cap\n                       \\<and> (final_matters (cap.ArchObjectCap cap)\n                            \\<longrightarrow> final = is_final_cap' (cap.ArchObjectCap cap) s)\n                       \\<and> cte_wp_at ((=) (cap.ArchObjectCap cap)) sl s)\n           (\\<lambda>s. invs' s \\<and> s \\<turnstile>' ArchObjectCap cap' \\<and>\n                 (final_matters' (ArchObjectCap cap') \\<longrightarrow>\n                      final' = isFinal (ArchObjectCap cap') (cte_map sl) (cteCaps_of s)))\n           (arch_finalise_cap cap final) (Arch.finaliseCap cap' final')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0062",
+      "module": "Vero_Refine_Finalise_R",
+      "name": "arch_postCapDeletion_corres",
+      "source_id": "contract:Refine.Finalise_R:arch_postCapDeletion_corres:fd91421b1c35",
+      "statement": "lemma arch_postCapDeletion_corres:\n  \"acap_relation cap cap' \\<Longrightarrow> corres dc \\<top> \\<top> (arch_post_cap_deletion cap) (ARM_H.postCapDeletion cap')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0063",
+      "module": "Vero_Refine_Finalise_R",
+      "name": "cap_delete_one_corres",
+      "source_id": "contract:Refine.Finalise_R:cap_delete_one_corres:b5a34882e76b",
+      "statement": "lemma cap_delete_one_corres:\n  \"corres dc (einvs and cte_wp_at can_fast_finalise ptr)\n        (invs' and cte_at' (cte_map ptr))\n        (cap_delete_one ptr) (cteDeleteOne (cte_map ptr))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0064",
+      "module": "Vero_Refine_Finalise_R",
+      "name": "clearUntypedFreeIndex_noop_corres",
+      "source_id": "contract:Refine.Finalise_R:clearUntypedFreeIndex_noop_corres:7f1f0fbcc698",
+      "statement": "lemma clearUntypedFreeIndex_noop_corres:\n  \"corres dc \\<top> (cte_at' (cte_map slot))\n    (return ()) (clearUntypedFreeIndex (cte_map slot))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0065",
+      "module": "Vero_Refine_Finalise_R",
+      "name": "deletedIRQHandler_corres",
+      "source_id": "contract:Refine.Finalise_R:deletedIRQHandler_corres:af8de2f51fda",
+      "statement": "lemma deletedIRQHandler_corres:\n  \"corres dc \\<top> \\<top>\n    (deleted_irq_handler irq)\n    (deletedIRQHandler irq)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0066",
+      "module": "Vero_Refine_Finalise_R",
+      "name": "emptySlot_corres",
+      "source_id": "contract:Refine.Finalise_R:emptySlot_corres:ec8faff38c87",
+      "statement": "lemma emptySlot_corres:\n  \"cap_relation info info' \\<Longrightarrow> corres dc (einvs and cte_at slot) (invs' and cte_at' (cte_map slot))\n             (empty_slot slot info) (emptySlot (cte_map slot) info')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0067",
+      "module": "Vero_Refine_Finalise_R",
+      "name": "fast_finaliseCap_corres",
+      "source_id": "contract:Refine.Finalise_R:fast_finaliseCap_corres:a8db77c84718",
+      "statement": "lemma fast_finaliseCap_corres:\n  \"\\<lbrakk> final_matters' cap' \\<longrightarrow> final = final'; cap_relation cap cap';\n     can_fast_finalise cap \\<rbrakk>\n   \\<Longrightarrow> corres dc\n           (\\<lambda>s. invs s \\<and> valid_sched s \\<and> s \\<turnstile> cap\n                       \\<and> cte_wp_at ((=) cap) sl s)\n           (\\<lambda>s. invs' s \\<and> s \\<turnstile>' cap')\n           (fast_finalise cap final)\n           (do\n               p \\<leftarrow> finaliseCap cap' final' True;\n               assert (capRemovable (fst p) (cte_map ptr) \\<and> snd p = NullCap)\n            od)\""
+    },
+    {
+      "context": [],
+      "id": "c0068",
+      "module": "Vero_Refine_Finalise_R",
+      "name": "finaliseCap_corres",
+      "source_id": "contract:Refine.Finalise_R:finaliseCap_corres:d834a16e0cb7",
+      "statement": "lemma finaliseCap_corres:\n  \"\\<lbrakk> final_matters' cap' \\<Longrightarrow> final = final'; cap_relation cap cap';\n          flag \\<longrightarrow> can_fast_finalise cap \\<rbrakk>\n     \\<Longrightarrow> corres (\\<lambda>x y. cap_relation (fst x) (fst y) \\<and> cap_relation (snd x) (snd y))\n           (\\<lambda>s. einvs s \\<and> s \\<turnstile> cap \\<and> (final_matters cap \\<longrightarrow> final = is_final_cap' cap s)\n                       \\<and> cte_wp_at ((=) cap) sl s)\n           (\\<lambda>s. invs' s \\<and> s \\<turnstile>' cap' \\<and>\n                 (final_matters' cap' \\<longrightarrow>\n                      final' = isFinal cap' (cte_map sl) (cteCaps_of s)))\n           (finalise_cap cap final) (finaliseCap cap' final' flag)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0069",
+      "module": "Vero_Refine_Finalise_R",
+      "name": "isFinalCapability_corres'",
+      "source_id": "contract:Refine.Finalise_R:isFinalCapability_corres':f12033749a90",
+      "statement": "lemma isFinalCapability_corres':\n  \"final_matters' (cteCap cte) \\<Longrightarrow>\n   corres (=) (invs and cte_wp_at ((=) cap) ptr)\n               (invs' and cte_wp_at' ((=) cte) (cte_map ptr))\n       (is_final_cap cap) (isFinalCapability cte)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0070",
+      "module": "Vero_Refine_Finalise_R",
+      "name": "isFinalCapability_corres",
+      "source_id": "contract:Refine.Finalise_R:isFinalCapability_corres:e23a4566197c",
+      "statement": "lemma isFinalCapability_corres:\n  \"corres (\\<lambda>rv rv'. final_matters' (cteCap cte) \\<longrightarrow> rv = rv')\n          (invs and cte_wp_at ((=) cap) ptr)\n          (invs' and cte_wp_at' ((=) cte) (cte_map ptr))\n       (is_final_cap cap) (isFinalCapability cte)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0071",
+      "module": "Vero_Refine_Finalise_R",
+      "name": "postCapDeletion_corres",
+      "source_id": "contract:Refine.Finalise_R:postCapDeletion_corres:7c2a9cee7fa0",
+      "statement": "lemma postCapDeletion_corres:\n  \"cap_relation cap cap' \\<Longrightarrow> corres dc \\<top> \\<top> (post_cap_deletion cap) (postCapDeletion cap')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0072",
+      "module": "Vero_Refine_Finalise_R",
+      "name": "unbindMaybeNotification_corres",
+      "source_id": "contract:Refine.Finalise_R:unbindMaybeNotification_corres:84413e465368",
+      "statement": "lemma unbindMaybeNotification_corres:\n  \"corres dc\n      (invs and ntfn_at ntfnptr) (invs' and ntfn_at' ntfnptr)\n      (unbind_maybe_notification ntfnptr)\n      (unbindMaybeNotification ntfnptr)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0073",
+      "module": "Vero_Refine_Finalise_R",
+      "name": "unbindNotification_corres",
+      "source_id": "contract:Refine.Finalise_R:unbindNotification_corres:a21bdd68da79",
+      "statement": "lemma unbindNotification_corres:\n  \"corres dc\n      (invs and tcb_at t)\n      invs'\n      (unbind_notification t)\n      (unbindNotification t)\""
+    },
+    {
+      "context": [],
+      "id": "c0074",
+      "module": "Vero_Refine_InterruptAcc_R",
+      "name": "getIRQSlot_corres",
+      "source_id": "contract:Refine.InterruptAcc_R:getIRQSlot_corres:6bf2b832a603",
+      "statement": "lemma getIRQSlot_corres:\n  \"corres (\\<lambda>sl sl'. sl' = cte_map sl) \\<top> \\<top> (get_irq_slot irq) (getIRQSlot irq)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0075",
+      "module": "Vero_Refine_InterruptAcc_R",
+      "name": "preemptionPoint_corres",
+      "source_id": "contract:Refine.InterruptAcc_R:preemptionPoint_corres:76ac83fc426f",
+      "statement": "lemma preemptionPoint_corres:\n  \"corres (dc \\<oplus> dc) \\<top> \\<top> preemption_point preemptionPoint\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0076",
+      "module": "Vero_Refine_InterruptAcc_R",
+      "name": "setIRQState_corres",
+      "source_id": "contract:Refine.InterruptAcc_R:setIRQState_corres:2dc2b2640489",
+      "statement": "lemma setIRQState_corres:\n  \"irq_state_relation state state' \\<Longrightarrow>\n   corres dc \\<top> \\<top> (set_irq_state state irq) (setIRQState state' irq)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0077",
+      "module": "Vero_Refine_Interrupt_R",
+      "name": "arch_decodeIRQControlInvocation_corres",
+      "source_id": "contract:Refine.Interrupt_R:arch_decodeIRQControlInvocation_corres:142c746f30e5",
+      "statement": "lemma arch_decodeIRQControlInvocation_corres:\n  \"list_all2 cap_relation caps caps' \\<Longrightarrow>\n   corres (ser \\<oplus> arch_irq_control_inv_relation)\n     (invs and (\\<lambda>s. \\<forall>cp \\<in> set caps. s \\<turnstile> cp))\n     (invs' and (\\<lambda>s. \\<forall>cp \\<in> set caps'. s \\<turnstile>' cp))\n     (arch_decode_irq_control_invocation label args slot caps)\n     (ARM_H.decodeIRQControlInvocation label args (cte_map slot) caps')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0078",
+      "module": "Vero_Refine_Interrupt_R",
+      "name": "arch_invokeIRQHandler_corres",
+      "source_id": "contract:Refine.Interrupt_R:arch_invokeIRQHandler_corres:b1fc578b937c",
+      "statement": "lemma arch_invokeIRQHandler_corres:\n  \"irq_handler_inv_relation i i' \\<Longrightarrow>\n   corres dc \\<top> \\<top> (arch_invoke_irq_handler i) (ARM_H.invokeIRQHandler i')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0079",
+      "module": "Vero_Refine_Interrupt_R",
+      "name": "arch_performIRQControl_corres",
+      "source_id": "contract:Refine.Interrupt_R:arch_performIRQControl_corres:6a9781440def",
+      "statement": "lemma arch_performIRQControl_corres:\n  \"arch_irq_control_inv_relation x2 ivk' \\<Longrightarrow> corres (dc \\<oplus> dc)\n          (einvs and arch_irq_control_inv_valid x2)\n          (invs' and arch_irq_control_inv_valid' ivk')\n          (arch_invoke_irq_control x2)\n          (Arch.performIRQControl ivk')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0080",
+      "module": "Vero_Refine_Interrupt_R",
+      "name": "checkIRQ_corres",
+      "source_id": "contract:Refine.Interrupt_R:checkIRQ_corres:ec4db63f80a9",
+      "statement": "lemma checkIRQ_corres:\n  \"corres (ser \\<oplus> dc) \\<top> \\<top> (arch_check_irq irq) (checkIRQ irq)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0081",
+      "module": "Vero_Refine_Interrupt_R",
+      "name": "decDomainTime_corres",
+      "source_id": "contract:Refine.Interrupt_R:decDomainTime_corres:73205b5fac89",
+      "statement": "lemma decDomainTime_corres:\n  \"corres dc \\<top> \\<top> dec_domain_time decDomainTime\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0082",
+      "module": "Vero_Refine_Interrupt_R",
+      "name": "decodeIRQControlInvocation_corres",
+      "source_id": "contract:Refine.Interrupt_R:decodeIRQControlInvocation_corres:0d32e4b18462",
+      "statement": "lemma decodeIRQControlInvocation_corres:\n  \"list_all2 cap_relation caps caps' \\<Longrightarrow>\n   corres (ser \\<oplus> irq_control_inv_relation)\n     (invs and (\\<lambda>s. \\<forall>cp \\<in> set caps. s \\<turnstile> cp)) (invs' and (\\<lambda>s. \\<forall>cp \\<in> set caps'. s \\<turnstile>' cp))\n     (decode_irq_control_invocation label args slot caps)\n     (decodeIRQControlInvocation label args (cte_map slot) caps')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0083",
+      "module": "Vero_Refine_Interrupt_R",
+      "name": "decodeIRQHandlerInvocation_corres",
+      "source_id": "contract:Refine.Interrupt_R:decodeIRQHandlerInvocation_corres:62b54c97b44a",
+      "statement": "lemma decodeIRQHandlerInvocation_corres:\n  \"\\<lbrakk> list_all2 cap_relation (map fst caps) (map fst caps');\n    list_all2 (\\<lambda>p pa. snd pa = cte_map (snd p)) caps caps' \\<rbrakk> \\<Longrightarrow>\n   corres (ser \\<oplus> irq_handler_inv_relation) invs invs'\n     (decode_irq_handler_invocation label irq caps)\n     (decodeIRQHandlerInvocation label irq caps')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0084",
+      "module": "Vero_Refine_Interrupt_R",
+      "name": "getIRQState_corres",
+      "source_id": "contract:Refine.Interrupt_R:getIRQState_corres:112e11288656",
+      "statement": "lemma getIRQState_corres:\n  \"corres irq_state_relation \\<top> \\<top>\n       (get_irq_state irq) (getIRQState irq)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0085",
+      "module": "Vero_Refine_Interrupt_R",
+      "name": "handleInterrupt_corres",
+      "source_id": "contract:Refine.Interrupt_R:handleInterrupt_corres:f9d90409b35c",
+      "statement": "lemma handleInterrupt_corres:\n  \"corres dc\n     (einvs) (invs' and (\\<lambda>s. intStateIRQTable (ksInterruptState s) irq \\<noteq> IRQInactive))\n     (handle_interrupt irq) (handleInterrupt irq)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0086",
+      "module": "Vero_Refine_Interrupt_R",
+      "name": "invokeIRQHandler_corres",
+      "source_id": "contract:Refine.Interrupt_R:invokeIRQHandler_corres:a3a4284e4e2f",
+      "statement": "lemma invokeIRQHandler_corres:\n  \"irq_handler_inv_relation i i' \\<Longrightarrow>\n   corres dc (einvs and irq_handler_inv_valid i)\n             (invs' and irq_handler_inv_valid' i')\n     (invoke_irq_handler i)\n     (InterruptDecls_H.invokeIRQHandler i')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0087",
+      "module": "Vero_Refine_Interrupt_R",
+      "name": "is_irq_active_corres",
+      "source_id": "contract:Refine.Interrupt_R:is_irq_active_corres:4e7740a0af05",
+      "statement": "lemma is_irq_active_corres:\n  \"corres (=) \\<top> \\<top> (is_irq_active irq) (isIRQActive irq)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0088",
+      "module": "Vero_Refine_Interrupt_R",
+      "name": "performIRQControl_corres",
+      "source_id": "contract:Refine.Interrupt_R:performIRQControl_corres:c09f0ad435f7",
+      "statement": "lemma performIRQControl_corres:\n  \"irq_control_inv_relation i i' \\<Longrightarrow>\n   corres (dc \\<oplus> dc) (einvs and irq_control_inv_valid i)\n             (invs' and irq_control_inv_valid' i')\n     (invoke_irq_control i)\n     (performIRQControl i')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0089",
+      "module": "Vero_Refine_Interrupt_R",
+      "name": "setIRQTrigger_corres",
+      "source_id": "contract:Refine.Interrupt_R:setIRQTrigger_corres:d60fe22cc9e0",
+      "statement": "lemma setIRQTrigger_corres:\n  \"corres dc \\<top> \\<top> (do_machine_op (setIRQTrigger irq t)) (doMachineOp (setIRQTrigger irq t))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0090",
+      "module": "Vero_Refine_Interrupt_R",
+      "name": "timerTick_corres",
+      "source_id": "contract:Refine.Interrupt_R:timerTick_corres:524c47c03690",
+      "statement": "lemma timerTick_corres:\n  \"corres dc\n     (cur_tcb and valid_sched and pspace_aligned and pspace_distinct) invs'\n     timer_tick timerTick\""
+    },
+    {
+      "context": [],
+      "id": "c0091",
+      "module": "Vero_Refine_IpcCancel_R",
+      "name": "blocked_cancelIPC_corres",
+      "source_id": "contract:Refine.IpcCancel_R:blocked_cancelIPC_corres:31468f11dc64",
+      "statement": "lemma blocked_cancelIPC_corres:\n  \"\\<lbrakk> st = Structures_A.BlockedOnReceive epPtr p' \\<or>\n     st = Structures_A.BlockedOnSend epPtr p; thread_state_relation st st' \\<rbrakk> \\<Longrightarrow>\n   corres dc (invs and st_tcb_at ((=) st) t) (invs' and st_tcb_at' ((=) st') t)\n           (blocked_cancel_ipc st t)\n           (do ep \\<leftarrow> getEndpoint epPtr;\n               y \\<leftarrow> assert (\\<not> (case ep of IdleEP \\<Rightarrow> True | _ \\<Rightarrow> False));\n               ep' \\<leftarrow>\n               if remove1 t (epQueue ep) = [] then return IdleEP\n               else\n                 return $ epQueue_update (%_. (remove1 t (epQueue ep))) ep;\n               y \\<leftarrow> setEndpoint epPtr ep';\n               setThreadState Structures_H.thread_state.Inactive t\n            od)\""
+    },
+    {
+      "context": [],
+      "id": "c0092",
+      "module": "Vero_Refine_IpcCancel_R",
+      "name": "cancelAllSignals_corres",
+      "source_id": "contract:Refine.IpcCancel_R:cancelAllSignals_corres:d93d69875eb6",
+      "statement": "lemma cancelAllSignals_corres:\n  \"corres dc (invs and valid_sched and ntfn_at ntfn) (invs' and ntfn_at' ntfn)\n             (cancel_all_signals ntfn) (cancelAllSignals ntfn)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0093",
+      "module": "Vero_Refine_IpcCancel_R",
+      "name": "cancelBadgedSends_corres",
+      "source_id": "contract:Refine.IpcCancel_R:cancelBadgedSends_corres:f5f8ec941641",
+      "statement": "lemma cancelBadgedSends_corres:\n  \"corres dc (invs and valid_sched and ep_at epptr) (invs' and ep_at' epptr)\n         (cancel_badged_sends epptr bdg) (cancelBadgedSends epptr bdg)\""
+    },
+    {
+      "context": [],
+      "id": "c0094",
+      "module": "Vero_Refine_IpcCancel_R",
+      "name": "cancelSignal_corres",
+      "source_id": "contract:Refine.IpcCancel_R:cancelSignal_corres:fa44ec77a741",
+      "statement": "lemma cancelSignal_corres:\n  \"corres dc\n          (invs and st_tcb_at ((=) (Structures_A.BlockedOnNotification ntfn)) t)\n          (invs' and st_tcb_at' ((=) (BlockedOnNotification ntfn)) t)\n          (cancel_signal t ntfn)\n          (cancelSignal t ntfn)\""
+    },
+    {
+      "context": [],
+      "id": "c0095",
+      "module": "Vero_Refine_IpcCancel_R",
+      "name": "ep_cancel_corres",
+      "source_id": "contract:Refine.IpcCancel_R:ep_cancel_corres:78b007ed2b65",
+      "statement": "lemma ep_cancel_corres:\n  \"corres dc (invs and valid_sched and ep_at ep) (invs' and ep_at' ep)\n             (cancel_all_ipc ep) (cancelAllIPC ep)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0096",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "asUser_getRestartPC_corres",
+      "source_id": "contract:Refine.Ipc_R:asUser_getRestartPC_corres:41564fe80f27",
+      "statement": "lemma asUser_getRestartPC_corres:\n  \"corres (=) (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n     (as_user t getRestartPC) (asUser t getRestartPC)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0097",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "asUser_mapM_getRegister_corres",
+      "source_id": "contract:Refine.Ipc_R:asUser_mapM_getRegister_corres:fea902cdc94e",
+      "statement": "lemma asUser_mapM_getRegister_corres:\n  \"corres (=) (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n     (as_user t (mapM getRegister regs))\n     (asUser t (mapM getRegister regs))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0098",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "completeSignal_corres",
+      "source_id": "contract:Refine.Ipc_R:completeSignal_corres:0b368d808d4b",
+      "statement": "lemma completeSignal_corres:\n  \"corres dc (ntfn_at ntfnptr and tcb_at tcb and pspace_aligned and pspace_distinct and valid_objs\n                                                                                                                            )\n             (ntfn_at' ntfnptr and tcb_at' tcb and valid_pspace' and obj_at' isActive ntfnptr)\n             (complete_signal ntfnptr tcb) (completeSignal ntfnptr tcb)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0099",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "doFaultTransfer_corres",
+      "source_id": "contract:Refine.Ipc_R:doFaultTransfer_corres:698bd48a5783",
+      "statement": "lemma doFaultTransfer_corres:\n  \"corres dc\n    (obj_at (\\<lambda>ko. \\<exists>tcb ft. ko = TCB tcb \\<and> tcb_fault tcb = Some ft) sender\n     and tcb_at receiver and case_option \\<top> in_user_frame recv_buf\n     and pspace_aligned and pspace_distinct)\n    (tcb_at' sender and tcb_at' receiver and\n     case_option \\<top> valid_ipc_buffer_ptr' recv_buf)\n    (do_fault_transfer badge sender receiver recv_buf)\n    (doFaultTransfer badge sender receiver recv_buf)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0100",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "doIPCTransfer_corres",
+      "source_id": "contract:Refine.Ipc_R:doIPCTransfer_corres:cf4565c694ba",
+      "statement": "lemma doIPCTransfer_corres:\n  \"corres dc\n     (tcb_at s and tcb_at r and valid_objs and pspace_aligned\n        and valid_list\n        and pspace_distinct and valid_mdb and cur_tcb\n        and (\\<lambda>s. case ep of Some x \\<Rightarrow> ep_at x s | _ \\<Rightarrow> True))\n     (tcb_at' s and tcb_at' r and valid_pspace' and cur_tcb'\n        and (\\<lambda>s. case ep of Some x \\<Rightarrow> ep_at' x s | _ \\<Rightarrow> True))\n     (do_ipc_transfer s ep bg grt r)\n     (doIPCTransfer s ep bg grt r)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0101",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "doNBRecvFailedTransfer_corres",
+      "source_id": "contract:Refine.Ipc_R:doNBRecvFailedTransfer_corres:e526454f969f",
+      "statement": "lemma doNBRecvFailedTransfer_corres:\n  \"corres dc (tcb_at thread and pspace_aligned and pspace_distinct) \\<top>\n             (do_nbrecv_failed_transfer thread)\n             (doNBRecvFailedTransfer thread)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0102",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "doNormalTransfer_corres",
+      "source_id": "contract:Refine.Ipc_R:doNormalTransfer_corres:3bf894f8f298",
+      "statement": "lemma doNormalTransfer_corres:\n  \"corres dc\n  (tcb_at sender and tcb_at receiver and (pspace_aligned:: det_state \\<Rightarrow> bool)\n   and valid_objs and cur_tcb and valid_mdb and valid_list and pspace_distinct\n   and (\\<lambda>s. case ep of Some x \\<Rightarrow> ep_at x s | _ \\<Rightarrow> True)\n   and case_option \\<top> in_user_frame send_buf\n   and case_option \\<top> in_user_frame recv_buf)\n  (tcb_at' sender and tcb_at' receiver and valid_objs'\n   and pspace_aligned' and pspace_distinct' and cur_tcb'\n   and valid_mdb' and no_0_obj'\n   and (\\<lambda>s. case ep of Some x \\<Rightarrow> ep_at' x s | _ \\<Rightarrow> True)\n   and case_option \\<top> valid_ipc_buffer_ptr' send_buf\n   and case_option \\<top> valid_ipc_buffer_ptr' recv_buf)\n  (do_normal_transfer sender send_buf ep badge can_grant receiver recv_buf)\n  (doNormalTransfer sender send_buf ep badge can_grant receiver recv_buf)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0103",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "doReplyTransfer_corres'",
+      "source_id": "contract:Refine.Ipc_R:doReplyTransfer_corres':d68c0bc95d17",
+      "statement": "lemma doReplyTransfer_corres':\n  \"corres dc\n     (einvs and tcb_at receiver and tcb_at sender\n           and cte_wp_at (is_reply_cap_to receiver) slot)\n     (invs' and tcb_at' sender and tcb_at' receiver\n            and valid_pspace' and cte_at' (cte_map slot))\n     (do_reply_transfer sender receiver slot grant)\n     (doReplyTransfer sender receiver (cte_map slot) grant)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0104",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "doReplyTransfer_corres",
+      "source_id": "contract:Refine.Ipc_R:doReplyTransfer_corres:e29cf1feb0bf",
+      "statement": "lemma doReplyTransfer_corres:\n  \"corres dc\n     (einvs and tcb_at receiver and tcb_at sender\n           and cte_wp_at ((=) (cap.ReplyCap receiver False rights)) slot)\n     (invs' and tcb_at' sender and tcb_at' receiver\n            and valid_pspace' and cte_at' (cte_map slot))\n     (do_reply_transfer sender receiver slot grant)\n     (doReplyTransfer sender receiver (cte_map slot) grant)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0105",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "getMessageInfo_corres",
+      "source_id": "contract:Refine.Ipc_R:getMessageInfo_corres:26197c91ba42",
+      "statement": "lemma getMessageInfo_corres: \"corres ((=) \\<circ> message_info_map)\n                      (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n                      (get_message_info t) (getMessageInfo t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0106",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "getReceiveSlots_corres",
+      "source_id": "contract:Refine.Ipc_R:getReceiveSlots_corres:a425fa848fd1",
+      "statement": "lemma getReceiveSlots_corres:\n  \"corres (\\<lambda>xs ys. ys = map cte_map xs)\n    (tcb_at receiver and valid_objs and pspace_aligned)\n    (tcb_at' receiver and valid_objs' and pspace_aligned' and pspace_distinct' and\n     case_option \\<top> valid_ipc_buffer_ptr' recv_buf)\n    (get_receive_slots receiver recv_buf)\n    (getReceiveSlots receiver recv_buf)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0107",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "gets_the_noop_corres",
+      "source_id": "contract:Refine.Ipc_R:gets_the_noop_corres:942f2155f904",
+      "statement": "lemma gets_the_noop_corres:\nassumes P: \"\\<And>s. P s \\<Longrightarrow> f s \\<noteq> None\"\nshows \"corres dc P P' (gets_the f) (return x)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0108",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "handleDoubleFault_corres",
+      "source_id": "contract:Refine.Ipc_R:handleDoubleFault_corres:b78ef0219ff9",
+      "statement": "lemma handleDoubleFault_corres:\n  \"corres dc (tcb_at thread and pspace_aligned and pspace_distinct)\n             \\<top>\n             (handle_double_fault thread f ft)\n             (handleDoubleFault thread f' ft')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0109",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "handleFaultReply_corres",
+      "source_id": "contract:Refine.Ipc_R:handleFaultReply_corres:abcdf9aae592",
+      "statement": "lemma handleFaultReply_corres:\n  \"ft' = fault_map ft \\<Longrightarrow>\n   corres (=) (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n     (handle_fault_reply ft t label msg)\n     (handleFaultReply ft' t label msg)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0110",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "handleFault_corres",
+      "source_id": "contract:Refine.Ipc_R:handleFault_corres:401e42a6fc27",
+      "statement": "lemma handleFault_corres:\n  \"fr f f' \\<Longrightarrow>\n   corres dc (einvs and  st_tcb_at active thread and ex_nonz_cap_to thread\n                   and (%_. valid_fault f))\n             (invs' and sch_act_not thread\n                    and st_tcb_at' simple' thread and ex_nonz_cap_to' thread)\n             (handle_fault thread f) (handleFault thread f')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0111",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "handle_fault_reply_registers_corres",
+      "source_id": "contract:Refine.Ipc_R:handle_fault_reply_registers_corres:db1f384b893d",
+      "statement": "lemma handle_fault_reply_registers_corres:\n  \"corres (=) (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n           (do t' \\<leftarrow> arch_get_sanitise_register_info t;\n               y \\<leftarrow> as_user t\n                (zipWithM_x\n                  (\\<lambda>r v. setRegister r\n                          (sanitise_register t' r v))\n                  msg_template msg);\n               return (label = 0)\n            od)\n           (do t' \\<leftarrow> getSanitiseRegisterInfo t;\n               y \\<leftarrow> asUser t\n                (zipWithM_x\n                  (\\<lambda>r v. setRegister r (sanitiseRegister t' r v))\n                  msg_template msg);\n               return (label = 0)\n            od)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0112",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "loadCapTransfer_corres",
+      "source_id": "contract:Refine.Ipc_R:loadCapTransfer_corres:d8b5121a0482",
+      "statement": "lemma loadCapTransfer_corres:\n  \"corres ct_relation \\<top> (valid_ipc_buffer_ptr' buffer) (load_cap_transfer buffer) (loadCapTransfer buffer)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0113",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "loadWordUser_corres'",
+      "source_id": "contract:Refine.Ipc_R:loadWordUser_corres':4b6d718c43d5",
+      "statement": "lemma loadWordUser_corres':\n  \"\\<lbrakk> y < unat max_ipc_words; y' = of_nat y * 4 \\<rbrakk> \\<Longrightarrow>\n  corres (=) \\<top> (valid_ipc_buffer_ptr' a) (load_word_offs a y) (loadWordUser (a + y'))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0114",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "lookupCapAndSlot_corres",
+      "source_id": "contract:Refine.Ipc_R:lookupCapAndSlot_corres:37adcf87e927",
+      "statement": "lemma lookupCapAndSlot_corres:\n  \"cptr = to_bl cptr' \\<Longrightarrow>\n  corres (lfr \\<oplus> (\\<lambda>a b. cap_relation (fst a) (fst b) \\<and> snd b = cte_map (snd a)))\n    (valid_objs and pspace_aligned and tcb_at thread)\n    (valid_objs' and pspace_distinct' and pspace_aligned' and tcb_at' thread)\n    (lookup_cap_and_slot thread cptr) (lookupCapAndSlot thread cptr')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0115",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "lookupExtraCaps_corres",
+      "source_id": "contract:Refine.Ipc_R:lookupExtraCaps_corres:8f6a35fda0c2",
+      "statement": "lemma lookupExtraCaps_corres:\n  \"\\<lbrakk> info' = message_info_map info; buffer = buffer'\\<rbrakk> \\<Longrightarrow>\n  corres (fr \\<oplus> list_all2 (\\<lambda>x y. cap_relation (fst x) (fst y) \\<and> snd y = cte_map (snd x)))\n   (valid_objs and pspace_aligned and tcb_at thread and (\\<lambda>_. valid_message_info info))\n   (valid_objs' and pspace_distinct' and pspace_aligned' and tcb_at' thread\n        and case_option \\<top> valid_ipc_buffer_ptr' buffer')\n   (lookup_extra_caps thread buffer info) (lookupExtraCaps thread buffer' info')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0116",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "makeArchFaultMessage_corres",
+      "source_id": "contract:Refine.Ipc_R:makeArchFaultMessage_corres:a3edd2fb71b6",
+      "statement": "lemma makeArchFaultMessage_corres:\n  \"corres (=) (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n  (make_arch_fault_msg f t)\n  (makeArchFaultMessage (arch_fault_map f) t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0117",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "makeFaultMessage_corres",
+      "source_id": "contract:Refine.Ipc_R:makeFaultMessage_corres:5f4865e41e2f",
+      "statement": "lemma makeFaultMessage_corres:\n  \"corres (=) (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n     (make_fault_msg ft t)\n     (makeFaultMessage (fault_map ft) t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0118",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "receiveIPC_corres",
+      "source_id": "contract:Refine.Ipc_R:receiveIPC_corres:df4b07f91ed5",
+      "statement": "lemma receiveIPC_corres:\nassumes \"is_ep_cap cap\" and \"cap_relation cap cap'\"\nshows \"\n   corres dc (einvs and valid_sched and tcb_at thread and valid_cap cap and ex_nonz_cap_to thread\n              and cte_wp_at (\\<lambda>c. c = cap.NullCap) (thread, tcb_cnode_index 3))\n             (invs' and tcb_at' thread and valid_cap' cap')\n             (receive_ipc thread cap isBlocking) (receiveIPC thread cap' isBlocking)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0119",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "receiveSignal_corres",
+      "source_id": "contract:Refine.Ipc_R:receiveSignal_corres:a1bd42a9e63a",
+      "statement": "lemma receiveSignal_corres:\n \"\\<lbrakk> is_ntfn_cap cap; cap_relation cap cap' \\<rbrakk> \\<Longrightarrow>\n  corres dc (invs and st_tcb_at active thread and valid_cap cap and ex_nonz_cap_to thread)\n            (invs' and tcb_at' thread and valid_cap' cap')\n            (receive_signal thread cap isBlocking) (receiveSignal thread cap' isBlocking)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0120",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "replyFromKernel_corres",
+      "source_id": "contract:Refine.Ipc_R:replyFromKernel_corres:d7175343c97e",
+      "statement": "lemma replyFromKernel_corres:\n  \"corres dc (tcb_at t and invs) invs'\n             (reply_from_kernel t r) (replyFromKernel t r)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0121",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "sendFaultIPC_corres",
+      "source_id": "contract:Refine.Ipc_R:sendFaultIPC_corres:ac16d827ac22",
+      "statement": "lemma sendFaultIPC_corres:\n  \"valid_fault f \\<Longrightarrow> fr f f' \\<Longrightarrow>\n  corres (fr \\<oplus> dc)\n         (einvs and st_tcb_at active thread and ex_nonz_cap_to thread)\n         (invs' and sch_act_not thread and tcb_at' thread)\n         (send_fault_ipc thread f) (sendFaultIPC thread f')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0122",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "sendIPC_corres",
+      "source_id": "contract:Refine.Ipc_R:sendIPC_corres:63ad2bb63fac",
+      "statement": "lemma sendIPC_corres:\nassumes \"call \\<longrightarrow> bl\"\nshows\n  \"corres dc (einvs and st_tcb_at active t and ep_at ep and ex_nonz_cap_to t)\n             (invs' and  sch_act_not t and tcb_at' t and ep_at' ep)\n             (send_ipc bl call bg cg cgr t ep) (sendIPC bl call bg cg cgr t ep)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0123",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "sendSignal_corres",
+      "source_id": "contract:Refine.Ipc_R:sendSignal_corres:f16d38198b68",
+      "statement": "lemma sendSignal_corres:\n  \"corres dc (einvs and ntfn_at ep) (invs' and ntfn_at' ep)\n             (send_signal ep bg) (sendSignal ep bg)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0124",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "setupCallerCap_corres",
+      "source_id": "contract:Refine.Ipc_R:setupCallerCap_corres:946bc835d952",
+      "statement": "lemma setupCallerCap_corres:\n  \"corres dc\n     (st_tcb_at (Not \\<circ> halted) sender and tcb_at receiver and\n      st_tcb_at (Not \\<circ> awaiting_reply) sender and valid_reply_caps and\n      valid_objs and pspace_distinct and pspace_aligned and valid_mdb\n      and valid_list and\n      valid_reply_masters and cte_wp_at (\\<lambda>c. c = cap.NullCap) (receiver, tcb_cnode_index 3))\n     (tcb_at' sender and tcb_at' receiver and valid_pspace'\n                and (\\<lambda>s. weak_sch_act_wf (ksSchedulerAction s) s))\n     (setup_caller_cap sender receiver grant)\n     (setupCallerCap sender receiver grant)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0125",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "transferCapsToSlots_corres",
+      "source_id": "contract:Refine.Ipc_R:transferCapsToSlots_corres:5fd5301aecb5",
+      "statement": "lemma transferCapsToSlots_corres:\n  \"\\<lbrakk> list_all2 (\\<lambda>(cap, slot) (cap', slot'). cap_relation cap cap'\n             \\<and> slot' = cte_map slot) caps caps';\n      mi' = message_info_map mi \\<rbrakk> \\<Longrightarrow>\n   corres ((=) \\<circ> message_info_map)\n      (\\<lambda>s. valid_objs s \\<and> pspace_aligned s \\<and> pspace_distinct s \\<and> valid_mdb s\n         \\<and> valid_list s\n         \\<and> (case ep of Some x \\<Rightarrow> ep_at x s | _ \\<Rightarrow> True)\n         \\<and> (\\<forall>x \\<in> set slots. cte_wp_at (\\<lambda>cap. cap = cap.NullCap) x s \\<and>\n                             real_cte_at x s)\n         \\<and> (\\<forall>(cap, slot) \\<in> set caps. valid_cap cap s \\<and>\n                    cte_wp_at (\\<lambda>cp'. (cap \\<noteq> cap.NullCap \\<longrightarrow> cp'\\<noteq>cap \\<longrightarrow> cp' = masked_as_full cap cap )) slot s )\n         \\<and> distinct slots\n         \\<and> in_user_frame buffer s)\n      (\\<lambda>s. valid_pspace' s\n         \\<and> (case ep of Some x \\<Rightarrow> ep_at' x s | _ \\<Rightarrow> True)\n         \\<and> (\\<forall>x \\<in> set (map cte_map slots).\n             cte_wp_at' (\\<lambda>cte. cteCap cte = NullCap) x s\n                   \\<and> real_cte_at' x s)\n         \\<and> distinct (map cte_map slots)\n         \\<and> valid_ipc_buffer_ptr' buffer s\n         \\<and> (\\<forall>(cap, slot) \\<in> set caps'. valid_cap' cap s \\<and>\n                    cte_wp_at' (\\<lambda>cte. cap \\<noteq> NullCap \\<longrightarrow> cteCap cte \\<noteq> cap \\<longrightarrow> cteCap cte = maskedAsFull cap cap) slot s)\n         \\<and> 2 + msg_max_length + n + length caps' < unat max_ipc_words)\n      (transfer_caps_loop ep buffer n caps slots mi)\n      (transferCapsToSlots ep buffer n caps'\n         (map cte_map slots) mi')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0126",
+      "module": "Vero_Refine_Ipc_R",
+      "name": "transferCaps_corres",
+      "source_id": "contract:Refine.Ipc_R:transferCaps_corres:3159c7f89660",
+      "statement": "lemma transferCaps_corres:\n  \"\\<lbrakk> info' = message_info_map info;\n    list_all2 (\\<lambda>x y. cap_relation (fst x) (fst y) \\<and> snd y = cte_map (snd x))\n         caps caps' \\<rbrakk>\n  \\<Longrightarrow>\n   corres ((=) \\<circ> message_info_map)\n   (tcb_at receiver and valid_objs and\n    pspace_aligned and pspace_distinct and valid_mdb\n    and valid_list\n    and (\\<lambda>s. case ep of Some x \\<Rightarrow> ep_at x s | _ \\<Rightarrow> True)\n    and case_option \\<top> in_user_frame recv_buf\n    and (\\<lambda>s. valid_message_info info)\n    and transfer_caps_srcs caps)\n   (tcb_at' receiver and valid_objs' and\n    pspace_aligned' and pspace_distinct' and no_0_obj' and valid_mdb'\n    and (\\<lambda>s. case ep of Some x \\<Rightarrow> ep_at' x s | _ \\<Rightarrow> True)\n    and case_option \\<top> valid_ipc_buffer_ptr' recv_buf\n    and transferCaps_srcs caps'\n    and (\\<lambda>s. length caps' \\<le> msgMaxExtraCaps))\n   (transfer_caps info caps ep receiver recv_buf)\n   (transferCaps info' caps' ep receiver recv_buf)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0127",
+      "module": "Vero_Refine_KHeap_R",
+      "name": "getEndpoint_corres",
+      "source_id": "contract:Refine.KHeap_R:getEndpoint_corres:841481e73259",
+      "statement": "lemma getEndpoint_corres [corres]:\n  \"corres ep_relation (ep_at ptr) (ep_at' ptr)\n     (get_endpoint ptr) (getEndpoint ptr)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0128",
+      "module": "Vero_Refine_KHeap_R",
+      "name": "getNotification_corres",
+      "source_id": "contract:Refine.KHeap_R:getNotification_corres:024722259eb1",
+      "statement": "lemma getNotification_corres:\n  \"corres ntfn_relation (ntfn_at ptr) (ntfn_at' ptr)\n     (get_notification ptr) (getNotification ptr)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0129",
+      "module": "Vero_Refine_KHeap_R",
+      "name": "setEndpoint_corres",
+      "source_id": "contract:Refine.KHeap_R:setEndpoint_corres:4908a69ad347",
+      "statement": "lemma setEndpoint_corres [corres]:\n  \"ep_relation e e' \\<Longrightarrow>\n  corres dc (ep_at ptr) (ep_at' ptr)\n            (set_endpoint ptr e) (setEndpoint ptr e')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0130",
+      "module": "Vero_Refine_KHeap_R",
+      "name": "setNotification_corres",
+      "source_id": "contract:Refine.KHeap_R:setNotification_corres:2d8d8379f49d",
+      "statement": "lemma setNotification_corres [corres]:\n  \"ntfn_relation ae ae' \\<Longrightarrow>\n  corres dc (ntfn_at ptr) (ntfn_at' ptr)\n            (set_notification ptr ae) (setNotification ptr ae')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0131",
+      "module": "Vero_Refine_KHeap_R",
+      "name": "setObject_other_corres",
+      "source_id": "contract:Refine.KHeap_R:setObject_other_corres:6927f9098d7d",
+      "statement": "lemma setObject_other_corres:\nfixes ob' :: \"'a :: pspace_storable\"\nassumes x: \"updateObject ob' = updateObject_default ob'\"\nassumes z: \"\\<And>s. obj_at' P ptr s\n               \\<Longrightarrow> map_to_ctes ((ksPSpace s) (ptr \\<mapsto> injectKO ob')) = map_to_ctes (ksPSpace s)\"\nassumes t: \"is_other_obj_relation_type (a_type ob)\"\nassumes b: \"\\<And>ko. P ko \\<Longrightarrow> objBits ko = objBits ob'\"\nassumes e: \"\\<And>ko. P ko \\<Longrightarrow> exst_same' (injectKO ko) (injectKO ob')\"\nassumes P: \"\\<And>(v::'a::pspace_storable). (1 :: word32) < 2 ^ (objBits v)\"\nshows      \"other_obj_relation ob (injectKO (ob' :: 'a :: pspace_storable)) \\<Longrightarrow>\n  corres dc (obj_at (\\<lambda>ko. a_type ko = a_type ob) ptr and obj_at (same_caps ob) ptr)\n            (obj_at' (P :: 'a \\<Rightarrow> bool) ptr)\n            (set_object ptr ob) (setObject ptr ob')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0132",
+      "module": "Vero_Refine_Refine",
+      "name": "checkActiveIRQ_just_idle_corres",
+      "source_id": "contract:Refine.Refine:checkActiveIRQ_just_idle_corres:bc0743c7bbc7",
+      "statement": "lemma checkActiveIRQ_just_idle_corres:\n  \"corres (=)\n    (invs and ct_idle and einvs and (\\<lambda>s. scheduler_action s = resume_cur_thread)\n      and (\\<lambda>s. 0 < domain_time s)  and valid_domain_list)\n    (invs' and ct_idle' and (\\<lambda>s. vs_valid_duplicates' (ksPSpace s))\n      and (\\<lambda>s. 0 < ksDomainTime s) and valid_domain_list'\n      and (\\<lambda>s. ksSchedulerAction s = ResumeCurrentThread))\n    (check_active_irq) (checkActiveIRQ)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0133",
+      "module": "Vero_Refine_Refine",
+      "name": "checkActiveIRQ_just_running_corres",
+      "source_id": "contract:Refine.Refine:checkActiveIRQ_just_running_corres:39ad63dc148e",
+      "statement": "lemma checkActiveIRQ_just_running_corres:\n  \"corres (=)\n    (invs and ct_running and einvs and (\\<lambda>s. scheduler_action s = resume_cur_thread)\n      and (\\<lambda>s. 0 < domain_time s) and valid_domain_list)\n    (invs' and ct_running' and (\\<lambda>s. vs_valid_duplicates' (ksPSpace s))\n      and (\\<lambda>s. 0 < ksDomainTime s) and valid_domain_list'\n      and (\\<lambda>s. ksSchedulerAction s = ResumeCurrentThread))\n    (check_active_irq) (checkActiveIRQ)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0134",
+      "module": "Vero_Refine_Refine",
+      "name": "check_active_irq_corres'",
+      "source_id": "contract:Refine.Refine:check_active_irq_corres':a882a5bee6e0",
+      "statement": "lemma check_active_irq_corres':\n  \"corres (=) \\<top> \\<top> (check_active_irq) (checkActiveIRQ)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0135",
+      "module": "Vero_Refine_Refine",
+      "name": "check_active_irq_corres",
+      "source_id": "contract:Refine.Refine:check_active_irq_corres:16af15f8f311",
+      "statement": "lemma check_active_irq_corres:\n  \"corres (=)\n    (invs and (ct_running or ct_idle) and einvs and (\\<lambda>s. scheduler_action s = resume_cur_thread)\n     and (\\<lambda>s. 0 < domain_time s) and valid_domain_list)\n    (invs' and (\\<lambda>s. ksSchedulerAction s = ResumeCurrentThread)\n      and (\\<lambda>s. 0 < ksDomainTime s) and valid_domain_list' and (ct_running' or ct_idle')\n      and (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)))\n    (check_active_irq) (checkActiveIRQ)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0136",
+      "module": "Vero_Refine_Refine",
+      "name": "device_mem_corres",
+      "source_id": "contract:Refine.Refine:device_mem_corres:379b19d89fcc",
+      "statement": "lemma device_mem_corres:\n  \"corres (=) invs invs' (gets (\\<lambda>x. g (device_mem x))) (gets (\\<lambda>x. g (device_mem' x)))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0137",
+      "module": "Vero_Refine_Refine",
+      "name": "do_user_op_corres",
+      "source_id": "contract:Refine.Refine:do_user_op_corres:b9ca95ff344e",
+      "statement": "lemma do_user_op_corres:\n  \"corres (=) (einvs and ct_running)\n                 (invs' and (%s. ksSchedulerAction s = ResumeCurrentThread) and\n                  ct_running')\n          (do_user_op f tc) (doUserOp f tc)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0138",
+      "module": "Vero_Refine_Refine",
+      "name": "entry_corres",
+      "source_id": "contract:Refine.Refine:entry_corres:6cf19f02eafe",
+      "statement": "lemma entry_corres:\n  \"corres (=) (einvs and (\\<lambda>s. event \\<noteq> Interrupt \\<longrightarrow> ct_running s) and\n                  (\\<lambda>s. 0 < domain_time s) and valid_domain_list and (ct_running or ct_idle) and\n                  (\\<lambda>s. scheduler_action s = resume_cur_thread))\n                 (invs' and (\\<lambda>s. event \\<noteq> Interrupt \\<longrightarrow> ct_running' s) and\n                  (\\<lambda>s. 0 < ksDomainTime s) and valid_domain_list' and (ct_running' or ct_idle') and\n                  (\\<lambda>s. ksSchedulerAction s = ResumeCurrentThread) and\n                  (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)))\n          (kernel_entry event tc) (kernelEntry event tc)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0139",
+      "module": "Vero_Refine_Refine",
+      "name": "kernel_corres'",
+      "source_id": "contract:Refine.Refine:kernel_corres':25c8f09c9e04",
+      "statement": "lemma kernel_corres':\n  \"corres dc (einvs and (\\<lambda>s. event \\<noteq> Interrupt \\<longrightarrow> ct_running s) and (ct_running or ct_idle)\n               and (\\<lambda>s. scheduler_action s = resume_cur_thread))\n             (invs' and (\\<lambda>s. event \\<noteq> Interrupt \\<longrightarrow> ct_running' s) and (ct_running' or ct_idle') and\n              (\\<lambda>s. ksSchedulerAction s = ResumeCurrentThread) and\n              (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)))\n             (call_kernel event)\n             (do _ \\<leftarrow> runExceptT $\n                      handleEvent event `~catchError~`\n                        (\\<lambda>_. withoutPreemption $ do\n                               irq <- doMachineOp (getActiveIRQ True);\n                               when (isJust irq) $ handleInterrupt (fromJust irq)\n                             od);\n                 _ \\<leftarrow> ThreadDecls_H.schedule;\n                 activateThread\n              od)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0140",
+      "module": "Vero_Refine_Refine",
+      "name": "kernel_corres",
+      "source_id": "contract:Refine.Refine:kernel_corres:3f3102b0682b",
+      "statement": "lemma kernel_corres:\n  \"corres dc (einvs and (\\<lambda>s. event \\<noteq> Interrupt \\<longrightarrow> ct_running s) and (ct_running or ct_idle) and\n              (\\<lambda>s. scheduler_action s = resume_cur_thread) and\n              (\\<lambda>s. 0 < domain_time s \\<and> valid_domain_list s))\n             (invs' and (\\<lambda>s. event \\<noteq> Interrupt \\<longrightarrow> ct_running' s) and (ct_running' or ct_idle') and\n              (\\<lambda>s. ksSchedulerAction s = ResumeCurrentThread) and\n              (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)))\n             (call_kernel event) (callKernel event)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0141",
+      "module": "Vero_Refine_Refine",
+      "name": "user_mem_corres",
+      "source_id": "contract:Refine.Refine:user_mem_corres:f68698c82b30",
+      "statement": "lemma user_mem_corres:\n  \"corres (=) invs invs' (gets (\\<lambda>x. g (user_mem x))) (gets (\\<lambda>x. g (user_mem' x)))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0142",
+      "module": "Vero_Refine_Retype_R",
+      "name": "copyGlobalMappings_corres",
+      "source_id": "contract:Refine.Retype_R:copyGlobalMappings_corres:4fee831a5a1c",
+      "statement": "lemma copyGlobalMappings_corres:\n  \"corres dc (valid_arch_state and valid_etcbs and pspace_aligned and page_directory_at pd)\n             (valid_arch_state' and page_directory_at' pd)\n          (copy_global_mappings pd)\n          (copyGlobalMappings pd)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0143",
+      "module": "Vero_Refine_Retype_R",
+      "name": "createObjects_corres'",
+      "source_id": "contract:Refine.Retype_R:createObjects_corres':336ece0d2a6e",
+      "statement": "lemma createObjects_corres':\n  \"\\<lbrakk>corres r P P' f (createObjects a b ko d); ko = injectKO val\\<rbrakk>\n   \\<Longrightarrow> corres dc P P' f (createObjects' a b ko d)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0144",
+      "module": "Vero_Refine_Retype_R",
+      "name": "gcd_corres",
+      "source_id": "contract:Refine.Retype_R:gcd_corres:a46a21a6caf3",
+      "statement": "lemma gcd_corres: \"corres (=) \\<top> \\<top> (gets cur_domain) curDomain\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0145",
+      "module": "Vero_Refine_Retype_R",
+      "name": "retype_region2_extra_ext_mapM_x_corres",
+      "source_id": "contract:Refine.Retype_R:retype_region2_extra_ext_mapM_x_corres:5223882daaa7",
+      "statement": "lemma retype_region2_extra_ext_mapM_x_corres:\nshows \"corres dc\n           (valid_etcbs and (\\<lambda>s. \\<forall>addr\\<in>set addrs. tcb_at addr s))\n           (\\<lambda>s. \\<forall>addr\\<in>set addrs. obj_at' (Not \\<circ> tcbQueued) addr s)\n           (retype_region2_extra_ext addrs Structures_A.apiobject_type.TCBObject)\n           (mapM_x (\\<lambda>addr. do cdom \\<leftarrow> curDomain;\n                              threadSet (tcbDomain_update (\\<lambda>_. cdom)) addr\n                           od)\n             addrs)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0146",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "arch_switchToIdleThread_corres",
+      "source_id": "contract:Refine.Schedule_R:arch_switchToIdleThread_corres:074489db86ac",
+      "statement": "lemma arch_switchToIdleThread_corres:\n  \"corres dc (valid_arch_state and valid_objs and valid_asid_map and unique_table_refs \\<circ> caps_of_state and\n      valid_vs_lookup and valid_global_objs and pspace_aligned and pspace_distinct and valid_vspace_objs and valid_idle)\n     (valid_arch_state' and pspace_aligned' and pspace_distinct' and no_0_obj' and valid_idle')\n        arch_switch_to_idle_thread\n        Arch.switchToIdleThread\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0147",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "arch_switchToThread_corres",
+      "source_id": "contract:Refine.Schedule_R:arch_switchToThread_corres:01ec03c616e0",
+      "statement": "lemma arch_switchToThread_corres:\n  \"corres dc (valid_arch_state and valid_objs and valid_asid_map\n              and valid_vspace_objs and pspace_aligned and pspace_distinct\n              and valid_vs_lookup and valid_global_objs\n              and unique_table_refs o caps_of_state\n              and st_tcb_at runnable t)\n             (valid_arch_state' and st_tcb_at' runnable' t and no_0_obj')\n             (arch_switch_to_thread t) (Arch.switchToThread t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0148",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "chooseThread_corres",
+      "source_id": "contract:Refine.Schedule_R:chooseThread_corres:57fd76ec394d",
+      "statement": "lemma chooseThread_corres:\n  \"corres dc (invs and valid_sched) invs_no_cicd' choose_thread chooseThread\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0149",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "curDomain_corres'",
+      "source_id": "contract:Refine.Schedule_R:curDomain_corres':fff7667c08de",
+      "statement": "lemma curDomain_corres':\n  \"corres (=) \\<top> (\\<lambda>s. ksCurDomain s \\<le> maxDomain)\n    (gets cur_domain) (if Suc 0 < numDomains then curDomain else return 0)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0150",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "curDomain_corres",
+      "source_id": "contract:Refine.Schedule_R:curDomain_corres:d8013a6e136b",
+      "statement": "lemma curDomain_corres: \"corres (=) \\<top> \\<top> (gets cur_domain) (curDomain)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0151",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "ethread_get_when_corres",
+      "source_id": "contract:Refine.Schedule_R:ethread_get_when_corres:f05240dee8f3",
+      "statement": "lemma ethread_get_when_corres:\nassumes x: \"\\<And>etcb tcb'. etcb_relation etcb tcb' \\<Longrightarrow> r (f etcb) (f' tcb')\"\nshows      \"corres (\\<lambda>rv rv'. b \\<longrightarrow> r rv rv') (is_etcb_at t) (tcb_at' t)\n                (ethread_get_when b f t) (threadGet f' t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0152",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "getDomainTime_corres",
+      "source_id": "contract:Refine.Schedule_R:getDomainTime_corres:c016d20846ed",
+      "statement": "lemma getDomainTime_corres:\n  \"corres (=) \\<top> \\<top> (gets domain_time) getDomainTime\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0153",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "guarded_switch_to_chooseThread_fragment_corres",
+      "source_id": "contract:Refine.Schedule_R:guarded_switch_to_chooseThread_fragment_corres:e0b4e7d28c5e",
+      "statement": "lemma guarded_switch_to_chooseThread_fragment_corres:\n  \"corres dc\n    (P and st_tcb_at runnable t and invs and valid_sched)\n    (P' and invs_no_cicd')\n    (guarded_switch_to t)\n    (do runnable \\<leftarrow> isRunnable t;\n        y \\<leftarrow> assert runnable;\n        ThreadDecls_H.switchToThread t\n     od)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0154",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "guarded_switch_to_corres",
+      "source_id": "contract:Refine.Schedule_R:guarded_switch_to_corres:4c973aa5285d",
+      "statement": "lemma guarded_switch_to_corres:\n  \"corres dc (valid_arch_state and valid_objs and valid_asid_map\n                and valid_vspace_objs and pspace_aligned and pspace_distinct\n                and valid_vs_lookup and valid_global_objs\n                and unique_table_refs o caps_of_state\n                and st_tcb_at runnable t and valid_etcbs and valid_queues and valid_idle)\n             (valid_arch_state' and no_0_obj' and sym_heap_sched_pointers and valid_objs')\n             (guarded_switch_to t) (switchToThread t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0155",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "isHighestPrio_corres",
+      "source_id": "contract:Refine.Schedule_R:isHighestPrio_corres:acda3c96a5a5",
+      "statement": "lemma isHighestPrio_corres:\nassumes \"d' = d\"\nassumes \"p' = p\"\nshows\n    \"corres ((=)) \\<top> valid_bitmaps\n      (gets (is_highest_prio d p))\n      (isHighestPrio d' p')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0156",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "nextDomain_corres",
+      "source_id": "contract:Refine.Schedule_R:nextDomain_corres:fa48c09d79c9",
+      "statement": "lemma nextDomain_corres:\n  \"corres dc \\<top> \\<top> next_domain nextDomain\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0157",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "possibleSwitchTo_corres",
+      "source_id": "contract:Refine.Schedule_R:possibleSwitchTo_corres:819c967fe8a7",
+      "statement": "lemma possibleSwitchTo_corres:\n  \"corres dc\n     (valid_etcbs and weak_valid_sched_action and cur_tcb and st_tcb_at runnable t\n      and in_correct_ready_q and ready_qs_distinct and pspace_aligned and pspace_distinct)\n     ((\\<lambda>s. weak_sch_act_wf (ksSchedulerAction s) s)\n      and sym_heap_sched_pointers and valid_sched_pointers and valid_objs')\n     (possible_switch_to t) (possibleSwitchTo t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0158",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "scheduleChooseNewThread_corres",
+      "source_id": "contract:Refine.Schedule_R:scheduleChooseNewThread_corres:180917bdabfe",
+      "statement": "lemma scheduleChooseNewThread_corres:\n  \"corres dc\n    (\\<lambda>s. invs s \\<and> valid_sched s \\<and> scheduler_action s = choose_new_thread)\n    (\\<lambda>s. invs' s \\<and> ksSchedulerAction s = ChooseNewThread)\n           schedule_choose_new_thread scheduleChooseNewThread\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0159",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "scheduleChooseNewThread_fragment_corres",
+      "source_id": "contract:Refine.Schedule_R:scheduleChooseNewThread_fragment_corres:7f1024a0246b",
+      "statement": "lemma scheduleChooseNewThread_fragment_corres:\n  \"corres dc (invs and valid_sched and (\\<lambda>s. scheduler_action s = choose_new_thread)) (invs' and (\\<lambda>s. ksSchedulerAction s = ChooseNewThread))\n     (do _ \\<leftarrow> when (domainTime = 0) next_domain;\n         choose_thread\n      od)\n     (do _ \\<leftarrow> when (domainTime = 0) nextDomain;\n          chooseThread\n      od)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0160",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "scheduleSwitchThreadFastfail_corres",
+      "source_id": "contract:Refine.Schedule_R:scheduleSwitchThreadFastfail_corres:b990930286e9",
+      "statement": "lemma scheduleSwitchThreadFastfail_corres:\n  \"\\<lbrakk> ct \\<noteq> it \\<longrightarrow> (tp = tp' \\<and> cp = cp') ; ct = ct' ; it = it' \\<rbrakk> \\<Longrightarrow>\n   corres ((=)) (is_etcb_at ct) (tcb_at' ct)\n     (schedule_switch_thread_fastfail ct it cp tp)\n     (scheduleSwitchThreadFastfail ct' it' cp' tp')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0161",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "schedule_corres",
+      "source_id": "contract:Refine.Schedule_R:schedule_corres:21d69356e61c",
+      "statement": "lemma schedule_corres:\n  \"corres dc (invs and valid_sched and valid_list) invs' (Schedule_A.schedule) ThreadDecls_H.schedule\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0162",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "setCurThread_corres",
+      "source_id": "contract:Refine.Schedule_R:setCurThread_corres:8f5f9624c3ad",
+      "statement": "lemma setCurThread_corres:\n  \"corres dc (valid_idle and valid_queues and valid_etcbs and pspace_aligned and pspace_distinct) \\<top>\n     (modify (cur_thread_update (\\<lambda>_. t))) (setCurThread t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0163",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "switchToIdleThread_corres",
+      "source_id": "contract:Refine.Schedule_R:switchToIdleThread_corres:82cc0e8b1794",
+      "statement": "lemma switchToIdleThread_corres:\n  \"corres dc\n     (invs and valid_queues and valid_etcbs)\n     invs_no_cicd'\n     switch_to_idle_thread switchToIdleThread\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0164",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "switchToThread_corres",
+      "source_id": "contract:Refine.Schedule_R:switchToThread_corres:d4109d4be9c0",
+      "statement": "lemma switchToThread_corres:\n  \"corres dc (valid_arch_state and valid_objs and valid_asid_map\n                and valid_vspace_objs and pspace_aligned and pspace_distinct\n                and valid_vs_lookup and valid_global_objs\n                and unique_table_refs o caps_of_state\n                and st_tcb_at runnable t and valid_etcbs\n                and valid_queues and valid_idle)\n             (no_0_obj' and sym_heap_sched_pointers and valid_objs' and valid_arch_state')\n             (switch_to_thread t) (switchToThread t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0165",
+      "module": "Vero_Refine_Schedule_R",
+      "name": "tcbSchedAppend_corres",
+      "source_id": "contract:Refine.Schedule_R:tcbSchedAppend_corres:60fe08b23713",
+      "statement": "lemma tcbSchedAppend_corres:\n  \"tcb_ptr = tcbPtr \\<Longrightarrow>\n   corres dc\n     (in_correct_ready_q and ready_qs_distinct and valid_etcbs and st_tcb_at runnable tcb_ptr\n      and pspace_aligned and pspace_distinct)\n     (sym_heap_sched_pointers and valid_sched_pointers and valid_tcbs')\n     (tcb_sched_action tcb_sched_append tcb_ptr) (tcbSchedAppend tcbPtr)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0166",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "decodeDomainInvocation_corres",
+      "source_id": "contract:Refine.Syscall_R:decodeDomainInvocation_corres:ddcf16bdac86",
+      "statement": "lemma decodeDomainInvocation_corres:\nshows \"\\<lbrakk> list_all2 cap_relation (map fst cs) (map fst cs');\n           list_all2 (\\<lambda>p pa. snd pa = cte_map (snd p)) cs cs' \\<rbrakk> \\<Longrightarrow>\n        corres (ser \\<oplus> ((\\<lambda>x. inv_relation x \\<circ> uncurry Invocations_H.invocation.InvokeDomain) \\<circ> (\\<lambda>(x,y). Invocations_A.invocation.InvokeDomain x y))) \\<top> \\<top>\n          (decode_domain_invocation label args cs)\n          (decodeDomainInvocation label args cs')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0167",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "decodeInvocation_corres",
+      "source_id": "contract:Refine.Syscall_R:decodeInvocation_corres:b1bbac8b75af",
+      "statement": "lemma decodeInvocation_corres:\n  \"\\<lbrakk>cptr = to_bl cptr'; mi' = message_info_map mi;\n    slot' = cte_map slot; cap_relation cap cap';\n    args = args'; list_all2 cap_relation (map fst excaps) (map fst excaps');\n    list_all2 (\\<lambda>p pa. snd pa = cte_map (snd p)) excaps excaps' \\<rbrakk>\n    \\<Longrightarrow>\n    corres (ser \\<oplus> inv_relation)\n           (invs and valid_sched and valid_list\n                 and valid_cap cap and cte_at slot and cte_wp_at ((=) cap) slot\n                 and (\\<lambda>s. \\<forall>x\\<in>set excaps. s \\<turnstile> fst x \\<and> cte_at (snd x) s)\n                 and (\\<lambda>s. length args < 2 ^ word_bits))\n           (invs' and valid_cap' cap' and cte_at' slot'\n            and (\\<lambda>s. \\<forall>x\\<in>set excaps'. s \\<turnstile>' fst x \\<and> cte_at' (snd x) s)\n            and (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)))\n      (decode_invocation (mi_label mi) args cptr slot cap excaps)\n      (RetypeDecls_H.decodeInvocation (mi_label mi) args' cptr' slot' cap' excaps')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0168",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "deleteCallerCap_corres",
+      "source_id": "contract:Refine.Syscall_R:deleteCallerCap_corres:008c375235fc",
+      "statement": "lemma deleteCallerCap_corres:\n  \"corres dc (einvs and tcb_at t) (invs' and tcb_at' t)\n     (delete_caller_cap t)\n     (deleteCallerCap t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0169",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "handleCall_corres",
+      "source_id": "contract:Refine.Syscall_R:handleCall_corres:80b64458cef2",
+      "statement": "lemma handleCall_corres:\n  \"corres (dc \\<oplus> dc) (einvs and schact_is_rct and ct_active)\n              (invs' and (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)) and\n                (\\<lambda>s. ksSchedulerAction s = ResumeCurrentThread) and\n                ct_active')\n         handle_call handleCall\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0170",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "handleEvent_corres",
+      "source_id": "contract:Refine.Syscall_R:handleEvent_corres:19ecd02dfd0f",
+      "statement": "lemma handleEvent_corres:\n  \"corres (dc \\<oplus> dc) (einvs and (\\<lambda>s. event \\<noteq> Interrupt \\<longrightarrow> ct_running s) and\n                       schact_is_rct)\n                      (invs' and (\\<lambda>s. event \\<noteq> Interrupt \\<longrightarrow> ct_running' s) and\n                       (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)) and\n                       (\\<lambda>s. ksSchedulerAction s = ResumeCurrentThread))\n                      (handle_event event) (handleEvent event)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0171",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "handleHypervisorFault_corres",
+      "source_id": "contract:Refine.Syscall_R:handleHypervisorFault_corres:71c50f138230",
+      "statement": "lemma handleHypervisorFault_corres:\n  \"corres dc (einvs and  st_tcb_at active thread and ex_nonz_cap_to thread\n                   and (%_. valid_fault f))\n             (invs' and sch_act_not thread\n                    and st_tcb_at' simple' thread and ex_nonz_cap_to' thread)\n          (handle_hypervisor_fault w fault)\n          (handleHypervisorFault w fault)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0172",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "handleInvocation_corres",
+      "source_id": "contract:Refine.Syscall_R:handleInvocation_corres:1497065fd3a5",
+      "statement": "lemma handleInvocation_corres:\n  \"c \\<longrightarrow> b \\<Longrightarrow>\n   corres (dc \\<oplus> dc)\n          (einvs and schact_is_rct and ct_active)\n          (invs' and (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)) and\n           (\\<lambda>s. ksSchedulerAction s = ResumeCurrentThread) and ct_active')\n          (handle_invocation c b)\n          (handleInvocation c b)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0173",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "handleRecv_isBlocking_corres'",
+      "source_id": "contract:Refine.Syscall_R:handleRecv_isBlocking_corres':89c842fa16c7",
+      "statement": "lemma handleRecv_isBlocking_corres':\n   \"corres dc (einvs and ct_in_state active\n                    and (\\<lambda>s. ex_nonz_cap_to (cur_thread s) s))\n              (invs' and ct_in_state' simple'\n                     and sch_act_sane\n                     and (\\<lambda>s. ex_nonz_cap_to' (ksCurThread s) s))\n                    (handle_recv isBlocking) (handleRecv isBlocking)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0174",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "handleRecv_isBlocking_corres",
+      "source_id": "contract:Refine.Syscall_R:handleRecv_isBlocking_corres:bc90be93f328",
+      "statement": "lemma handleRecv_isBlocking_corres:\n  \"corres dc (einvs and ct_active)\n             (invs' and ct_active' and sch_act_sane)\n            (handle_recv isBlocking) (handleRecv isBlocking)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0175",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "handleReply_corres",
+      "source_id": "contract:Refine.Syscall_R:handleReply_corres:a94e1b50da5c",
+      "statement": "lemma handleReply_corres:\n  \"corres dc (einvs and ct_running) (invs' and ct_running')\n         handle_reply handleReply\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0176",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "handleReply_handleRecv_corres",
+      "source_id": "contract:Refine.Syscall_R:handleReply_handleRecv_corres:64e62ff88680",
+      "statement": "lemma handleReply_handleRecv_corres:\n  \"corres dc (einvs and ct_running)\n             (invs' and ct_running' and (\\<lambda>s. ksSchedulerAction s = ResumeCurrentThread))\n         (do x \\<leftarrow> handle_reply; handle_recv True od)\n         (do x \\<leftarrow> handleReply; handleRecv True od)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0177",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "handleSend_corres",
+      "source_id": "contract:Refine.Syscall_R:handleSend_corres:a73970b1d57d",
+      "statement": "lemma handleSend_corres:\n  \"corres (dc \\<oplus> dc)\n          (einvs and schact_is_rct and ct_active)\n          (invs' and (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)) and\n           (\\<lambda>s. ksSchedulerAction s = ResumeCurrentThread) and ct_active')\n          (handle_send blocking) (handleSend blocking)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0178",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "handleYield_corres",
+      "source_id": "contract:Refine.Syscall_R:handleYield_corres:899f4d389032",
+      "statement": "lemma handleYield_corres:\n  \"corres dc\n     (einvs and ct_active)\n     (invs' and (\\<lambda>s. ksSchedulerAction s = ResumeCurrentThread))\n     handle_yield handleYield\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0179",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "performInvocation_corres",
+      "source_id": "contract:Refine.Syscall_R:performInvocation_corres:3d18bce8b854",
+      "statement": "lemma performInvocation_corres:\n  \"\\<lbrakk> inv_relation i i'; call \\<longrightarrow> block \\<rbrakk> \\<Longrightarrow>\n   corres (dc \\<oplus> (=))\n     (einvs and valid_invocation i\n            and schact_is_rct\n            and ct_active\n            and (\\<lambda>s. (\\<exists>w w2 b c. i = Invocations_A.InvokeEndpoint w w2 b c) \\<longrightarrow> st_tcb_at simple (cur_thread s) s))\n     (invs' and sch_act_simple and valid_invocation' i' and ct_active' and (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)))\n     (perform_invocation block call i) (performInvocation block call i')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0180",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "setDomain_corres",
+      "source_id": "contract:Refine.Syscall_R:setDomain_corres:cddf96dd1c2f",
+      "statement": "lemma setDomain_corres:\n  \"corres dc\n     (valid_etcbs and valid_sched and tcb_at tptr and pspace_aligned and pspace_distinct)\n     (invs' and sch_act_simple and tcb_at' tptr and (\\<lambda>s. new_dom \\<le> maxDomain))\n     (set_domain tptr new_dom) (setDomain tptr new_dom)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0181",
+      "module": "Vero_Refine_Syscall_R",
+      "name": "syscall_corres",
+      "source_id": "contract:Refine.Syscall_R:syscall_corres:8595eefc854f",
+      "statement": "lemma syscall_corres:\nassumes corres:\n    \"corres (fr \\<oplus> r_flt_rel) P P' m_flt m_flt'\"\n    \"\\<And>flt flt'. flt' = fault_map flt \\<Longrightarrow>\n        corres r (P_flt flt) (P'_flt flt') (h_flt flt) (h_flt' flt')\"\n    \"\\<And>rv rv'. r_flt_rel rv rv' \\<Longrightarrow>\n        corres (ser \\<oplus> r_err_rel rv rv')\n               (P_no_flt rv) (P'_no_flt rv')\n               (m_err rv) (m_err' rv')\"\n    \"\\<And>rv rv' err err'. \\<lbrakk>r_flt_rel rv rv'; err' = syscall_error_map err \\<rbrakk>\n     \\<Longrightarrow> corres r (P_err rv err)\n            (P'_err rv' err') (h_err err) (h_err' err')\"\n    \"\\<And>rvf rvf' rve rve'. \\<lbrakk>r_flt_rel rvf rvf'; r_err_rel rvf rvf' rve rve'\\<rbrakk>\n     \\<Longrightarrow> corres (dc \\<oplus> r)\n           (P_no_err rvf rve) (P'_no_err rvf' rve')\n           (m_fin rve) (m_fin' rve')\"\nassumes wp:\n    \"\\<And>rv.  \\<lbrace>Q_no_flt rv\\<rbrace>   m_err rv   \\<lbrace>P_no_err rv\\<rbrace>,  \\<lbrace>P_err rv\\<rbrace>\"\n    \"\\<And>rv'. \\<lbrace>Q'_no_flt rv'\\<rbrace> m_err' rv' \\<lbrace>P'_no_err rv'\\<rbrace>,\\<lbrace>P'_err rv'\\<rbrace>\"\n    \"\\<lbrace>Q\\<rbrace> m_flt \\<lbrace>\\<lambda>rv. P_no_flt rv and Q_no_flt rv\\<rbrace>, \\<lbrace>P_flt\\<rbrace>\"\n    \"\\<lbrace>Q'\\<rbrace> m_flt' \\<lbrace>\\<lambda>rv. P'_no_flt rv and Q'_no_flt rv\\<rbrace>, \\<lbrace>P'_flt\\<rbrace>\"\nshows \"corres (dc \\<oplus> r) (P and Q) (P' and Q')\n           (Syscall_A.syscall m_flt  h_flt m_err h_err m_fin)\n           (Syscall_H.syscall m_flt' h_flt' m_err' h_err' m_fin')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0182",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "addToBitmap_if_null_noop_corres",
+      "source_id": "contract:Refine.TcbAcc_R:addToBitmap_if_null_noop_corres:6a93e15f3217",
+      "statement": "lemma addToBitmap_if_null_noop_corres:\n  \"corres dc \\<top> \\<top> (return ()) (if tcbQueueEmpty queue then addToBitmap d p else return ())\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0183",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "addToBitmap_noop_corres",
+      "source_id": "contract:Refine.TcbAcc_R:addToBitmap_noop_corres:d78b8e49a9b7",
+      "statement": "lemma addToBitmap_noop_corres:\n  \"corres dc \\<top> \\<top> (return ()) (addToBitmap d p)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0184",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "asUser_corres'",
+      "source_id": "contract:Refine.TcbAcc_R:asUser_corres':db217001a3a2",
+      "statement": "lemma asUser_corres':\nassumes y: \"corres_underlying Id False True r \\<top> \\<top> f g\"\nshows      \"corres r (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n                       (as_user t f) (asUser t g)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0185",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "asUser_corres",
+      "source_id": "contract:Refine.TcbAcc_R:asUser_corres:cf555f775177",
+      "statement": "lemma asUser_corres:\nassumes y: \"corres_underlying Id False True r \\<top> \\<top> f g\"\nshows      \"corres r (tcb_at t and invs) (tcb_at' t and invs') (as_user t f) (asUser t g)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0186",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "asUser_getRegister_corres",
+      "source_id": "contract:Refine.TcbAcc_R:asUser_getRegister_corres:d343b577dae9",
+      "statement": "lemma asUser_getRegister_corres:\n \"corres (=) (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n        (as_user t (getRegister r)) (asUser t (getRegister r))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0187",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "asUser_setRegister_corres",
+      "source_id": "contract:Refine.TcbAcc_R:asUser_setRegister_corres:6239a84a3409",
+      "statement": "lemma asUser_setRegister_corres:\n  \"corres dc (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n             (as_user t (setRegister r v))\n             (asUser t (setRegister r v))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0188",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "copyMRs_corres",
+      "source_id": "contract:Refine.TcbAcc_R:copyMRs_corres:f85df264d4e1",
+      "statement": "lemma copyMRs_corres:\n  \"corres (=) (tcb_at s and tcb_at r and pspace_aligned and pspace_distinct\n               and case_option \\<top> in_user_frame sb\n               and case_option \\<top> in_user_frame rb\n               and K (unat n \\<le> msg_max_length))\n              (case_option \\<top> valid_ipc_buffer_ptr' sb\n                and case_option \\<top> valid_ipc_buffer_ptr' rb)\n              (copy_mrs s sb r rb n) (copyMRs s sb r rb n)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0189",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "ethreadget_corres",
+      "source_id": "contract:Refine.TcbAcc_R:ethreadget_corres:ecdef1c63eac",
+      "statement": "lemma ethreadget_corres:\nassumes x: \"\\<And>etcb tcb'. etcb_relation etcb tcb' \\<Longrightarrow> r (f etcb) (f' tcb')\"\nshows      \"corres r (is_etcb_at t) (tcb_at' t) (ethread_get f t) (threadGet f' t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0190",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "getBoundNotification_corres",
+      "source_id": "contract:Refine.TcbAcc_R:getBoundNotification_corres:dca87288a17c",
+      "statement": "lemma getBoundNotification_corres:\n  \"corres (=) (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n          (get_bound_notification t) (getBoundNotification t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0191",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "getMRs_corres",
+      "source_id": "contract:Refine.TcbAcc_R:getMRs_corres:7c4a1040b70b",
+      "statement": "lemma getMRs_corres:\n  \"corres (=) (tcb_at t and pspace_aligned and pspace_distinct)\n              (case_option \\<top> valid_ipc_buffer_ptr' buf)\n              (get_mrs t buf mi) (getMRs t buf (message_info_map mi))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0192",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "getObject_TCB_corres",
+      "source_id": "contract:Refine.TcbAcc_R:getObject_TCB_corres:683865d1b103",
+      "statement": "lemma getObject_TCB_corres:\n  \"corres tcb_relation (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n          (gets_the (get_tcb t)) (getObject t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0193",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "getQueue_corres",
+      "source_id": "contract:Refine.TcbAcc_R:getQueue_corres:f03d43e7b3ec",
+      "statement": "lemma getQueue_corres:\n  \"corres (\\<lambda>ls q. (ls = [] \\<longleftrightarrow> tcbQueueEmpty q) \\<and> (ls \\<noteq> [] \\<longrightarrow> tcbQueueHead q = Some (hd ls))\n                  \\<and> queue_end_valid ls q)\n     \\<top> \\<top> (get_tcb_queue qdom prio) (getQueue qdom prio)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0194",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "getSchedulerAction_corres",
+      "source_id": "contract:Refine.TcbAcc_R:getSchedulerAction_corres:c6b21109562d",
+      "statement": "lemma getSchedulerAction_corres:\n  \"corres sched_act_relation \\<top> \\<top> (gets scheduler_action) getSchedulerAction\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0195",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "getThreadState_corres",
+      "source_id": "contract:Refine.TcbAcc_R:getThreadState_corres:e606cee9586f",
+      "statement": "lemma getThreadState_corres:\n  \"corres thread_state_relation (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n          (get_thread_state t) (getThreadState t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0196",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "get_tcb_cap_corres",
+      "source_id": "contract:Refine.TcbAcc_R:get_tcb_cap_corres:759454f0f32c",
+      "statement": "lemma get_tcb_cap_corres:\n  \"tcb_cap_cases ref = Some (getF, v) \\<Longrightarrow>\n   corres cap_relation (tcb_at t and valid_objs) (tcb_at' t and pspace_aligned' and pspace_distinct')\n                       (liftM getF (gets_the (get_tcb t)))\n                       (getSlotCap (cte_map (t, ref)))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0197",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "loadWordUser_corres",
+      "source_id": "contract:Refine.TcbAcc_R:loadWordUser_corres:7680ea275c0b",
+      "statement": "lemma loadWordUser_corres:\nassumes y: \"y < unat max_ipc_words\"\nshows \"corres (=) \\<top> (valid_ipc_buffer_ptr' a) (load_word_offs a y) (loadWordUser (a + of_nat y * 4))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0198",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "load_word_corres",
+      "source_id": "contract:Refine.TcbAcc_R:load_word_corres:3f3c86c4c57e",
+      "statement": "lemma load_word_corres:\n  \"corres (=) \\<top>\n     (typ_at' UserDataT (a && ~~ mask pageBits) and (\\<lambda>s. is_aligned a 2))\n     (do_machine_op (loadWord a)) (loadWordUser a)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0199",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "lookupIPCBuffer_corres'",
+      "source_id": "contract:Refine.TcbAcc_R:lookupIPCBuffer_corres':00693f113a0b",
+      "statement": "lemma lookupIPCBuffer_corres':\n  \"corres (=) (tcb_at t and valid_objs and pspace_aligned and pspace_distinct)\n               (tcb_at' t and valid_objs' and pspace_aligned'\n                and pspace_distinct' and no_0_obj')\n               (lookup_ipc_buffer w t) (lookupIPCBuffer w t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0200",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "lookupIPCBuffer_corres",
+      "source_id": "contract:Refine.TcbAcc_R:lookupIPCBuffer_corres:6defba94f38f",
+      "statement": "lemma lookupIPCBuffer_corres:\n  \"corres (=) (tcb_at t and invs)\n               (tcb_at' t and invs')\n               (lookup_ipc_buffer w t) (lookupIPCBuffer w t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0201",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "rescheduleRequired_corres",
+      "source_id": "contract:Refine.TcbAcc_R:rescheduleRequired_corres:acffe98c6740",
+      "statement": "lemma rescheduleRequired_corres:\n  \"corres dc\n     (weak_valid_sched_action and in_correct_ready_q and ready_qs_distinct and valid_etcbs\n      and pspace_aligned and pspace_distinct)\n     (sym_heap_sched_pointers and valid_sched_pointers and valid_tcbs')\n     (reschedule_required) rescheduleRequired\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0202",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "setBoundNotification_corres",
+      "source_id": "contract:Refine.TcbAcc_R:setBoundNotification_corres:39cbc210c8bb",
+      "statement": "lemma setBoundNotification_corres:\n  \"corres dc\n          (tcb_at t and pspace_aligned and pspace_distinct)\n          \\<top>\n          (set_bound_notification t ntfn) (setBoundNotification ntfn t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0203",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "setMRs_corres",
+      "source_id": "contract:Refine.TcbAcc_R:setMRs_corres:424a90e22de3",
+      "statement": "lemma setMRs_corres:\nassumes m: \"mrs' = mrs\"\nshows\n  \"corres (=) (tcb_at t and pspace_aligned and pspace_distinct and case_option \\<top> in_user_frame buf)\n              (case_option \\<top> valid_ipc_buffer_ptr' buf)\n              (set_mrs t buf mrs) (setMRs t buf mrs')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0204",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "setObject_update_TCB_corres'",
+      "source_id": "contract:Refine.TcbAcc_R:setObject_update_TCB_corres':bd6fdadb45b5",
+      "statement": "lemma setObject_update_TCB_corres':\nassumes tcbs: \"tcb_relation tcb tcb' \\<Longrightarrow> tcb_relation new_tcb new_tcb'\"\nassumes tables: \"\\<forall>(getF, v) \\<in> ran tcb_cap_cases. getF new_tcb = getF tcb\"\nassumes tables': \"\\<forall>(getF, v) \\<in> ran tcb_cte_cases. getF new_tcb' = getF tcb'\"\nassumes sched_pointers: \"tcbSchedPrev new_tcb' = tcbSchedPrev tcb'\"\n                          \"tcbSchedNext new_tcb' = tcbSchedNext tcb'\"\nassumes flag: \"tcbQueued new_tcb' = tcbQueued tcb'\"\nassumes r: \"r () ()\"\nassumes exst: \"exst_same tcb' new_tcb'\"\nshows\n    \"corres r\n       (ko_at (TCB tcb) ptr) (ko_at' tcb' ptr)\n       (set_object ptr (TCB new_tcb)) (setObject ptr new_tcb')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0205",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "setObject_update_TCB_corres",
+      "source_id": "contract:Refine.TcbAcc_R:setObject_update_TCB_corres:f0044b20bd5a",
+      "statement": "lemma setObject_update_TCB_corres:\n  \"\\<lbrakk>tcb_relation tcb tcb' \\<Longrightarrow> tcb_relation new_tcb new_tcb';\n     \\<forall>(getF, v) \\<in> ran tcb_cap_cases. getF new_tcb = getF tcb;\n     \\<forall>(getF, v) \\<in> ran tcb_cte_cases. getF new_tcb' = getF tcb';\n     tcbSchedPrev new_tcb' = tcbSchedPrev tcb'; tcbSchedNext new_tcb' = tcbSchedNext tcb';\n     tcbQueued new_tcb' = tcbQueued tcb'; exst_same tcb' new_tcb';\n     r () ()\\<rbrakk> \\<Longrightarrow>\n   corres r\n     (\\<lambda>s. get_tcb ptr s = Some tcb) (\\<lambda>s'. (tcb', s') \\<in> fst (getObject ptr s'))\n     (set_object ptr (TCB new_tcb)) (setObject ptr new_tcb')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0206",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "setSchedulerAction_corres",
+      "source_id": "contract:Refine.TcbAcc_R:setSchedulerAction_corres:d20e7e82216d",
+      "statement": "lemma setSchedulerAction_corres:\n  \"sched_act_relation sa sa'\n    \\<Longrightarrow> corres dc \\<top> \\<top> (set_scheduler_action sa) (setSchedulerAction sa')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0207",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "setThreadState_corres",
+      "source_id": "contract:Refine.TcbAcc_R:setThreadState_corres:df902af54e35",
+      "statement": "lemma setThreadState_corres:\n  \"thread_state_relation ts ts' \\<Longrightarrow>\n   corres dc\n          (tcb_at t and pspace_aligned and pspace_distinct)\n          \\<top>\n          (set_thread_state t ts) (setThreadState ts' t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0208",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "set_eobject_corres'",
+      "source_id": "contract:Refine.TcbAcc_R:set_eobject_corres':3348d11d9150",
+      "statement": "lemma set_eobject_corres':\nassumes e: \"etcb_relation etcb tcb'\"\nassumes z: \"\\<And>s. obj_at' P ptr s\n               \\<Longrightarrow> map_to_ctes ((ksPSpace s) (ptr \\<mapsto> KOTCB tcb')) = map_to_ctes (ksPSpace s)\"\nshows\n    \"corres dc\n       (tcb_at ptr and is_etcb_at ptr)\n       (obj_at' (\\<lambda>ko. non_exst_same ko tcb') ptr and obj_at' P ptr\n        and obj_at' (\\<lambda>tcb. (tcbDomain tcb \\<noteq> tcbDomain tcb' \\<or> tcbPriority tcb \\<noteq> tcbPriority tcb')\n                            \\<longrightarrow> \\<not> tcbQueued tcb) ptr)\n       (set_eobject ptr etcb) (setObject ptr tcb')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0209",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "set_eobject_corres",
+      "source_id": "contract:Refine.TcbAcc_R:set_eobject_corres:105a6bdecf8f",
+      "statement": "lemma set_eobject_corres:\nassumes tcbs: \"non_exst_same tcb' tcbu'\"\nassumes e: \"etcb_relation etcb tcb' \\<Longrightarrow> etcb_relation etcbu tcbu'\"\nassumes tables': \"\\<forall>(getF, v) \\<in> ran tcb_cte_cases. getF tcbu' = getF tcb'\"\nassumes r: \"r () ()\"\nshows\n    \"corres r\n       (tcb_at add and (\\<lambda>s. ekheap s add = Some etcb))\n       (ko_at' tcb' add\n        and obj_at' (\\<lambda>tcb. (tcbDomain tcb \\<noteq> tcbDomain tcbu' \\<or> tcbPriority tcb \\<noteq> tcbPriority tcbu')\n                           \\<longrightarrow> \\<not> tcbQueued tcb) add)\n       (set_eobject add etcbu) (setObject add tcbu')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0210",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "storeWordUser_corres",
+      "source_id": "contract:Refine.TcbAcc_R:storeWordUser_corres:60bbd9dec7af",
+      "statement": "lemma storeWordUser_corres:\nassumes y: \"y < unat max_ipc_words\"\nshows \"corres dc (in_user_frame a) (valid_ipc_buffer_ptr' a)\n                   (store_word_offs a y w) (storeWordUser (a + of_nat y * 4) w)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0211",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "tcbSchedDequeue_corres",
+      "source_id": "contract:Refine.TcbAcc_R:tcbSchedDequeue_corres:1eb81af976b5",
+      "statement": "lemma tcbSchedDequeue_corres:\n  \"tcb_ptr = tcbPtr \\<Longrightarrow>\n   corres dc\n     (in_correct_ready_q and ready_qs_distinct and valid_etcbs and tcb_at tcb_ptr\n      and pspace_aligned and pspace_distinct)\n     (sym_heap_sched_pointers and valid_objs')\n     (tcb_sched_action tcb_sched_dequeue tcb_ptr) (tcbSchedDequeue tcbPtr)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0212",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "tcbSchedEnqueue_corres",
+      "source_id": "contract:Refine.TcbAcc_R:tcbSchedEnqueue_corres:06c8c280345b",
+      "statement": "lemma tcbSchedEnqueue_corres:\n  \"tcb_ptr = tcbPtr \\<Longrightarrow>\n   corres dc\n     (in_correct_ready_q and ready_qs_distinct and valid_etcbs and st_tcb_at runnable tcb_ptr\n      and pspace_aligned and pspace_distinct)\n     (sym_heap_sched_pointers and valid_sched_pointers and valid_tcbs')\n     (tcb_sched_action tcb_sched_enqueue tcb_ptr) (tcbSchedEnqueue tcbPtr)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0213",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "threadGet_corres",
+      "source_id": "contract:Refine.TcbAcc_R:threadGet_corres:866983913aab",
+      "statement": "lemma threadGet_corres:\nassumes x: \"\\<And>tcb tcb'. tcb_relation tcb tcb' \\<Longrightarrow> r (f tcb) (f' tcb')\"\nshows      \"corres r (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n                       (thread_get f t) (threadGet f' t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0214",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "thread_get_isRunnable_corres",
+      "source_id": "contract:Refine.TcbAcc_R:thread_get_isRunnable_corres:0cf92ee07b1d",
+      "statement": "lemma thread_get_isRunnable_corres:\n  \"corres (=) (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n              (thread_get (\\<lambda>tcb. runnable (tcb_state tcb)) t) (isRunnable t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0215",
+      "module": "Vero_Refine_TcbAcc_R",
+      "name": "zipWithM_x_corres",
+      "source_id": "contract:Refine.TcbAcc_R:zipWithM_x_corres:8e37957fb16a",
+      "statement": "lemma zipWithM_x_corres:\nassumes x: \"\\<And>x x' y y'. ((x, y), (x', y')) \\<in> S \\<Longrightarrow> corres dc P P' (f x y) (f' x' y')\"\nassumes y: \"\\<And>x x' y y'. ((x, y), (x', y')) \\<in> S \\<Longrightarrow> \\<lbrace>P\\<rbrace> f x y \\<lbrace>\\<lambda>rv. P\\<rbrace>\"\n      and z: \"\\<And>x x' y y'. ((x, y), (x', y')) \\<in> S \\<Longrightarrow> \\<lbrace>P'\\<rbrace> f' x' y' \\<lbrace>\\<lambda>rv. P'\\<rbrace>\"\n      and a: \"set (zip (zip xs ys) (zip xs' ys')) \\<subseteq> S\"\n      and b: \"length (zip xs ys) = length (zip xs' ys')\"\nshows      \"corres dc P P' (zipWithM_x f xs ys) (zipWithM_x f' xs' ys')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0216",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "activateIdleThread_corres",
+      "source_id": "contract:Refine.Tcb_R:activateIdleThread_corres:b66df044879f",
+      "statement": "lemma activateIdleThread_corres:\n \"corres dc (invs and st_tcb_at idle t)\n            (invs' and st_tcb_at' idle' t)\n    (arch_activate_idle_thread t) (activateIdleThread t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0217",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "activateThread_corres",
+      "source_id": "contract:Refine.Tcb_R:activateThread_corres:70920f660b0c",
+      "statement": "lemma activateThread_corres:\n \"corres dc (invs and ct_in_state activatable) (invs' and ct_in_state' activatable')\n            activate_thread activateThread\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0218",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "asUser_postModifyRegisters_corres",
+      "source_id": "contract:Refine.Tcb_R:asUser_postModifyRegisters_corres:47c44d9a2988",
+      "statement": "lemma asUser_postModifyRegisters_corres:\n  \"corres dc \\<top> (tcb_at' t)\n     (arch_post_modify_registers ct t)\n     (asUser t $ postModifyRegisters ct t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0219",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "asUser_setNextPC_corres",
+      "source_id": "contract:Refine.Tcb_R:asUser_setNextPC_corres:559de8cfae61",
+      "statement": "lemma asUser_setNextPC_corres:\n  \"corres dc (tcb_at t and invs) (tcb_at' t and invs')\n             (as_user t (setNextPC v)) (asUser t (setNextPC v))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0220",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "bindNotification_corres",
+      "source_id": "contract:Refine.Tcb_R:bindNotification_corres:1ae4c2b68811",
+      "statement": "lemma bindNotification_corres:\n  \"corres dc\n         (invs and tcb_at t and ntfn_at a) (invs' and tcb_at' t and ntfn_at' a)\n         (bind_notification t a) (bindNotification t a)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0221",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "checkCapAt_corres",
+      "source_id": "contract:Refine.Tcb_R:checkCapAt_corres:440987973474",
+      "statement": "lemma checkCapAt_corres:\nassumes r: \"cap_relation cap cap'\"\nassumes c: \"corres dc Q Q' f f'\"\nassumes Q: \"\\<And>s. P s \\<and> cte_wp_at (same_object_as cap) slot s \\<Longrightarrow> Q s\"\nassumes Q': \"\\<And>s. P' s \\<and> cte_wp_at' (sameObjectAs cap' o cteCap) (cte_map slot) s \\<Longrightarrow> Q' s\"\nshows \"corres dc (P and cte_at slot and invs) (P' and pspace_aligned' and pspace_distinct')\n             (check_cap_at cap slot f)\n             (checkCapAt cap' (cte_map slot) f')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0222",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "checkCapAt_cteInsert_corres",
+      "source_id": "contract:Refine.Tcb_R:checkCapAt_cteInsert_corres:c30ede9a9fb4",
+      "statement": "lemma checkCapAt_cteInsert_corres:\n  \"cap_relation new_cap newCap \\<Longrightarrow>\n   corres dc (einvs and cte_wp_at (\\<lambda>c. c = cap.NullCap) (target, ref)\n               and cte_at slot and K (is_cnode_or_valid_arch new_cap\n                                        \\<and> (is_pt_cap new_cap \\<or> is_pd_cap new_cap\n                                               \\<longrightarrow> cap_asid new_cap \\<noteq> None))\n               and cte_wp_at (\\<lambda>c. obj_refs c = obj_refs new_cap\n                                \\<longrightarrow> table_cap_ref c = table_cap_ref new_cap \\<and>\n                                    pt_pd_asid c = pt_pd_asid new_cap) src_slot)\n             (invs' and cte_wp_at' (\\<lambda>cte. cteCap cte = NullCap) (cte_map (target, ref))\n               and valid_cap' newCap)\n     (check_cap_at new_cap src_slot\n      (check_cap_at (cap.ThreadCap target) slot\n       (cap_insert new_cap src_slot (target, ref))))\n     (checkCapAt newCap (cte_map src_slot)\n      (checkCapAt (ThreadCap target) (cte_map slot)\n       (assertDerived (cte_map src_slot) newCap (cteInsert newCap (cte_map src_slot) (cte_map (target, ref))))))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0223",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "checkCapAt_weak_corres",
+      "source_id": "contract:Refine.Tcb_R:checkCapAt_weak_corres:aa51beb68f1f",
+      "statement": "lemma checkCapAt_weak_corres:\nassumes r: \"cap_relation cap cap'\"\nassumes c: \"corres dc P P' f f'\"\nshows \"corres dc (P and cte_at slot and invs) (P' and pspace_aligned' and pspace_distinct')\n             (check_cap_at cap slot f)\n             (checkCapAt cap' (cte_map slot) f')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0224",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "checkPrio_corres",
+      "source_id": "contract:Refine.Tcb_R:checkPrio_corres:43323f905a00",
+      "statement": "lemma checkPrio_corres:\n  \"corres (ser \\<oplus> dc) (tcb_at auth and pspace_aligned and pspace_distinct) \\<top>\n     (check_prio p auth) (checkPrio p auth)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0225",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "checkValidIPCBuffer_corres",
+      "source_id": "contract:Refine.Tcb_R:checkValidIPCBuffer_corres:11f64247d98f",
+      "statement": "lemma checkValidIPCBuffer_corres:\n  \"cap_relation cap cap' \\<Longrightarrow>\n   corres (ser \\<oplus> dc) \\<top> \\<top>\n     (check_valid_ipc_buffer vptr cap)\n     (checkValidIPCBuffer vptr cap')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0226",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "decodeBindNotification_corres",
+      "source_id": "contract:Refine.Tcb_R:decodeBindNotification_corres:ab9124d032bc",
+      "statement": "lemma decodeBindNotification_corres:\nshows\n  \"\\<lbrakk> list_all2 (\\<lambda>x y. cap_relation (fst x) (fst y)) extras extras' \\<rbrakk> \\<Longrightarrow>\n    corres (ser \\<oplus> tcbinv_relation)\n      (invs and tcb_at t and (\\<lambda>s. \\<forall>x \\<in> set extras. s \\<turnstile> (fst x)))\n      (invs' and tcb_at' t and (\\<lambda>s. \\<forall>x \\<in> set extras'. s \\<turnstile>' (fst x)))\n     (decode_bind_notification (cap.ThreadCap t) extras)\n     (decodeBindNotification (capability.ThreadCap t) extras')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0227",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "decodeCopyRegisters_corres",
+      "source_id": "contract:Refine.Tcb_R:decodeCopyRegisters_corres:e89804ffc6cc",
+      "statement": "lemma decodeCopyRegisters_corres:\n  \"\\<lbrakk> list_all2 cap_relation extras extras'; length args < 2 ^ word_bits \\<rbrakk> \\<Longrightarrow>\n   corres (ser \\<oplus> tcbinv_relation) (invs and tcb_at t) (invs' and tcb_at' t)\n     (decode_copy_registers args (cap.ThreadCap t) extras)\n     (decodeCopyRegisters args (ThreadCap t) extras')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0228",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "decodeReadRegisters_corres",
+      "source_id": "contract:Refine.Tcb_R:decodeReadRegisters_corres:32ded2c4627d",
+      "statement": "lemma decodeReadRegisters_corres:\n  \"corres (ser \\<oplus> tcbinv_relation) (invs and tcb_at t) (invs' and tcb_at' t)\n     (decode_read_registers args (cap.ThreadCap t))\n     (decodeReadRegisters args (ThreadCap t))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0229",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "decodeSetIPCBuffer_corres",
+      "source_id": "contract:Refine.Tcb_R:decodeSetIPCBuffer_corres:a7aa29077f12",
+      "statement": "lemma decodeSetIPCBuffer_corres:\nshows\n  \"\\<lbrakk> cap_relation cap cap'; is_thread_cap cap;\n     list_all2 (\\<lambda>(c, sl) (c', sl'). cap_relation c c' \\<and> sl' = cte_map sl) extras extras' \\<rbrakk> \\<Longrightarrow>\n   corres (ser \\<oplus> tcbinv_relation) (\\<lambda>s. \\<forall>x \\<in> set extras. cte_at (snd x) s)\n                            (\\<lambda>s. invs' s \\<and> (\\<forall>x \\<in> set extras'. cte_at' (snd x) s))\n       (decode_set_ipc_buffer args cap slot extras)\n       (decodeSetIPCBuffer args cap' (cte_map slot) extras')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0230",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "decodeSetMCPriority_corres",
+      "source_id": "contract:Refine.Tcb_R:decodeSetMCPriority_corres:bf48c03f0c40",
+      "statement": "lemma decodeSetMCPriority_corres:\n  \"\\<lbrakk> cap_relation cap cap'; is_thread_cap cap;\n     list_all2 (\\<lambda>(c, sl) (c', sl'). cap_relation c c' \\<and> sl' = cte_map sl) extras extras' \\<rbrakk> \\<Longrightarrow>\n   corres (ser \\<oplus> tcbinv_relation)\n       (cur_tcb and valid_etcbs and (pspace_aligned and pspace_distinct and (\\<lambda>s. \\<forall>x \\<in> set extras. s \\<turnstile> (fst x))))\n       (invs' and (\\<lambda>s. \\<forall>x \\<in> set extras'. s \\<turnstile>' (fst x)))\n       (decode_set_mcpriority args cap slot extras)\n       (decodeSetMCPriority args cap' extras')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0231",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "decodeSetPriority_corres",
+      "source_id": "contract:Refine.Tcb_R:decodeSetPriority_corres:7398ee6c4383",
+      "statement": "lemma decodeSetPriority_corres:\n  \"\\<lbrakk> cap_relation cap cap'; is_thread_cap cap;\n     list_all2 (\\<lambda>(c, sl) (c', sl'). cap_relation c c' \\<and> sl' = cte_map sl) extras extras' \\<rbrakk> \\<Longrightarrow>\n   corres (ser \\<oplus> tcbinv_relation)\n       (cur_tcb and valid_etcbs and (pspace_aligned and pspace_distinct and (\\<lambda>s. \\<forall>x \\<in> set extras. s \\<turnstile> (fst x))))\n       (invs' and (\\<lambda>s. \\<forall>x \\<in> set extras'. s \\<turnstile>' (fst x)))\n       (decode_set_priority args cap slot extras)\n       (decodeSetPriority args cap' extras')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0232",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "decodeSetSchedParams_corres",
+      "source_id": "contract:Refine.Tcb_R:decodeSetSchedParams_corres:e7a954259317",
+      "statement": "lemma decodeSetSchedParams_corres:\n  \"\\<lbrakk> cap_relation cap cap'; is_thread_cap cap;\n     list_all2 (\\<lambda>(c, sl) (c', sl'). cap_relation c c' \\<and> sl' = cte_map sl) extras extras' \\<rbrakk> \\<Longrightarrow>\n   corres (ser \\<oplus> tcbinv_relation)\n       (cur_tcb and valid_etcbs and\n         (pspace_aligned and pspace_distinct and (\\<lambda>s. \\<forall>x \\<in> set extras. s \\<turnstile> (fst x))))\n       (invs' and (\\<lambda>s. \\<forall>x \\<in> set extras'. s \\<turnstile>' (fst x)))\n       (decode_set_sched_params args cap slot extras)\n       (decodeSetSchedParams args cap' extras')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0233",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "decodeSetSpace_corres",
+      "source_id": "contract:Refine.Tcb_R:decodeSetSpace_corres:4654231bada8",
+      "statement": "lemma decodeSetSpace_corres:\nshows\n \"\\<lbrakk> cap_relation cap cap'; list_all2 (\\<lambda>(c, sl) (c', sl'). cap_relation c c' \\<and> sl' = cte_map sl) extras extras';\n      is_thread_cap cap \\<rbrakk> \\<Longrightarrow>\n  corres (ser \\<oplus> tcbinv_relation)\n         (invs and valid_cap cap and (\\<lambda>s. \\<forall>x \\<in> set extras. cte_at (snd x) s))\n         (invs' and valid_cap' cap'  and (\\<lambda>s. \\<forall>x \\<in> set extras'. cte_at' (snd x) s))\n      (decode_set_space args cap slot extras)\n      (decodeSetSpace args cap' (cte_map slot) extras')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0234",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "decodeSetTLSBase_corres",
+      "source_id": "contract:Refine.Tcb_R:decodeSetTLSBase_corres:fa5ec4a4b2fd",
+      "statement": "lemma decodeSetTLSBase_corres:\n  \"corres (ser \\<oplus> tcbinv_relation) (tcb_at t) (tcb_at' t)\n          (decode_set_tls_base w (cap.ThreadCap t))\n          (decodeSetTLSBase w (capability.ThreadCap t))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0235",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "decodeTCBConfigure_corres",
+      "source_id": "contract:Refine.Tcb_R:decodeTCBConfigure_corres:03ea805953c7",
+      "statement": "lemma decodeTCBConfigure_corres:\nshows\n \"\\<lbrakk> cap_relation cap cap'; list_all2 (\\<lambda>(c, sl) (c', sl'). cap_relation c c' \\<and> sl' = cte_map sl) extras extras';\n     is_thread_cap cap \\<rbrakk> \\<Longrightarrow>\n  corres (ser \\<oplus> tcbinv_relation) (einvs and valid_cap cap and (\\<lambda>s. \\<forall>x \\<in> set extras. cte_at (snd x) s))\n                                 (invs' and valid_cap' cap' and (\\<lambda>s. \\<forall>x \\<in> set extras'. cte_at' (snd x) s))\n      (decode_tcb_configure args cap slot extras)\n      (decodeTCBConfigure args cap' (cte_map slot) extras')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0236",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "decodeTCBInvocation_corres",
+      "source_id": "contract:Refine.Tcb_R:decodeTCBInvocation_corres:e2822fae58d3",
+      "statement": "lemma decodeTCBInvocation_corres:\n \"\\<lbrakk> c = Structures_A.ThreadCap t; cap_relation c c';\n      list_all2 (\\<lambda>(c, sl) (c', sl'). cap_relation c c' \\<and> sl' = cte_map sl) extras extras';\n      length args < 2 ^ word_bits \\<rbrakk> \\<Longrightarrow>\n  corres (ser \\<oplus> tcbinv_relation) (einvs and tcb_at t and (\\<lambda>s. \\<forall>x \\<in> set extras. s \\<turnstile> fst x \\<and> cte_at (snd x) s))\n                                 (invs' and tcb_at' t and (\\<lambda>s. \\<forall>x \\<in> set extras'. s \\<turnstile>' fst x \\<and> cte_at' (snd x) s))\n         (decode_tcb_invocation label args c slot extras)\n         (decodeTCBInvocation label args c' (cte_map slot) extras')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0237",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "decodeUnbindNotification_corres",
+      "source_id": "contract:Refine.Tcb_R:decodeUnbindNotification_corres:a7765fc2ac51",
+      "statement": "lemma decodeUnbindNotification_corres:\n  \"corres (ser \\<oplus> tcbinv_relation)\n      (tcb_at t and pspace_aligned and pspace_distinct)\n      \\<top>\n     (decode_unbind_notification (cap.ThreadCap t))\n     (decodeUnbindNotification (capability.ThreadCap t))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0238",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "decodeWriteRegisters_corres",
+      "source_id": "contract:Refine.Tcb_R:decodeWriteRegisters_corres:9dee950a5722",
+      "statement": "lemma decodeWriteRegisters_corres:\nshows\n  \"\\<lbrakk> length args < 2 ^ word_bits \\<rbrakk> \\<Longrightarrow>\n   corres (ser \\<oplus> tcbinv_relation) (invs and tcb_at t) (invs' and tcb_at' t)\n     (decode_write_registers args (cap.ThreadCap t))\n     (decodeWriteRegisters args (ThreadCap t))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0239",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "invokeTCB_CopyRegisters_corres",
+      "source_id": "contract:Refine.Tcb_R:invokeTCB_CopyRegisters_corres:f89302c78acc",
+      "statement": "lemma invokeTCB_CopyRegisters_corres:\n  \"corres (dc \\<oplus> (=))\n        (einvs and simple_sched_action and tcb_at dest and tcb_at src and ex_nonz_cap_to src and\n          ex_nonz_cap_to dest)\n        (invs' and sch_act_simple and tcb_at' dest and tcb_at' src\n          and ex_nonz_cap_to' src and ex_nonz_cap_to' dest)\n        (invoke_tcb (tcb_invocation.CopyRegisters dest src susp resume frames ints arch))\n        (invokeTCB (tcbinvocation.CopyRegisters dest src susp resume frames ints arch'))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0240",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "invokeTCB_ReadRegisters_corres",
+      "source_id": "contract:Refine.Tcb_R:invokeTCB_ReadRegisters_corres:a61335f448f4",
+      "statement": "lemma invokeTCB_ReadRegisters_corres:\n  \"corres (dc \\<oplus> (=))\n        (einvs  and tcb_at src and ex_nonz_cap_to src)\n        (invs' and sch_act_simple and tcb_at' src and ex_nonz_cap_to' src)\n        (invoke_tcb (tcb_invocation.ReadRegisters src susp n arch))\n        (invokeTCB (tcbinvocation.ReadRegisters src susp n arch'))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0241",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "invokeTCB_WriteRegisters_corres",
+      "source_id": "contract:Refine.Tcb_R:invokeTCB_WriteRegisters_corres:8edf9868695e",
+      "statement": "lemma invokeTCB_WriteRegisters_corres:\n  \"corres (dc \\<oplus> (=)) (einvs  and tcb_at dest and ex_nonz_cap_to dest)\n        (invs' and sch_act_simple and tcb_at' dest and ex_nonz_cap_to' dest)\n        (invoke_tcb (tcb_invocation.WriteRegisters dest resume values arch))\n        (invokeTCB (tcbinvocation.WriteRegisters dest resume values arch'))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0242",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "invokeTCB_corres",
+      "source_id": "contract:Refine.Tcb_R:invokeTCB_corres:5bb26ad2d4fb",
+      "statement": "lemma invokeTCB_corres:\n \"tcbinv_relation ti ti' \\<Longrightarrow>\n  corres (dc \\<oplus> (=))\n         (einvs and simple_sched_action and Tcb_AI.tcb_inv_wf ti)\n         (invs' and sch_act_simple and tcb_inv_wf' ti')\n         (invoke_tcb ti) (invokeTCB ti')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0243",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "isRunnable_corres",
+      "source_id": "contract:Refine.Tcb_R:isRunnable_corres:f2bc15ef0f56",
+      "statement": "lemma isRunnable_corres:\n  \"corres (\\<lambda>ts runn. runnable ts = runn)\n          (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n          (get_thread_state t) (isRunnable t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0244",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "restart_corres",
+      "source_id": "contract:Refine.Tcb_R:restart_corres:5ef589f0692b",
+      "statement": "lemma restart_corres:\n  \"corres dc (einvs  and tcb_at t) (invs' and tcb_at' t and ex_nonz_cap_to' t)\n      (Tcb_A.restart t) (ThreadDecls_H.restart t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0245",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "setMCPriority_corres",
+      "source_id": "contract:Refine.Tcb_R:setMCPriority_corres:b38228711727",
+      "statement": "lemma setMCPriority_corres:\n  \"corres dc (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n             (set_mcpriority t x) (setMCPriority t x)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0246",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "setPriority_corres",
+      "source_id": "contract:Refine.Tcb_R:setPriority_corres:674f6c1f1dd9",
+      "statement": "lemma setPriority_corres:\n  \"corres dc\n     (einvs and tcb_at t)\n     (invs' and tcb_at' t and valid_objs' and (\\<lambda>_. x \\<le> maxPriority))\n     (set_priority t x) (setPriority t x)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0247",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "slotCapLongRunningDelete_corres",
+      "source_id": "contract:Refine.Tcb_R:slotCapLongRunningDelete_corres:65f50bd698fb",
+      "statement": "lemma slotCapLongRunningDelete_corres:\n  \"cte_map ptr = ptr' \\<Longrightarrow>\n   corres (=) (cte_at ptr and invs) invs'\n           (slot_cap_long_running_delete ptr)\n           (slotCapLongRunningDelete ptr')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0248",
+      "module": "Vero_Refine_Tcb_R",
+      "name": "transferCaps_corres",
+      "source_id": "contract:Refine.Tcb_R:transferCaps_corres:b64e353efb64",
+      "statement": "lemma transferCaps_corres:\nassumes x: \"newroot_rel e e'\"\nassumes y: \"newroot_rel f f'\"\nassumes z: \"(case g of None \\<Rightarrow> g' = None\n                       | Some (vptr, g'') \\<Rightarrow> \\<exists>g'''. g' = Some (vptr, g''')\n                              \\<and> newroot_rel g'' g''')\"\nassumes sl: \"{e, f, option_map undefined g} \\<noteq> {None} \\<longrightarrow> sl' = cte_map slot\"\nshows\n    \"corres (dc \\<oplus> (=))\n    (einvs and simple_sched_action and tcb_at a and\n     (\\<lambda>s. {e, f, option_map undefined g} \\<noteq> {None} \\<longrightarrow> cte_at slot s) and\n     case_option \\<top> (valid_cap o fst) e and\n     case_option \\<top> (cte_at o snd) e and\n     case_option \\<top> (no_cap_to_obj_dr_emp o fst) e and\n     K (case_option True (is_cnode_cap o fst) e) and\n     case_option \\<top> (valid_cap o fst) f and\n     case_option \\<top> (cte_at o snd) f and\n     case_option \\<top> (no_cap_to_obj_dr_emp o fst) f and\n     K (case_option True (is_valid_vtable_root o fst) f)\n      and case_option \\<top> (case_option \\<top> (cte_at o snd) o snd) g\n      and case_option \\<top> (case_option \\<top> (no_cap_to_obj_dr_emp o fst) o snd) g\n      and case_option \\<top> (case_option \\<top> (valid_cap o fst) o snd) g\n      and K (case_option True ((\\<lambda>v. is_aligned v msg_align_bits) o fst) g)\n      and K (case_option True (\\<lambda>v. case_option True ((swp valid_ipc_buffer_cap (fst v)\n                                  and is_arch_cap and is_cnode_or_valid_arch) o fst) (snd v)) g)\n      and (\\<lambda>s. case_option True (\\<lambda>(pr, auth). mcpriority_tcb_at (\\<lambda>m. pr \\<le> m) auth s) p_auth)\n      and (\\<lambda>s. case_option True (\\<lambda>(mcp, auth). mcpriority_tcb_at (\\<lambda>m. mcp \\<le> m) auth s) mcp_auth)                                                      )\n    (invs' and sch_act_simple and case_option \\<top> (valid_cap' o fst) e' and\n     (\\<lambda>s. {e', f', option_map undefined g'} \\<noteq> {None} \\<longrightarrow> cte_at' (cte_map slot) s) and\n     K (case_option True (isCNodeCap o fst) e') and\n     case_option \\<top> (valid_cap' o fst) f' and\n     K (case_option True (isValidVTableRoot o fst) f') and\n     K (case_option True ((\\<lambda>v. is_aligned v msg_align_bits) o fst) g') and\n     K (case_option True (case_option True (isArchObjectCap o fst) o snd) g') and\n     case_option \\<top> (case_option \\<top> (valid_cap' o fst) o snd) g' and\n     tcb_at' a and ex_nonz_cap_to' a and K (valid_option_prio p_auth \\<and> valid_option_prio mcp_auth) and\n     (\\<lambda>s. case_option True (\\<lambda>(pr, auth). mcpriority_tcb_at' ((\\<le>) pr) auth s) p_auth) and\n     (\\<lambda>s. case_option True (\\<lambda>(m, auth). mcpriority_tcb_at' ((\\<le>) m) auth s) mcp_auth))\n    (invoke_tcb (tcb_invocation.ThreadControl a slot (option_map to_bl b') mcp_auth p_auth e f g))\n    (invokeTCB (tcbinvocation.ThreadControl a sl' b' mcp_auth p_auth e' f' g'))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0249",
+      "module": "Vero_Refine_Untyped_R",
+      "name": "decodeUntypedInvocation_corres",
+      "source_id": "contract:Refine.Untyped_R:decodeUntypedInvocation_corres:c109f8161f51",
+      "statement": "lemma decodeUntypedInvocation_corres:\nassumes cap_rel: \"list_all2 cap_relation cs cs'\"\nshows \"corres\n        (ser \\<oplus> untypinv_relation)\n        (invs and cte_wp_at ((=) (cap.UntypedCap d w n idx)) slot and (\\<lambda>s. \\<forall>x \\<in> set cs. s \\<turnstile> x))\n        (invs'\n          and (\\<lambda>s. \\<forall>x \\<in> set cs'. s \\<turnstile>' x))\n        (decode_untyped_invocation label args slot (cap.UntypedCap d w n idx) cs)\n        (decodeUntypedInvocation label args (cte_map slot)\n          (UntypedCap d w n idx) cs')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0250",
+      "module": "Vero_Refine_Untyped_R",
+      "name": "insertNewCap_corres",
+      "source_id": "contract:Refine.Untyped_R:insertNewCap_corres:efce22459990",
+      "statement": "lemma insertNewCap_corres:\nshows\n  \"\\<lbrakk> cref' = cte_map (fst tup)\n     \\<and> cap_relation (default_cap tp (snd tup) sz d) cap \\<rbrakk> \\<Longrightarrow>\n   corres dc\n     (cte_wp_at ((=) cap.NullCap) (fst tup) and pspace_aligned\n        and pspace_distinct and valid_objs and valid_mdb and valid_list\n        and cte_wp_at ((\\<noteq>) cap.NullCap) p)\n     (cte_wp_at' (\\<lambda>c. cteCap c = NullCap) cref' and\n      cte_wp_at' (\\<lambda>cte. isUntypedCap (cteCap cte) \\<and> sameRegionAs (cteCap cte) cap) (cte_map p)\n       and valid_mdb' and pspace_aligned' and pspace_distinct' and valid_objs'\n       and (\\<lambda>s. descendants_range' cap (cte_map p) (ctes_of s)))\n     (create_cap tp sz p d tup)\n     (insertNewCap (cte_map p) cref' cap)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0251",
+      "module": "Vero_Refine_Untyped_R",
+      "name": "inv_untyped_corres'",
+      "source_id": "contract:Refine.Untyped_R:inv_untyped_corres':16216505f726",
+      "statement": "lemma inv_untyped_corres':\n  \"\\<lbrakk> untypinv_relation ui ui' \\<rbrakk> \\<Longrightarrow>\n   corres (dc \\<oplus> (=))\n     (einvs and valid_untyped_inv ui and ct_active and schact_is_rct)\n     (invs' and valid_untyped_inv' ui' and ct_active')\n     (invoke_untyped ui) (invokeUntyped ui')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch .",
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0252",
+      "module": "Vero_Refine_Untyped_R",
+      "name": "resetUntypedCap_corres",
+      "source_id": "contract:Refine.Untyped_R:resetUntypedCap_corres:29a2c67f3ae5",
+      "statement": "lemma resetUntypedCap_corres:\n  \"untypinv_relation ui ui'\n    \\<Longrightarrow> corres (dc \\<oplus> dc)\n    (einvs and schact_is_rct and ct_active\n     and valid_untyped_inv_wcap ui (Some (cap.UntypedCap dev ptr sz idx))\n     and (\\<lambda>_. \\<exists>ptr_base ptr' ty us slots dev'.\n               ui = Invocations_A.Retype slot True ptr_base ptr' ty us slots dev))\n    (invs' and valid_untyped_inv_wcap' ui' (Some (UntypedCap dev ptr sz idx)) and ct_active')\n    (reset_untyped_cap slot) (resetUntypedCap (cte_map slot))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0253",
+      "module": "Vero_Refine_Untyped_R",
+      "name": "updateCap_isUntypedCap_corres",
+      "source_id": "contract:Refine.Untyped_R:updateCap_isUntypedCap_corres:1e8077598cae",
+      "statement": "lemma updateCap_isUntypedCap_corres:\n  \"\\<lbrakk>is_untyped_cap cap; isUntypedCap cap'; cap_relation cap cap'\\<rbrakk>\n   \\<Longrightarrow> corres dc\n         (cte_wp_at (\\<lambda>c. is_untyped_cap c \\<and> obj_ref_of c = obj_ref_of cap \\<and>\n          cap_bits c = cap_bits cap \\<and> cap_is_device c = cap_is_device cap) src and valid_objs and\n          pspace_aligned and pspace_distinct)\n         (cte_at' (cte_map src) and pspace_distinct' and pspace_aligned')\n         (set_cap cap src) (updateCap (cte_map src) cap')\""
+    },
+    {
+      "context": [],
+      "id": "c0254",
+      "module": "Vero_Refine_Untyped_R",
+      "name": "updateFreeIndex_corres",
+      "source_id": "contract:Refine.Untyped_R:updateFreeIndex_corres:cd77c92adccf",
+      "statement": "lemma updateFreeIndex_corres:\n  \"\\<lbrakk>is_untyped_cap cap; free_index_of cap = idx \\<rbrakk>\n   \\<Longrightarrow> corres dc\n         (cte_wp_at (\\<lambda>c. is_untyped_cap c \\<and> obj_ref_of c = obj_ref_of cap \\<and>\n          cap_bits c = cap_bits cap \\<and> cap_is_device c = cap_is_device cap) src and valid_objs\n           and pspace_aligned and pspace_distinct)\n         (cte_at' (cte_map src)\n           and pspace_distinct' and pspace_aligned')\n         (set_cap cap src) (updateFreeIndex (cte_map src) idx)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0255",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "armv_contextSwitch_corres",
+      "source_id": "contract:Refine.VSpace_R:armv_contextSwitch_corres:df747c2a43f1",
+      "statement": "lemma armv_contextSwitch_corres:\n  \"corres dc\n          (vspace_at_asid a pd and K (a \\<noteq> 0 \\<and> a \\<le> mask asid_bits)\n           and unique_table_refs o caps_of_state\n           and valid_global_objs and valid_vs_lookup\n           and valid_asid_map and valid_vspace_objs\n           and pspace_aligned and pspace_distinct\n           and valid_arch_state)\n          (pspace_aligned' and pspace_distinct' and no_0_obj')\n          (arm_context_switch pd a) (armv_contextSwitch pd a)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0256",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "checkMappingPPtr_corres",
+      "source_id": "contract:Refine.VSpace_R:checkMappingPPtr_corres:d3b0db3892eb",
+      "statement": "lemma checkMappingPPtr_corres:\n  \"corres (dc \\<oplus> dc)\n            ((case slotptr of Inl ptr \\<Rightarrow> pte_at ptr | Inr ptr \\<Rightarrow> pde_at ptr) and\n             (\\<lambda>s. (case slotptr of Inl ptr \\<Rightarrow> is_aligned ptr (pg_entry_align sz)\n                   | Inr ptr \\<Rightarrow> is_aligned ptr (pg_entry_align sz))))\n            (pspace_aligned' and pspace_distinct')\n      (throw_on_false v (check_mapping_pptr pptr sz slotptr))\n      (checkMappingPPtr pptr sz slotptr)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0257",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "clear_page_table_corres",
+      "source_id": "contract:Refine.VSpace_R:clear_page_table_corres:047a16b3c424",
+      "statement": "lemma clear_page_table_corres:\n  \"corres dc (pspace_aligned and page_table_at p and valid_etcbs)\n             (pspace_aligned' and pspace_distinct')\n    (mapM_x (swp store_pte ARM_A.InvalidPTE)\n       [p , p + 4 .e. p + 2 ^ ptBits - 1])\n    (mapM_x (swp storePTE ARM_H.InvalidPTE)\n       [p , p + 4 .e. p + 2 ^ ptBits - 1])\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0258",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "deleteASIDPool_corres",
+      "source_id": "contract:Refine.VSpace_R:deleteASIDPool_corres:3b0bb58ee80c",
+      "statement": "lemma deleteASIDPool_corres:\n  \"corres dc\n          (invs and K (is_aligned base asid_low_bits\n                         \\<and> base \\<le> mask asid_bits)\n           and asid_pool_at ptr)\n          (pspace_aligned' and pspace_distinct' and no_0_obj'\n               and valid_arch_state' and cur_tcb')\n          (delete_asid_pool base ptr) (deleteASIDPool base ptr)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0259",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "deleteASID_corres",
+      "source_id": "contract:Refine.VSpace_R:deleteASID_corres:40694e9f3550",
+      "statement": "lemma deleteASID_corres:\n  \"corres dc\n          (invs and valid_etcbs and K (asid \\<le> mask asid_bits \\<and> asid \\<noteq> 0))\n          (pspace_aligned' and pspace_distinct' and no_0_obj'\n              and valid_arch_state' and cur_tcb')\n          (delete_asid asid pd) (deleteASID asid pd)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0260",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "findFreeHWASID_corres",
+      "source_id": "contract:Refine.VSpace_R:findFreeHWASID_corres:0b529eaf1ad5",
+      "statement": "lemma findFreeHWASID_corres:\n  \"corres (=)\n          (valid_asid_map and valid_vspace_objs\n              and pspace_aligned and pspace_distinct\n              and (unique_table_refs o caps_of_state)\n              and valid_vs_lookup and valid_arch_state\n              and valid_global_objs)\n          (pspace_aligned' and pspace_distinct' and no_0_obj')\n          find_free_hw_asid findFreeHWASID\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0261",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "findPDForASIDAssert_corres",
+      "source_id": "contract:Refine.VSpace_R:findPDForASIDAssert_corres:08041c113779",
+      "statement": "lemma findPDForASIDAssert_corres:\n  \"corres (\\<lambda>rv rv'. rv = pd \\<and> rv' = pd)\n           (K (asid \\<noteq> 0 \\<and> asid \\<le> mask asid_bits)\n                 and pspace_aligned and pspace_distinct\n                 and valid_vspace_objs and valid_asid_map\n                 and vspace_at_asid asid pd and pd_at_uniq asid pd)\n           (pspace_aligned' and pspace_distinct' and no_0_obj')\n       (find_pd_for_asid_assert asid)\n       (findPDForASIDAssert asid)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0262",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "findPDForASIDAssert_known_corres",
+      "source_id": "contract:Refine.VSpace_R:findPDForASIDAssert_known_corres:ffddc172266a",
+      "statement": "lemma findPDForASIDAssert_known_corres:\n  \"corres r P P' f (g pd) \\<Longrightarrow>\n  corres r (vspace_at_asid asid pd and pd_at_uniq asid pd\n               and valid_vspace_objs and valid_asid_map\n               and pspace_aligned and pspace_distinct\n               and K (asid \\<noteq> 0 \\<and> asid \\<le> mask asid_bits) and P)\n           (P' and pspace_aligned' and pspace_distinct' and no_0_obj')\n       f (findPDForASIDAssert asid >>= g)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0263",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "flushPage_corres",
+      "source_id": "contract:Refine.VSpace_R:flushPage_corres:b008fab77820",
+      "statement": "lemma flushPage_corres:\n  \"corres dc\n          (K (is_aligned vptr pageBits \\<and> asid \\<le> mask asid_bits \\<and> asid \\<noteq> 0) and\n           cur_tcb and valid_arch_state and valid_objs and\n           vspace_at_asid asid pd and valid_asid_map and valid_vspace_objs and\n           valid_vs_lookup and valid_global_objs and\n           unique_table_refs o caps_of_state and\n           pspace_aligned and pspace_distinct)\n          (pspace_aligned' and pspace_distinct' and no_0_obj'\n             and valid_arch_state' and cur_tcb')\n          (flush_page pageSize pd asid vptr)\n          (flushPage pageSize pd asid vptr)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0264",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "flushSpace_corres",
+      "source_id": "contract:Refine.VSpace_R:flushSpace_corres:79ab6a18b291",
+      "statement": "lemma flushSpace_corres:\n  \"corres dc\n          (K (asid \\<le> mask asid_bits \\<and> asid \\<noteq> 0)\n           and valid_asid_map and valid_vspace_objs\n           and pspace_aligned and pspace_distinct\n           and unique_table_refs o caps_of_state\n           and valid_global_objs and valid_vs_lookup\n           and valid_arch_state and vspace_at_asid asid pd)\n          (pspace_aligned' and pspace_distinct' and no_0_obj')\n          (flush_space asid) (flushSpace asid)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0265",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "flushTable_corres",
+      "source_id": "contract:Refine.VSpace_R:flushTable_corres:0594a0125ea7",
+      "statement": "lemma flushTable_corres:\n  \"corres dc\n          (pspace_aligned and valid_objs and valid_arch_state and\n           cur_tcb and vspace_at_asid asid pd and valid_asid_map and valid_vspace_objs and\n           pspace_aligned and pspace_distinct and valid_vs_lookup and valid_global_objs\n           and unique_table_refs o caps_of_state and\n           K (is_aligned vptr (pageBitsForSize ARMSection) \\<and> asid \\<le> mask asid_bits \\<and> asid \\<noteq> 0))\n          (pspace_aligned' and pspace_distinct' and no_0_obj' and\n           valid_arch_state' and cur_tcb')\n          (flush_table pd asid vptr ptr)\n          (flushTable pd asid vptr)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0266",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "getHWASID_corres",
+      "source_id": "contract:Refine.VSpace_R:getHWASID_corres:41562368a0a9",
+      "statement": "lemma getHWASID_corres:\n  \"corres (=)\n          (vspace_at_asid a pd and K (a \\<noteq> 0 \\<and> a \\<le> mask asid_bits)\n           and unique_table_refs o caps_of_state\n           and valid_global_objs and valid_vs_lookup\n           and valid_asid_map and valid_vspace_objs\n           and pspace_aligned and pspace_distinct\n           and valid_arch_state)\n          (pspace_aligned' and pspace_distinct' and no_0_obj')\n          (get_hw_asid a) (getHWASID a)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0267",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "handleVMFault_corres",
+      "source_id": "contract:Refine.VSpace_R:handleVMFault_corres:6499840b7810",
+      "statement": "lemma handleVMFault_corres:\n  \"corres (fr \\<oplus> dc) (tcb_at thread and pspace_aligned and pspace_distinct) \\<top>\n          (handle_vm_fault thread fault) (handleVMFault thread fault)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0268",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "invalidateASIDEntry_corres",
+      "source_id": "contract:Refine.VSpace_R:invalidateASIDEntry_corres:5ff3c2c426a0",
+      "statement": "lemma invalidateASIDEntry_corres:\n  \"corres dc (valid_vspace_objs and valid_asid_map\n                and K (asid \\<le> mask asid_bits \\<and> asid \\<noteq> 0)\n                and vspace_at_asid asid pd and valid_vs_lookup\n                and unique_table_refs o caps_of_state\n                and valid_global_objs and valid_arch_state\n                and pspace_aligned and pspace_distinct)\n             (pspace_aligned' and pspace_distinct' and no_0_obj')\n             (invalidate_asid_entry asid) (invalidateASIDEntry asid)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0269",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "invalidateASID_corres",
+      "source_id": "contract:Refine.VSpace_R:invalidateASID_corres:851ed3c65fa8",
+      "statement": "lemma invalidateASID_corres:\n  \"corres dc\n          (valid_asid_map and valid_vspace_objs\n               and pspace_aligned and pspace_distinct\n               and vspace_at_asid a pd and pd_at_uniq a pd\n               and K (a \\<noteq> 0 \\<and> a \\<le> mask asid_bits))\n          (pspace_aligned' and pspace_distinct' and no_0_obj')\n     (invalidate_asid a) (invalidateASID a)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0270",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "invalidateHWASIDEntry_corres",
+      "source_id": "contract:Refine.VSpace_R:invalidateHWASIDEntry_corres:2413c4762451",
+      "statement": "lemma invalidateHWASIDEntry_corres:\n  \"corres dc \\<top> \\<top> (invalidate_hw_asid_entry a) (invalidateHWASIDEntry a)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0271",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "invalidateTLBByASID_corres",
+      "source_id": "contract:Refine.VSpace_R:invalidateTLBByASID_corres:42d863c95ccb",
+      "statement": "lemma invalidateTLBByASID_corres:\n  \"corres dc\n          (K (asid \\<le> mask asid_bits \\<and> asid \\<noteq> 0)\n           and valid_asid_map and valid_vspace_objs\n           and pspace_aligned and pspace_distinct\n           and unique_table_refs o caps_of_state\n           and valid_global_objs and valid_vs_lookup\n           and valid_arch_state and vspace_at_asid asid pd)\n          (pspace_aligned' and pspace_distinct' and no_0_obj')\n          (invalidate_tlb_by_asid asid) (invalidateTLBByASID asid)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0272",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "invalidate_asid_ext_corres",
+      "source_id": "contract:Refine.VSpace_R:invalidate_asid_ext_corres:1db3dabe7c94",
+      "statement": "lemma invalidate_asid_ext_corres:\n  \"corres dc\n          (\\<lambda>s. \\<exists>pd. valid_asid_map s \\<and> valid_vspace_objs s\n               \\<and> pspace_aligned s \\<and> pspace_distinct s\n               \\<and> vspace_at_asid a pd s \\<and> pd_at_uniq a pd s\n               \\<and> a \\<noteq> 0 \\<and> a \\<le> mask asid_bits)\n          (pspace_aligned' and pspace_distinct' and no_0_obj')\n     (invalidate_asid a) (invalidateASID a)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0273",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "loadHWASID_corres",
+      "source_id": "contract:Refine.VSpace_R:loadHWASID_corres:758848d736b9",
+      "statement": "lemma loadHWASID_corres:\n  \"corres (=)\n          (valid_vspace_objs and pspace_distinct\n                 and pspace_aligned and valid_asid_map\n                 and vspace_at_asid a pd\n                 and (\\<lambda>s. \\<forall>pd. vspace_at_asid a pd s \\<longrightarrow> pd_at_uniq a pd s)\n                 and K (a \\<noteq> 0 \\<and> a \\<le> mask asid_bits))\n          (pspace_aligned' and pspace_distinct' and no_0_obj')\n          (load_hw_asid a) (loadHWASID a)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0274",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "pageTableMapped_corres",
+      "source_id": "contract:Refine.VSpace_R:pageTableMapped_corres:827350933c0a",
+      "statement": "lemma pageTableMapped_corres:\n  \"corres (=) (valid_arch_state and valid_vspace_objs and pspace_aligned\n                       and K (asid \\<noteq> 0 \\<and> asid \\<le> mask asid_bits))\n                 (pspace_aligned' and pspace_distinct' and no_0_obj')\n       (page_table_mapped asid vaddr pt)\n       (pageTableMapped asid vaddr pt)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0275",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "pdeCheckIfMapped_corres",
+      "source_id": "contract:Refine.VSpace_R:pdeCheckIfMapped_corres:e78db1b9d8d7",
+      "statement": "lemma pdeCheckIfMapped_corres:\n  \"corres (=) (pde_at slot) ((\\<lambda>s. vs_valid_duplicates' (ksPSpace s)) and pspace_aligned' and pspace_distinct') (pde_check_if_mapped slot) (pdeCheckIfMapped slot)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0276",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "performASIDPoolInvocation_corres",
+      "source_id": "contract:Refine.VSpace_R:performASIDPoolInvocation_corres:b84dbe6b3151",
+      "statement": "lemma performASIDPoolInvocation_corres:\n  \"ap' = asid_pool_invocation_map ap \\<Longrightarrow>\n  corres dc\n          (valid_objs and pspace_aligned and pspace_distinct and valid_apinv ap and valid_etcbs)\n          (pspace_aligned' and pspace_distinct' and valid_apinv' ap')\n          (perform_asid_pool_invocation ap)\n          (performASIDPoolInvocation ap')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0277",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "performPageDirectoryInvocation_corres",
+      "source_id": "contract:Refine.VSpace_R:performPageDirectoryInvocation_corres:7cfe507bdf29",
+      "statement": "lemma performPageDirectoryInvocation_corres:\n  \"page_directory_invocation_map pdi pdi' \\<Longrightarrow>\n   corres dc (invs and valid_pdi pdi)\n             (valid_objs' and pspace_aligned' and pspace_distinct' and no_0_obj'\n               and cur_tcb' and valid_arch_state')\n             (perform_page_directory_invocation pdi) (performPageDirectoryInvocation pdi')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0278",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "performPageInvocation_corres",
+      "source_id": "contract:Refine.VSpace_R:performPageInvocation_corres:32cbf9e65429",
+      "statement": "lemma performPageInvocation_corres:\nassumes \"page_invocation_map pgi pgi'\"\nshows \"corres (=) (invs and valid_etcbs and valid_page_inv pgi)\n            (invs' and valid_page_inv' pgi' and (\\<lambda>s. vs_valid_duplicates' (ksPSpace s)))\n            (perform_page_invocation pgi) (performPageInvocation pgi')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0279",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "performPageTableInvocation_corres",
+      "source_id": "contract:Refine.VSpace_R:performPageTableInvocation_corres:cba6b92c1476",
+      "statement": "lemma performPageTableInvocation_corres:\n  \"page_table_invocation_map pti pti' \\<Longrightarrow>\n   corres dc\n          (invs and valid_etcbs and valid_pti pti)\n          (invs' and valid_pti' pti')\n          (perform_page_table_invocation pti)\n          (performPageTableInvocation pti')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0280",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "pteCheckIfMapped_corres",
+      "source_id": "contract:Refine.VSpace_R:pteCheckIfMapped_corres:c936c97f7a41",
+      "statement": "lemma pteCheckIfMapped_corres:\n  \"corres (=) (pte_at slot) ((\\<lambda>s. vs_valid_duplicates' (ksPSpace s)) and pspace_aligned' and pspace_distinct') (pte_check_if_mapped slot) (pteCheckIfMapped slot)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0281",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "setCurrentPD_corres",
+      "source_id": "contract:Refine.VSpace_R:setCurrentPD_corres:08a850f59b47",
+      "statement": "lemma setCurrentPD_corres:\n  \"corres dc \\<top> \\<top> (do_machine_op (setCurrentPD addr)) (doMachineOp (setCurrentPD addr))\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0282",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "setMessageInfo_corres",
+      "source_id": "contract:Refine.VSpace_R:setMessageInfo_corres:60b7275af902",
+      "statement": "lemma setMessageInfo_corres:\n \"mi' = message_info_map mi \\<Longrightarrow>\n  corres dc (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n    (set_message_info t mi) (setMessageInfo t mi')\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0283",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "setVMRootForFlush_corres",
+      "source_id": "contract:Refine.VSpace_R:setVMRootForFlush_corres:d995a0da1039",
+      "statement": "lemma setVMRootForFlush_corres:\n  \"corres (=)\n          (cur_tcb and vspace_at_asid asid pd\n           and K (asid \\<noteq> 0 \\<and> asid \\<le> mask asid_bits)\n           and valid_asid_map and valid_vs_lookup\n           and valid_vspace_objs and valid_global_objs\n           and unique_table_refs o caps_of_state\n           and valid_arch_state\n           and pspace_aligned and pspace_distinct)\n          (pspace_aligned' and pspace_distinct' and no_0_obj')\n          (set_vm_root_for_flush pd asid)\n          (setVMRootForFlush pd asid)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0284",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "setVMRoot_corres",
+      "source_id": "contract:Refine.VSpace_R:setVMRoot_corres:40b43d93addc",
+      "statement": "lemma setVMRoot_corres:\n  \"corres dc (tcb_at t and valid_arch_state and valid_objs and valid_asid_map\n              and unique_table_refs o caps_of_state and valid_vs_lookup\n              and valid_global_objs and pspace_aligned and pspace_distinct\n              and valid_vspace_objs)\n             (pspace_aligned' and pspace_distinct'\n                 and valid_arch_state' and tcb_at' t and no_0_obj')\n             (set_vm_root t) (setVMRoot t)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0285",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "storeHWASID_corres",
+      "source_id": "contract:Refine.VSpace_R:storeHWASID_corres:f73d63a248d0",
+      "statement": "lemma storeHWASID_corres:\n  \"corres dc\n          (vspace_at_asid a pd and pd_at_uniq a pd\n                  and valid_vspace_objs and pspace_distinct\n                  and pspace_aligned and K (a \\<noteq> 0 \\<and> a \\<le> mask asid_bits)\n                  and valid_asid_map)\n          (pspace_aligned' and pspace_distinct' and no_0_obj')\n          (store_hw_asid a h) (storeHWASID a h)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0286",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "unmapPageTable_corres",
+      "source_id": "contract:Refine.VSpace_R:unmapPageTable_corres:7051996f1431",
+      "statement": "lemma unmapPageTable_corres:\n  \"corres dc\n          (invs and valid_etcbs and page_table_at pt and\n           K (0 < asid \\<and> is_aligned vptr 20 \\<and> asid \\<le> mask asid_bits))\n          (valid_arch_state' and pspace_aligned' and pspace_distinct'\n            and no_0_obj' and cur_tcb' and valid_objs')\n          (unmap_page_table asid vptr pt)\n          (unmapPageTable asid vptr pt)\""
+    },
+    {
+      "context": [
+        "context begin interpretation Arch ."
+      ],
+      "id": "c0287",
+      "module": "Vero_Refine_VSpace_R",
+      "name": "unmapPage_corres",
+      "source_id": "contract:Refine.VSpace_R:unmapPage_corres:eb9d56d80746",
+      "statement": "lemma unmapPage_corres:\n  \"corres dc (invs and valid_etcbs and\n              K (valid_unmap sz (asid,vptr) \\<and> vptr < kernel_base \\<and> asid \\<le> mask asid_bits))\n             (valid_objs' and valid_arch_state' and pspace_aligned' and\n              pspace_distinct' and no_0_obj' and cur_tcb')\n             (unmap_page sz asid vptr pptr)\n             (unmapPage sz asid vptr pptr)\""
+    }
+  ],
+  "mode": "proof",
+  "policy": {
+    "cross_module_proof_imports": false,
+    "reference_proofs_visible": false,
+    "unfilled": "oops"
+  },
+  "provenance": {
+    "dataflow": {
+      "artifact_type": "environment-dataflow",
+      "campaign_id": "sel4-refine-semantic-base-908b7de1d3cb042a",
+      "counts": {
+        "contracts": 287,
+        "owners": 21,
+        "premises": 84281
+      },
+      "dataflow_id": "dataflow:38875bd04099d2e3efd4",
+      "environment_gate_id": "environment:c8a005ecc9fe28e8b463",
+      "model_calls_performed": 0,
+      "policy": {
+        "contract_statements_are_premises": false,
+        "generated_facts_included": false,
+        "owner_groups_constrain_generated_theories": false,
+        "private_inventory_included": false,
+        "symbol_resolution_performed": false
+      },
+      "schema_version": 1,
+      "status": "ready",
+      "streams": {
+        "contracts": {
+          "bytes": 310192,
+          "path": "Environment-Dataflow/contracts.jsonl",
+          "sha256": "285575f92434b7dc0faba83a3ea8ea4fbbc72507f97ed1f95df5148bff249aca"
+        },
+        "owners": {
+          "bytes": 23360,
+          "path": "Environment-Dataflow/owners.json",
+          "sha256": "bb7c2c9aaf8b485f74823cedc3b718a467ad31319aaf0a88132c9b0277476611"
+        },
+        "premises": {
+          "bytes": 62805974,
+          "path": "Environment-Dataflow/premises.jsonl",
+          "sha256": "bcd77f1357524507e823ca4c6b9b3fbb6529216635406f01842a1395de2c1365"
+        }
+      }
+    },
+    "environment_manifest_sha256": "cb149517396a677fb99bb3dbbac7bd5b5ea3f52130177ce9a1e4408c8a0dfa34",
+    "isabelle_commit": "74b2d1278b57797572abe5842e318d17ed131c55",
+    "l4v_commit": "00d9073f70d064b31b4b1fad8a0e7086bb258007",
+    "sel4_commit": "daa0dfb1470c5ffbf13b3778f93111679574e80c",
+    "upstream_vero_commit": "0a7325df9e9e6dbc275c0ad483b3d1cbe38d9b09"
+  },
+  "schema_version": 1
+}

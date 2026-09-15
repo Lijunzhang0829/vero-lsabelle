@@ -28,6 +28,7 @@ dependencies = [
 
 [project.scripts]
 vero = "vero.cli:main"
+vero-isabelle = "vero.isabelle.__main__:main"
 vero-extract = "vero.extract_cli:main"
 vero-sweep-aggregate = "vero.sweep_aggregate:main"
 

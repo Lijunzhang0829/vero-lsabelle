@@ -222,3 +222,7 @@ The instances below live under `archive/benchmarks/` and are **not** part of the
 | `special_numbers` | [TheAlgorithms/Python](https://github.com/TheAlgorithms/Python.git) |
 | `stack` | [TheAlgorithms/Python](https://github.com/TheAlgorithms/Python.git) |
 | `suffix_tree` | [TheAlgorithms/Python](https://github.com/TheAlgorithms/Python.git) |
+
+## Isabelle proof mode
+
+The experimental [Isabelle backend](docs/isabelle.md) reproduces the repository-agent, artifact extraction, and independent evaluation loop for fixed seL4 Refine contracts. Use `vero-isabelle` or `python -m vero.isabelle`.

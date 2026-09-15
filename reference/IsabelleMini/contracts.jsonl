@@ -1,0 +1,4 @@
+{"contract_id":"mini:truth","name":"truth","owner_theory":"Mini","exact_statement":"lemma truth: \"True\""}
+{"contract_id":"mini:false","name":"false_spec","owner_theory":"Mini","exact_statement":"lemma false_spec: \"False\""}
+{"contract_id":"mini:vacuous","name":"vacuous","owner_theory":"Mini","exact_statement":"lemma vacuous:\nassumes impossible: \"False\"\nshows \"False\""}
+{"contract_id":"mini:counterexample","name":"counterexample","owner_theory":"Mini","exact_statement":"lemma counterexample:\nfixes P :: bool\nassumes p: \"P\"\nshows \"\\<not> P\""}
