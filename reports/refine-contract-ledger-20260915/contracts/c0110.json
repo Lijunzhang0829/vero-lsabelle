@@ -1,0 +1,45 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": true,
+  "current_state": "unresolved_attempt_history_unknown",
+  "final_status": "unfilled",
+  "id": "c0110",
+  "last_attempt": null,
+  "last_legacy_target_evidence": null,
+  "legacy_evidence": [],
+  "module": "Vero_Refine_Ipc_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 0,
+      "line": 56,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 274,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 288,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 296,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 340,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 347,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "handleFault_corres",
+  "withdrawn_since_observed_candidate": false
+}

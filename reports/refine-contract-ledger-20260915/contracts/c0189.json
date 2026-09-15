@@ -1,0 +1,106 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0189",
+  "last_attempt": null,
+  "last_legacy_target_evidence": {
+    "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_Schedule_R.thy');s=p.read_text();src=Path('Vero_Refine_TcbAcc_R.thy').read_text();body=re.search(r'\\\\(\\\\* VERO START c0189 prove \\\\*\\\\)(.*?)\\\\(\\\\* VERO END c0189 prove \\\\*\\\\)',src,re.S)[1].replace('by (fastforce simp: corres_underlying_def)','by (cases b; fastforce simp: ethread_get_when_def corres_underlying_def return_def)')\ns=re.sub(r'(\\\\(\\\\* VERO START c0151 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0151 prove \\\\*\\\\))',lambda m:m[1]+body+m[2],s,flags=re.S)\ns=re.sub(r'(\\\\(\\\\* VERO START c0162 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0162 prove \\\\*\\\\))',lambda m:m[1]+'\\\\n\\\\noops\\\\n\\\\n'+m[2],s,flags=re.S);p.write_text(s)\nPY\npython3 /backend/tool.py check Vero_Refine_Schedule_R\"",
+    "exit_code": 0,
+    "line": 267,
+    "output": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_Refine_Schedule_R\")\n### theory \"Draft.Vero_Support\"\n### 0.183s elapsed time, 0.245s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_Refine_Schedule_R\"\nVERO_RESULT c0149 prove clean\nVERO_RESULT c0150 prove clean\n### Introduced fixed type variable(s): 'd in \"s__\"\n### Ignoring duplicate rewrite rule:\n### ?i1 \\<in> {?l1..?u1} \\<equiv> ?l1 \\<le> ?i1 \\<and> ?i1 \\<le> ?u1\n### Introduced fixed type variable(s): 'd in \"s__\"\n### Ignoring duplicate rewrite rule:\n### psMap \\<equiv> id\n### Ignoring duplicate rewrite rule:\n### loadObject ?p ?q ?n ?obj \\<equiv> loadObject_default ?p ?q ?n ?obj\n### Ignoring duplicate rewrite rule:\n### maybeToMonad \\<equiv> assert_opt\n### Ignoring duplicate rewrite rule:\n### maybe \\<equiv> case_option\nVERO_RESULT c0151 prove clean\nVERO_RESULT c0152 prove clean\nVERO_RESULT c0156 prove clean\n### theory \"Draft.Vero_Refine_Schedule_R\"\n### 14.518s elapsed time, 14.668s cpu time, 0.188s GC time\nval it = (): unit\n\n{\n  \"status\": \"ok\",\n  \"returncode\": 0,\n  \"elapsed_seconds\": 18.92259743390605,\n  \"audited\": [\n    \"c0149:prove\",\n    \"c0150:prove\",\n    \"c0151:prove\",\n    \"c0152:prove\",\n    \"c0156:prove\"\n  ]\n}\n",
+    "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+  },
+  "legacy_evidence": [
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\nsrc=Path('Vero_Refine_KHeap_R.thy').read_text();b=re.search(r'\\\\(\\\\* VERO START c0127 prove \\\\*\\\\)(.*?)\\\\(\\\\* VERO END c0127 prove \\\\*\\\\)',src,re.S)[1]\npre=b[:b.index('  have abs:')].replace('ptr','t').replace('getEndpoint_def ','').replace('getEndpoint','getObject').replace('KOEndpoint','KOTCB').replace('loadObject_endpoint','loadObject_tcb')\ncon=b[b.index('  have con:'):b.index('  have rel:')].replace('ptr','t').replace(\\\"ep_at'\\\",\\\"tcb_at'\\\").replace('KOEndpoint','KOTCB')\ntail=r'''  have abs: \\\"\\\\<And>s. is_etcb_at t s \\\\<Longrightarrow> \\\\<exists>ep. ekheap s t = Some ep\\\"\n    by (auto simp: is_etcb_at_def)\n  have rel: \\\"\\\\<And>s s' ep ep'. \\\\<lbrakk>(s,s') \\\\<in> state_relation; ekheap s t = Some ep; ksPSpace s' t = Some (KOTCB ep')\\\\<rbrakk> \\\\<Longrightarrow> etcb_relation ep ep'\\\"\n  proof -\n    fix s s' ep ep'\n    assume sr: \\\"(s,s') \\\\<in> state_relation\\\" and kh: \\\"ekheap s t = Some ep\\\" and ch: \\\"ksPSpace s' t = Some (KOTCB ep')\\\"\n    have er: \\\"ekheap_relation (ekheap s) (ksPSpace s')\\\" using sr by (simp add: state_relation_def)\n    show \\\"etcb_relation ep ep'\\\" using er kh ch by (auto simp: ekheap_relation_def dom_def)\n  qed\n  have aget: \\\"\\\\<And>s ep. ekheap s t = Some ep \\\\<Longrightarrow> ethread_get f t s = ({(f ep,s)},False)\\\"\n    by (simp add: ethread_get_def gets_the_def get_etcb_def gets_def get_def bind_def return_def assert_opt_def)\n  have cget: \\\"\\\\<And>s ep. \\\\<lbrakk>ksPSpace s t = Some (KOTCB ep); is_aligned t (objBitsKO (KOTCB ep)); ps_clear t (objBitsKO (KOTCB ep)) s\\\\<rbrakk> \\\\<Longrightarrow> threadGet f' t s = ({(f' ep,s)},False)\\\"\n    by (simp add: threadGet_def liftM_def bind_def get return_def)\n  show ?thesis using abs con rel aget cget x by (fastforce simp: corres_underlying_def)\nqed\n'''\np=Path('Vero_Refine_TcbAcc_R.thy');s=p.read_text();s=re.sub(r'(\\\\(\\\\* VERO START c0189 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0189 prove \\\\*\\\\))',lambda m:m[1]+pre+con+tail+'\\\\n'+m[2],s,flags=re.S);p.write_text(s)\nPY\npython3 /backend/tool.py check Vero_Refine_TcbAcc_R\"",
+      "exit_code": 1,
+      "line": 253,
+      "output": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_Refine_TcbAcc_R\")\n### theory \"Draft.Vero_Support\"\n### 0.183s elapsed time, 0.247s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_Refine_TcbAcc_R\"\nVERO_RESULT c0182 prove clean\nVERO_RESULT c0183 prove clean\n### Introduced fixed type variable(s): 'd in \"s__\"\n### Ignoring duplicate rewrite rule:\n### ?i1 \\<in> {?l1..?u1} \\<equiv> ?l1 \\<le> ?i1 \\<and> ?i1 \\<le> ?u1\n### Introduced fixed type variable(s): 'd in \"s__\"\n### Ignoring duplicate rewrite rule:\n### psMap \\<equiv> id\n### Ignoring duplicate rewrite rule:\n### loadObject ?p ?q ?n ?obj \\<equiv> loadObject_default ?p ?q ?n ?obj\n### Ignoring duplicate rewrite rule:\n### maybeToMonad \\<equiv> assert_opt\n### Ignoring duplicate rewrite rule:\n### maybe \\<equiv> case_option\nVERO_RESULT c0189 prove clean\nVERO_RESULT c0193 prove clean\nVERO_RESULT c0194 prove clean\n### Ignoring duplicate rewrite rule:\n### HaskellLib_H.bit ?x \\<equiv> shiftL (1::?'a) ?x\n*** Failed to finish proof (line 397 of \"/tmp/vero-check-f5b6f5b7/Vero_Refine_TcbAcc_R.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>aa b.\n***        \\<lbrakk>a + word_of_nat y * 4 && mask 2 \\<noteq> 0;\n***         pspace_relation (kheap aa) (ksPSpace b);\n***         ekheap_relation (ekheap aa) (ksPSpace b);\n***         sched_act_relation (scheduler_action aa) (ksSchedulerAction b);\n***         ready_queues_relation aa b;\n***         ghost_relation (kheap aa) (gsUserPages b) (gsCNodes b);\n***         cdt_relation\n***          (\\<lambda>y.\n***              (\\<exists>sz fun.\n***                  kheap aa (fst y) = Some (CNode sz fun) \\<and>\n***                  well_formed_cnode_n sz fun \\<and>\n***                  (\\<exists>cap. fun (snd y) = Some cap)) \\<or>\n***              (\\<exists>tcb. kheap aa (fst y) = Some (TCB tcb)) \\<and>\n***              (\\<exists>get set restr.\n***                  tcb_cap_cases (snd y) = Some (get, set, restr)))\n***          (cdt aa) (ctes_of b);\n***         cdt_list_relation (cdt_list aa) (cdt aa) (ctes_of b);\n***         revokable_relation (is_original_cap aa)\n***          (null_filter (caps_of_state aa)) (ctes_of b);\n***         (arch_state aa, ksArchState b) \\<in> arch_state_relation;\n***         interrupt_state_relation (interrupt_irq_node aa)\n***          (interrupt_states aa) (ksInterruptState b);\n***         cur_thread aa = ksCurThread b; idle_thread aa = ksIdleThread b;\n***         machine_state aa = ksMachineState b;\n***         work_units_completed aa = ksWorkUnitsCompleted b;\n***         domain_index aa = ksDomScheduleIdx b;\n***         domain_list aa = ksDomSchedule b; cur_domain aa = ksCurDomain b;\n***         domain_time aa = ksDomainTime b; a && mask msg_align_bits = 0;\n***         typ_at' UserDataT (a && ~~ mask pageBits) b\\<rbrakk>\n***        \\<Longrightarrow> False\n*** At command \"by\" (line 397 of \"/tmp/vero-check-f5b6f5b7/Vero_Refine_TcbAcc_R.thy\")\n### theory \"Draft.Vero_Refine_TcbAcc_R\"\n### 15.639s elapsed time, 15.791s cpu time, 0.190s GC time\n*** Failed to finish proof (line 397 of \"/tmp/vero-check-f5b6f5b7/Vero_Refine_TcbAcc_R.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>aa b.\n***        \\<lbrakk>a + word_of_nat y * 4 && mask 2 \\<noteq> 0;\n***         pspace_relation (kheap aa) (ksPSpace b);\n***         ekheap_relation (ekheap aa) (ksPSpace b);\n***         sched_act_relation (scheduler_action aa) (ksSchedulerAction b);\n***         ready_queues_relation aa b;\n***         ghost_relation (kheap aa) (gsUserPages b) (gsCNodes b);\n***         cdt_relation\n***          (\\<lambda>y.\n***              (\\<exists>sz fun.\n***                  kheap aa (fst y) = Some (CNode sz fun) \\<and>\n***                  well_formed_cnode_n sz fun \\<and>\n***                  (\\<exists>cap. fun (snd y) = Some cap)) \\<or>\n***              (\\<exists>tcb. kheap aa (fst y) = Some (TCB tcb)) \\<and>\n***              (\\<exists>get set restr.\n***                  tcb_cap_cases (snd y) = Some (get, set, restr)))\n***          (cdt aa) (ctes_of b);\n***         cdt_list_relation (cdt_list aa) (cdt aa) (ctes_of b);\n***         revokable_relation (is_original_cap aa)\n***          (null_filter (caps_of_state aa)) (ctes_of b);\n***         (arch_state aa, ksArchState b) \\<in> arch_state_relation;\n***         interrupt_state_relation (interrupt_irq_node aa)\n***          (interrupt_states aa) (ksInterruptState b);\n***         cur_thread aa = ksCurThread b; idle_thread aa = ksIdleThread b;\n***         machine_state aa = ksMachineState b;\n***         work_units_completed aa = ksWorkUnitsCompleted b;\n***         domain_index aa = ksDomScheduleIdx b;\n***         domain_list aa = ksDomSchedule b; cur_domain aa = ksCurDomain b;\n***         domain_time aa = ksDomainTime b; a && mask msg_align_bits = 0;\n***         typ_at' UserDataT (a && ~~ mask pageBits) b\\<rbrakk>\n***        \\<Longrightarrow> False\n*** At command \"by\" (line 397 of \"/tmp/vero-check-f5b6f5b7/Vero_Refine_TcbAcc_R.thy\")\n*** At command \"vero_prove\" (line 377 of \"/tmp/vero-check-f5b6f5b7/Vero_Refine_TcbAcc_R.thy\")\n*** Failed to finish proof (line 397 of \"/tmp/vero-check-f5b6f5b7/Vero_Refine_TcbAcc_R.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>aa b.\n***        \\<lbrakk>a + word_of_nat y * 4 && mask 2 \\<noteq> 0;\n***         pspace_relation (kheap aa) (ksPSpace b);\n***         ekheap_relation (ekheap aa) (ksPSpace b);\n***         sched_act_relation (scheduler_action aa) (ksSchedulerAction b);\n***         ready_queues_relation aa b;\n***         ghost_relation (kheap aa) (gsUserPages b) (gsCNodes b);\n***         cdt_relation\n***          (\\<lambda>y.\n***              (\\<exists>sz fun.\n***                  kheap aa (fst y) = Some (CNode sz fun) \\<and>\n***                  well_formed_cnode_n sz fun \\<and>\n***                  (\\<exists>cap. fun (snd y) = Some cap)) \\<or>\n***              (\\<exists>tcb. kheap aa (fst y) = Some (TCB tcb)) \\<and>\n***              (\\<exists>get set restr.\n***                  tcb_cap_cases (snd y) = Some (get, set, restr)))\n***          (cdt aa) (ctes_of b);\n***         cdt_list_relation (cdt_list aa) (cdt aa) (ctes_of b);\n***         revokable_relation (is_original_cap aa)\n***          (null_filter (caps_of_state aa)) (ctes_of b);\n***         (arch_state aa, ksArchState b) \\<in> arch_state_relation;\n***         interrupt_state_relation (interrupt_irq_node aa)\n***          (interrupt_states aa) (ksInterruptState b);\n***         cur_thread aa = ksCurThread b; idle_thread aa = ksIdleThread b;\n***         machine_state aa = ksMachineState b;\n***         work_units_completed aa = ksWorkUnitsCompleted b;\n***         domain_index aa = ksDomScheduleIdx b;\n***         domain_list aa = ksDomSchedule b; cur_domain aa = ksCurDomain b;\n***         domain_time aa = ksDomainTime b; a && mask msg_align_bits = 0;\n***         typ_at' UserDataT (a && ~~ mask pageBits) b\\<rbrakk>\n***        \\<Longrightarrow> False\n*** At command \"by\" (line 397 of \"/tmp/vero-check-f5b6f5b7/Vero_Refine_TcbAcc_R.thy\")\nException- TOPLEVEL_ERROR raised\n\n{\n  \"status\": \"build_error\",\n  \"returncode\": 1,\n  \"elapsed_seconds\": 20.036041338928044,\n  \"audited\": [\n    \"c0182:prove\",\n    \"c0183:prove\",\n    \"c0189:prove\",\n    \"c0193:prove\",\n    \"c0194:prove\"\n  ]\n}\n",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_Schedule_R.thy');s=p.read_text();src=Path('Vero_Refine_TcbAcc_R.thy').read_text();body=re.search(r'\\\\(\\\\* VERO START c0189 prove \\\\*\\\\)(.*?)\\\\(\\\\* VERO END c0189 prove \\\\*\\\\)',src,re.S)[1].replace('by (fastforce simp: corres_underlying_def)','by (cases b; fastforce simp: ethread_get_when_def corres_underlying_def return_def)')\ns=re.sub(r'(\\\\(\\\\* VERO START c0151 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0151 prove \\\\*\\\\))',lambda m:m[1]+body+m[2],s,flags=re.S)\ns=re.sub(r'(\\\\(\\\\* VERO START c0162 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0162 prove \\\\*\\\\))',lambda m:m[1]+'\\\\n\\\\noops\\\\n\\\\n'+m[2],s,flags=re.S);p.write_text(s)\nPY\npython3 /backend/tool.py check Vero_Refine_Schedule_R\"",
+      "exit_code": 0,
+      "line": 267,
+      "output": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_Refine_Schedule_R\")\n### theory \"Draft.Vero_Support\"\n### 0.183s elapsed time, 0.245s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_Refine_Schedule_R\"\nVERO_RESULT c0149 prove clean\nVERO_RESULT c0150 prove clean\n### Introduced fixed type variable(s): 'd in \"s__\"\n### Ignoring duplicate rewrite rule:\n### ?i1 \\<in> {?l1..?u1} \\<equiv> ?l1 \\<le> ?i1 \\<and> ?i1 \\<le> ?u1\n### Introduced fixed type variable(s): 'd in \"s__\"\n### Ignoring duplicate rewrite rule:\n### psMap \\<equiv> id\n### Ignoring duplicate rewrite rule:\n### loadObject ?p ?q ?n ?obj \\<equiv> loadObject_default ?p ?q ?n ?obj\n### Ignoring duplicate rewrite rule:\n### maybeToMonad \\<equiv> assert_opt\n### Ignoring duplicate rewrite rule:\n### maybe \\<equiv> case_option\nVERO_RESULT c0151 prove clean\nVERO_RESULT c0152 prove clean\nVERO_RESULT c0156 prove clean\n### theory \"Draft.Vero_Refine_Schedule_R\"\n### 14.518s elapsed time, 14.668s cpu time, 0.188s GC time\nval it = (): unit\n\n{\n  \"status\": \"ok\",\n  \"returncode\": 0,\n  \"elapsed_seconds\": 18.92259743390605,\n  \"audited\": [\n    \"c0149:prove\",\n    \"c0150:prove\",\n    \"c0151:prove\",\n    \"c0152:prove\",\n    \"c0156:prove\"\n  ]\n}\n",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "module": "Vero_Refine_TcbAcc_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 1,
+      "line": 55,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 89,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 122,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 160,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 442,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 221,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 229,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 238,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 245,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 253,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 263,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 286,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 294,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 320,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "ethreadget_corres",
+  "withdrawn_since_observed_candidate": false
+}

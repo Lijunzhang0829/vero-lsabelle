@@ -1,0 +1,160 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": true,
+  "current_state": "unresolved_attempt_history_unknown",
+  "final_status": "unfilled",
+  "id": "c0129",
+  "last_attempt": null,
+  "last_legacy_target_evidence": null,
+  "legacy_evidence": [],
+  "module": "Vero_Refine_KHeap_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 1,
+      "line": 306,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 332,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 340,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 355,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 375,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 383,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 391,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 395,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 402,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 143,
+      "line": 411,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 416,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 418,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 422,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 143,
+      "line": 444,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 48,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 56,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 63,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 68,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 74,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 96,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 101,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 116,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 129,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 144,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 176,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 177,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 185,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 196,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 327,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "setEndpoint_corres",
+  "withdrawn_since_observed_candidate": false
+}

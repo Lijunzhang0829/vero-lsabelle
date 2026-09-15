@@ -1,0 +1,44 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0065",
+  "last_attempt": null,
+  "last_legacy_target_evidence": {
+    "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_Finalise_R.thy');s=p.read_text();pat=r'(\\\\(\\\\* VERO START c0065 prove \\\\*\\\\))(.*?)(\\\\(\\\\* VERO END c0065 prove \\\\*\\\\))'\ndef f(m):\n b=m[2].replace('irq_state_relation_def ','').replace('; simp add: fun_upd_apply','')\n return m[1]+'\\\\nproof -\\\\n  have [simp]: \\\"irq_state_relation irq_state.IRQInactive irqstate.IRQInactive\\\" by (simp add: irq_state_relation_def)\\\\n  show ?thesis\\\\n'+b+'qed\\\\n'+m[3]\ns=re.sub(pat,f,s,flags=re.S);p.write_text(s)\np=Path('Vero_Refine_InterruptAcc_R.thy');s=p.read_text();pat=r'(\\\\(\\\\* VERO START c0076 prove \\\\*\\\\))(.*?)(\\\\(\\\\* VERO END c0076 prove \\\\*\\\\))'\ndef f(m):\n b=m[2].replace(\\\"by (cases state; cases state'; auto\\\",'by (auto').replace('irq_state_relation_def ','').replace('; simp add: fun_upd_apply','')\n return m[1]+r'''\nproof -\n  assume r: \\\"irq_state_relation state state'\\\"\n  have eq: \\\"(state = irq_state.IRQInactive) = (state' = irqstate.IRQInactive)\\\"\n    using r by (cases state; cases state'; simp add: irq_state_relation_def)\n  show ?thesis using r eq\n'''+b+'qed\\\\n'+m[3]\ns=re.sub(pat,f,s,flags=re.S);p.write_text(s)\nPY\"",
+    "exit_code": 0,
+    "line": 342,
+    "output": "",
+    "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+  },
+  "legacy_evidence": [
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_Finalise_R.thy');s=p.read_text();pat=r'(\\\\(\\\\* VERO START c0065 prove \\\\*\\\\))(.*?)(\\\\(\\\\* VERO END c0065 prove \\\\*\\\\))'\ndef f(m):\n b=m[2].replace('irq_state_relation_def ','').replace('; simp add: fun_upd_apply','')\n return m[1]+'\\\\nproof -\\\\n  have [simp]: \\\"irq_state_relation irq_state.IRQInactive irqstate.IRQInactive\\\" by (simp add: irq_state_relation_def)\\\\n  show ?thesis\\\\n'+b+'qed\\\\n'+m[3]\ns=re.sub(pat,f,s,flags=re.S);p.write_text(s)\np=Path('Vero_Refine_InterruptAcc_R.thy');s=p.read_text();pat=r'(\\\\(\\\\* VERO START c0076 prove \\\\*\\\\))(.*?)(\\\\(\\\\* VERO END c0076 prove \\\\*\\\\))'\ndef f(m):\n b=m[2].replace(\\\"by (cases state; cases state'; auto\\\",'by (auto').replace('irq_state_relation_def ','').replace('; simp add: fun_upd_apply','')\n return m[1]+r'''\nproof -\n  assume r: \\\"irq_state_relation state state'\\\"\n  have eq: \\\"(state = irq_state.IRQInactive) = (state' = irqstate.IRQInactive)\\\"\n    using r by (cases state; cases state'; simp add: irq_state_relation_def)\n  show ?thesis using r eq\n'''+b+'qed\\\\n'+m[3]\ns=re.sub(pat,f,s,flags=re.S);p.write_text(s)\nPY\"",
+      "exit_code": 0,
+      "line": 342,
+      "output": "",
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "module": "Vero_Refine_Finalise_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 1,
+      "line": 326,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 337,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 354,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "deletedIRQHandler_corres",
+  "withdrawn_since_observed_candidate": false
+}

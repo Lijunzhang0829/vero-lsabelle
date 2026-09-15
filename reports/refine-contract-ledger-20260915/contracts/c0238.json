@@ -1,0 +1,104 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0238",
+  "last_attempt": null,
+  "last_legacy_target_evidence": {
+    "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_Tcb_R.thy');s=p.read_text()\na=s.index('(* VERO START c0238 prove *)');b=s.index('(* VERO END c0238 prove *)',a)\ns=s[:a]+s[a:b].replace('genericTake_def','genericTake_def word_less_nat_alt unat_of_nat word_bits_def')+s[b:]\np.write_text(s)\nPY\npython3 /backend/tool.py check Vero_Refine_Tcb_R\"",
+    "exit_code": 0,
+    "line": 164,
+    "output": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_Refine_Tcb_R\")\n### theory \"Draft.Vero_Support\"\n### 0.190s elapsed time, 0.254s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_Refine_Tcb_R\"\nVERO_RESULT c0216 prove clean\nVERO_RESULT c0225 prove clean\nVERO_RESULT c0228 prove clean\nVERO_RESULT c0234 prove clean\nVERO_RESULT c0238 prove clean\n### theory \"Draft.Vero_Refine_Tcb_R\"\n### 13.341s elapsed time, 13.511s cpu time, 0.224s GC time\nval it = (): unit\n\n{\n  \"status\": \"ok\",\n  \"returncode\": 0,\n  \"elapsed_seconds\": 17.907812256831676,\n  \"audited\": [\n    \"c0216:prove\",\n    \"c0225:prove\",\n    \"c0228:prove\",\n    \"c0234:prove\",\n    \"c0238:prove\"\n  ]\n}\n",
+    "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+  },
+  "legacy_evidence": [
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_Tcb_R.thy');s=p.read_text()\na=s.index('(* VERO START c0238 prove *)');b=s.index('(* VERO END c0238 prove *)',a)\ns=s[:a]+s[a:b].replace('genericTake_def','genericTake_def word_less_nat_alt unat_of_nat word_bits_def')+s[b:]\np.write_text(s)\nPY\npython3 /backend/tool.py check Vero_Refine_Tcb_R\"",
+      "exit_code": 0,
+      "line": 164,
+      "output": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_Refine_Tcb_R\")\n### theory \"Draft.Vero_Support\"\n### 0.190s elapsed time, 0.254s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_Refine_Tcb_R\"\nVERO_RESULT c0216 prove clean\nVERO_RESULT c0225 prove clean\nVERO_RESULT c0228 prove clean\nVERO_RESULT c0234 prove clean\nVERO_RESULT c0238 prove clean\n### theory \"Draft.Vero_Refine_Tcb_R\"\n### 13.341s elapsed time, 13.511s cpu time, 0.224s GC time\nval it = (): unit\n\n{\n  \"status\": \"ok\",\n  \"returncode\": 0,\n  \"elapsed_seconds\": 17.907812256831676,\n  \"audited\": [\n    \"c0216:prove\",\n    \"c0225:prove\",\n    \"c0228:prove\",\n    \"c0234:prove\",\n    \"c0238:prove\"\n  ]\n}\n",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "module": "Vero_Refine_Tcb_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 1,
+      "line": 153,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 173,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 209,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 245,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 91,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 102,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 115,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 128,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 142,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 156,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 164,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 194,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 206,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 224,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 326,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "decodeWriteRegisters_corres",
+  "withdrawn_since_observed_candidate": false
+}

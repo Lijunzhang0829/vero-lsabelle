@@ -1,0 +1,30 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": true,
+  "current_state": "unresolved_attempt_history_unknown",
+  "final_status": "unfilled",
+  "id": "c0265",
+  "last_attempt": null,
+  "last_legacy_target_evidence": null,
+  "legacy_evidence": [],
+  "module": "Vero_Refine_VSpace_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 1,
+      "line": 58,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 90,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 125,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "flushTable_corres",
+  "withdrawn_since_observed_candidate": false
+}

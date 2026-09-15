@@ -1,0 +1,106 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0210",
+  "last_attempt": null,
+  "last_legacy_target_evidence": {
+    "command": "/bin/bash -lc \"rg -n -A 100 'VERO START c0210 prove' Vero_Refine_TcbAcc_R.thy\"",
+    "exit_code": 0,
+    "line": 298,
+    "output": "755:(* VERO START c0210 prove *)\n756-\n757-proof -\n758-  have bound: \"y < 128\"\n759-    using y by (simp add: max_ipc_words_def capTransferDataSize_def msgMaxLength_def msgMaxExtraCaps_def msgExtraCapBits_def HaskellLib_H.bit_def)\n760-  have small: \"y * 4 < 512\" using bound by arith\n761-  have off': \"(word_of_nat (y*4)::word32) < 512\"\n762-    apply (rule word_of_nat_less)\n763-    using small by simp\n764-  have off: \"(of_nat y * 4 :: word32) < 2 ^ msg_align_bits\"\n765-    using off' by (simp add: msg_align_bits)\n766-  have mask: \"\\<And>a::word32. is_aligned a msg_align_bits \\<Longrightarrow> (a + of_nat y * 4) && ~~ mask pageBits = a && ~~ mask pageBits\"\n767-    using mask_out_first_mask_some[OF neg_mask_add_aligned[OF _ off]] by (simp add: msg_align_bits pageBits_def)\n768-  have al: \"\\<And>a::word32. is_aligned a msg_align_bits \\<Longrightarrow> is_aligned (a + of_nat y * 4) 2\"\n769-    by (rule is_aligned_add_multI[where n=2, simplified]; simp add: msg_align_bits; arith)\n770-  have sz: \"\\<And>sz. msg_align_bits \\<le> pageBitsForSize sz\"\n771-    by (case_tac sz; simp add: msg_align_bits; arith)\n772-  have mask2: \"\\<And>a::word32. \\<And>sz. is_aligned a msg_align_bits \\<Longrightarrow> (a + of_nat y * 4) && ~~ mask (pageBitsForSize sz) = a && ~~ mask (pageBitsForSize sz)\"\n773-    using mask_out_first_mask_some[OF neg_mask_add_aligned[OF _ off] sz] by (case_tac sz; simp add: msg_align_bits)\n774-  have frame: \"\\<And>a s. \\<lbrakk>is_aligned a msg_align_bits; in_user_frame a s\\<rbrakk> \\<Longrightarrow> in_user_frame (a + of_nat y * 4) s\"\n775-    by (simp add: in_user_frame_def mask2)\n776-  show ?thesis\n777-    by (auto simp: store_word_offs_def word_size_def storeWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def storeWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases valid_ipc_buffer_ptr'_def mask al al[unfolded is_aligned_mask] frame frame[unfolded is_aligned_mask] is_aligned_mask dc_def)\n778-qed\n779-\n780-(* VERO END c0210 prove *)\n781-\n782-vero_disprove \"c0210\" c0210_disprove:\n783-assumes y: \"y < unat max_ipc_words\"\n784-shows \"corres dc (in_user_frame a) (valid_ipc_buffer_ptr' a)\n785-                   (store_word_offs a y w) (storeWordUser (a + of_nat y * 4) w)\"\n786-\n787-(* VERO START c0210 disprove *)\n788-\n789-oops\n790-\n791-(* VERO END c0210 disprove *)\n792-\n793-vero_prove \"c0211\" c0211_prove:\n794-  \"tcb_ptr = tcbPtr \\<Longrightarrow>\n795-   corres dc\n796-     (in_correct_ready_q and ready_qs_distinct and valid_etcbs and tcb_at tcb_ptr\n797-      and pspace_aligned and pspace_distinct)\n798-     (sym_heap_sched_pointers and valid_objs')\n799-     (tcb_sched_action tcb_sched_dequeue tcb_ptr) (tcbSchedDequeue tcbPtr)\"\n800-\n801-(* VERO START c0211 prove *)\n802-\n803-oops\n804-\n805-(* VERO END c0211 prove *)\n806-\n807-vero_disprove \"c0211\" c0211_disprove:\n808-  \"tcb_ptr = tcbPtr \\<Longrightarrow>\n809-   corres dc\n810-     (in_correct_ready_q and ready_qs_distinct and valid_etcbs and tcb_at tcb_ptr\n811-      and pspace_aligned and pspace_distinct)\n812-     (sym_heap_sched_pointers and valid_objs')\n813-     (tcb_sched_action tcb_sched_dequeue tcb_ptr) (tcbSchedDequeue tcbPtr)\"\n814-\n815-(* VERO START c0211 disprove *)\n816-\n817-oops\n818-\n819-(* VERO END c0211 disprove *)\n820-\n821-vero_prove \"c0212\" c0212_prove:\n822-  \"tcb_ptr = tcbPtr \\<Longrightarrow>\n823-   corres dc\n824-     (in_correct_ready_q and ready_qs_distinct and valid_etcbs and st_tcb_at runnable tcb_ptr\n825-      and pspace_aligned and pspace_distinct)\n826-     (sym_heap_sched_pointers and valid_sched_pointers and valid_tcbs')\n827-     (tcb_sched_action tcb_sched_enqueue tcb_ptr) (tcbSchedEnqueue tcbPtr)\"\n828-\n829-(* VERO START c0212 prove *)\n830-\n831-oops\n832-\n833-(* VERO END c0212 prove *)\n834-\n835-vero_disprove \"c0212\" c0212_disprove:\n836-  \"tcb_ptr = tcbPtr \\<Longrightarrow>\n837-   corres dc\n838-     (in_correct_ready_q and ready_qs_distinct and valid_etcbs and st_tcb_at runnable tcb_ptr\n839-      and pspace_aligned and pspace_distinct)\n840-     (sym_heap_sched_pointers and valid_sched_pointers and valid_tcbs')\n841-     (tcb_sched_action tcb_sched_enqueue tcb_ptr) (tcbSchedEnqueue tcbPtr)\"\n842-\n843-(* VERO START c0212 disprove *)\n844-\n845-oops\n846-\n847-(* VERO END c0212 disprove *)\n848-\n849-vero_prove \"c0213\" c0213_prove:\n850-assumes x: \"\\<And>tcb tcb'. tcb_relation tcb tcb' \\<Longrightarrow> r (f tcb) (f' tcb')\"\n851-shows      \"corres r (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n852-                       (thread_get f t) (threadGet f' t)\"\n853-\n854-(* VERO START c0213 prove *)\n855-\n",
+    "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+  },
+  "legacy_evidence": [
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_TcbAcc_R.thy');s=p.read_text();body=re.search(r'\\\\(\\\\* VERO START c0197 prove \\\\*\\\\)(.*?)\\\\(\\\\* VERO END c0197 prove \\\\*\\\\)',s,re.S)[1]\na=body.index('  show ?thesis');body=body[:a]+r'''  have sz: \\\"\\\\<And>sz. msg_align_bits \\\\<le> pageBitsForSize sz\\\"\n    by (case_tac sz; simp add: msg_align_bits; arith)\n  have mask2: \\\"\\\\<And>a::word32. \\\\<And>sz. is_aligned a msg_align_bits \\\\<Longrightarrow> (a + of_nat y * 4) && ~~ mask (pageBitsForSize sz) = a && ~~ mask (pageBitsForSize sz)\\\"\n    using mask_out_first_mask_some[OF neg_mask_add_aligned[OF _ off] sz] by blast\n  have frame: \\\"\\\\<And>a s. \\\\<lbrakk>is_aligned a msg_align_bits; in_user_frame a s\\\\<rbrakk> \\\\<Longrightarrow> in_user_frame (a + of_nat y * 4) s\\\"\n    by (simp add: in_user_frame_def mask2)\n  show ?thesis\n    by (auto simp: store_word_offs_def word_size_def storeWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def storeWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases valid_ipc_buffer_ptr'_def mask al al[unfolded is_aligned_mask] frame frame[unfolded is_aligned_mask] is_aligned_mask dc_def)\nqed\n\n''';s=re.sub(r'(\\\\(\\\\* VERO START c0210 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0210 prove \\\\*\\\\))',lambda m:m[1]+body+m[2],s,flags=re.S);p.write_text(s)\nPY\npython3 /backend/tool.py check Vero_Refine_TcbAcc_R\"",
+      "exit_code": 1,
+      "line": 286,
+      "output": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_Refine_TcbAcc_R\")\n### theory \"Draft.Vero_Support\"\n### 0.185s elapsed time, 0.247s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_Refine_TcbAcc_R\"\nVERO_RESULT c0182 prove clean\nVERO_RESULT c0183 prove clean\n### Introduced fixed type variable(s): 'd in \"s__\"\n### Ignoring duplicate rewrite rule:\n### ?i1 \\<in> {?l1..?u1} \\<equiv> ?l1 \\<le> ?i1 \\<and> ?i1 \\<le> ?u1\n### Introduced fixed type variable(s): 'd in \"s__\"\n### Ignoring duplicate rewrite rule:\n### psMap \\<equiv> id\n### Ignoring duplicate rewrite rule:\n### loadObject ?p ?q ?n ?obj \\<equiv> loadObject_default ?p ?q ?n ?obj\n### Ignoring duplicate rewrite rule:\n### maybeToMonad \\<equiv> assert_opt\n### Ignoring duplicate rewrite rule:\n### maybe \\<equiv> case_option\nVERO_RESULT c0189 prove clean\nVERO_RESULT c0193 prove clean\nVERO_RESULT c0194 prove clean\n### Ignoring duplicate rewrite rule:\n### HaskellLib_H.bit ?x \\<equiv> shiftL (1::?'a) ?x\nVERO_RESULT c0197 prove clean\nVERO_RESULT c0198 prove clean\nVERO_RESULT c0206 prove clean\n### Ignoring duplicate rewrite rule:\n### HaskellLib_H.bit ?x \\<equiv> shiftL (1::?'a) ?x\n*** Failed to apply initial proof method (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\"):\n*** using this:\n***   is_aligned ?p2 msg_align_bits \\<Longrightarrow>\n***   ?p2 + word_of_nat y * 4 && ~~ mask (pageBitsForSize ?sz1) =\n***   (?p2 && ~~ mask msg_align_bits) && ~~ mask (pageBitsForSize ?sz1)\n*** goal (1 subgoal):\n***  1. \\<And>a sz.\n***        is_aligned a msg_align_bits \\<Longrightarrow>\n***        a + word_of_nat y * 4 && ~~ mask (pageBitsForSize sz) =\n***        a && ~~ mask (pageBitsForSize sz)\n*** At command \"by\" (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\")\n### theory \"Draft.Vero_Refine_TcbAcc_R\"\n### 17.257s elapsed time, 17.427s cpu time, 0.210s GC time\n*** Failed to apply initial proof method (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\"):\n*** using this:\n***   is_aligned ?p2 msg_align_bits \\<Longrightarrow>\n***   ?p2 + word_of_nat y * 4 && ~~ mask (pageBitsForSize ?sz1) =\n***   (?p2 && ~~ mask msg_align_bits) && ~~ mask (pageBitsForSize ?sz1)\n*** goal (1 subgoal):\n***  1. \\<And>a sz.\n***        is_aligned a msg_align_bits \\<Longrightarrow>\n***        a + word_of_nat y * 4 && ~~ mask (pageBitsForSize sz) =\n***        a && ~~ mask (pageBitsForSize sz)\n*** At command \"by\" (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\")\n*** At command \"vero_prove\" (line 750 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\")\n*** Failed to apply initial proof method (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\"):\n*** using this:\n***   is_aligned ?p2 msg_align_bits \\<Longrightarrow>\n***   ?p2 + word_of_nat y * 4 && ~~ mask (pageBitsForSize ?sz1) =\n***   (?p2 && ~~ mask msg_align_bits) && ~~ mask (pageBitsForSize ?sz1)\n*** goal (1 subgoal):\n***  1. \\<And>a sz.\n***        is_aligned a msg_align_bits \\<Longrightarrow>\n***        a + word_of_nat y * 4 && ~~ mask (pageBitsForSize sz) =\n***        a && ~~ mask (pageBitsForSize sz)\n*** At command \"by\" (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\")\nException- TOPLEVEL_ERROR raised\n\n{\n  \"status\": \"build_error\",\n  \"returncode\": 1,\n  \"elapsed_seconds\": 21.644776773173362,\n  \"audited\": [\n    \"c0182:prove\",\n    \"c0183:prove\",\n    \"c0189:prove\",\n    \"c0193:prove\",\n    \"c0194:prove\",\n    \"c0197:prove\",\n    \"c0198:prove\",\n    \"c0206:prove\"\n  ]\n}\n",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "command": "/bin/bash -lc \"rg -n -A 100 'VERO START c0210 prove' Vero_Refine_TcbAcc_R.thy\"",
+      "exit_code": 0,
+      "line": 298,
+      "output": "755:(* VERO START c0210 prove *)\n756-\n757-proof -\n758-  have bound: \"y < 128\"\n759-    using y by (simp add: max_ipc_words_def capTransferDataSize_def msgMaxLength_def msgMaxExtraCaps_def msgExtraCapBits_def HaskellLib_H.bit_def)\n760-  have small: \"y * 4 < 512\" using bound by arith\n761-  have off': \"(word_of_nat (y*4)::word32) < 512\"\n762-    apply (rule word_of_nat_less)\n763-    using small by simp\n764-  have off: \"(of_nat y * 4 :: word32) < 2 ^ msg_align_bits\"\n765-    using off' by (simp add: msg_align_bits)\n766-  have mask: \"\\<And>a::word32. is_aligned a msg_align_bits \\<Longrightarrow> (a + of_nat y * 4) && ~~ mask pageBits = a && ~~ mask pageBits\"\n767-    using mask_out_first_mask_some[OF neg_mask_add_aligned[OF _ off]] by (simp add: msg_align_bits pageBits_def)\n768-  have al: \"\\<And>a::word32. is_aligned a msg_align_bits \\<Longrightarrow> is_aligned (a + of_nat y * 4) 2\"\n769-    by (rule is_aligned_add_multI[where n=2, simplified]; simp add: msg_align_bits; arith)\n770-  have sz: \"\\<And>sz. msg_align_bits \\<le> pageBitsForSize sz\"\n771-    by (case_tac sz; simp add: msg_align_bits; arith)\n772-  have mask2: \"\\<And>a::word32. \\<And>sz. is_aligned a msg_align_bits \\<Longrightarrow> (a + of_nat y * 4) && ~~ mask (pageBitsForSize sz) = a && ~~ mask (pageBitsForSize sz)\"\n773-    using mask_out_first_mask_some[OF neg_mask_add_aligned[OF _ off] sz] by (case_tac sz; simp add: msg_align_bits)\n774-  have frame: \"\\<And>a s. \\<lbrakk>is_aligned a msg_align_bits; in_user_frame a s\\<rbrakk> \\<Longrightarrow> in_user_frame (a + of_nat y * 4) s\"\n775-    by (simp add: in_user_frame_def mask2)\n776-  show ?thesis\n777-    by (auto simp: store_word_offs_def word_size_def storeWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def storeWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases valid_ipc_buffer_ptr'_def mask al al[unfolded is_aligned_mask] frame frame[unfolded is_aligned_mask] is_aligned_mask dc_def)\n778-qed\n779-\n780-(* VERO END c0210 prove *)\n781-\n782-vero_disprove \"c0210\" c0210_disprove:\n783-assumes y: \"y < unat max_ipc_words\"\n784-shows \"corres dc (in_user_frame a) (valid_ipc_buffer_ptr' a)\n785-                   (store_word_offs a y w) (storeWordUser (a + of_nat y * 4) w)\"\n786-\n787-(* VERO START c0210 disprove *)\n788-\n789-oops\n790-\n791-(* VERO END c0210 disprove *)\n792-\n793-vero_prove \"c0211\" c0211_prove:\n794-  \"tcb_ptr = tcbPtr \\<Longrightarrow>\n795-   corres dc\n796-     (in_correct_ready_q and ready_qs_distinct and valid_etcbs and tcb_at tcb_ptr\n797-      and pspace_aligned and pspace_distinct)\n798-     (sym_heap_sched_pointers and valid_objs')\n799-     (tcb_sched_action tcb_sched_dequeue tcb_ptr) (tcbSchedDequeue tcbPtr)\"\n800-\n801-(* VERO START c0211 prove *)\n802-\n803-oops\n804-\n805-(* VERO END c0211 prove *)\n806-\n807-vero_disprove \"c0211\" c0211_disprove:\n808-  \"tcb_ptr = tcbPtr \\<Longrightarrow>\n809-   corres dc\n810-     (in_correct_ready_q and ready_qs_distinct and valid_etcbs and tcb_at tcb_ptr\n811-      and pspace_aligned and pspace_distinct)\n812-     (sym_heap_sched_pointers and valid_objs')\n813-     (tcb_sched_action tcb_sched_dequeue tcb_ptr) (tcbSchedDequeue tcbPtr)\"\n814-\n815-(* VERO START c0211 disprove *)\n816-\n817-oops\n818-\n819-(* VERO END c0211 disprove *)\n820-\n821-vero_prove \"c0212\" c0212_prove:\n822-  \"tcb_ptr = tcbPtr \\<Longrightarrow>\n823-   corres dc\n824-     (in_correct_ready_q and ready_qs_distinct and valid_etcbs and st_tcb_at runnable tcb_ptr\n825-      and pspace_aligned and pspace_distinct)\n826-     (sym_heap_sched_pointers and valid_sched_pointers and valid_tcbs')\n827-     (tcb_sched_action tcb_sched_enqueue tcb_ptr) (tcbSchedEnqueue tcbPtr)\"\n828-\n829-(* VERO START c0212 prove *)\n830-\n831-oops\n832-\n833-(* VERO END c0212 prove *)\n834-\n835-vero_disprove \"c0212\" c0212_disprove:\n836-  \"tcb_ptr = tcbPtr \\<Longrightarrow>\n837-   corres dc\n838-     (in_correct_ready_q and ready_qs_distinct and valid_etcbs and st_tcb_at runnable tcb_ptr\n839-      and pspace_aligned and pspace_distinct)\n840-     (sym_heap_sched_pointers and valid_sched_pointers and valid_tcbs')\n841-     (tcb_sched_action tcb_sched_enqueue tcb_ptr) (tcbSchedEnqueue tcbPtr)\"\n842-\n843-(* VERO START c0212 disprove *)\n844-\n845-oops\n846-\n847-(* VERO END c0212 disprove *)\n848-\n849-vero_prove \"c0213\" c0213_prove:\n850-assumes x: \"\\<And>tcb tcb'. tcb_relation tcb tcb' \\<Longrightarrow> r (f tcb) (f' tcb')\"\n851-shows      \"corres r (tcb_at t and pspace_aligned and pspace_distinct) \\<top>\n852-                       (thread_get f t) (threadGet f' t)\"\n853-\n854-(* VERO START c0213 prove *)\n855-\n",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "module": "Vero_Refine_TcbAcc_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 1,
+      "line": 55,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 89,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 122,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 160,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 442,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 221,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 229,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 238,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 245,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 253,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 263,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 286,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 294,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 320,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "storeWordUser_corres",
+  "withdrawn_since_observed_candidate": false
+}

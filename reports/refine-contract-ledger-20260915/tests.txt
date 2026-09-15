@@ -1,0 +1,29 @@
+test_archive_skips_symlinks (test_attempts.AttemptTests.test_archive_skips_symlinks) ... ok
+test_corrupt_telemetry_does_not_override_evaluation (test_attempts.AttemptTests.test_corrupt_telemetry_does_not_override_evaluation) ... ok
+test_failing_line_does_not_blame_audited_sibling (test_attempts.AttemptTests.test_failing_line_does_not_blame_audited_sibling) ... ok
+test_interrupted_and_final_authority (test_attempts.AttemptTests.test_interrupted_and_final_authority) ... ok
+test_legacy_module_failure_does_not_invent_contract_attempt (test_attempts.AttemptTests.test_legacy_module_failure_does_not_invent_contract_attempt) ... ok
+test_tool_records_real_invocation_and_survives_tmp_cleanup (test_attempts.AttemptTests.test_tool_records_real_invocation_and_survives_tmp_cleanup) ... ok
+test_both_polarities_rejected (test_backend.BackendTests.test_both_polarities_rejected) ... ok
+test_bound_artifact (test_backend.BackendTests.test_bound_artifact) ... ok
+test_duplicate_marker_rejected (test_backend.BackendTests.test_duplicate_marker_rejected) ... ok
+test_fresh_evaluation_required (test_backend.BackendTests.test_fresh_evaluation_required) ... ok
+test_frozen_statement_tamper_not_replayed (test_backend.BackendTests.test_frozen_statement_tamper_not_replayed) ... ok
+test_malformed_and_unsafe_bodies (test_backend.BackendTests.test_malformed_and_unsafe_bodies) ... ok
+test_missing_audit_is_not_proved (test_backend.BackendTests.test_missing_audit_is_not_proved) ... ok
+test_roundtrip (test_backend.BackendTests.test_roundtrip) ... ok
+test_symlink_rejected (test_backend.BackendTests.test_symlink_rejected) ... ok
+test_unfilled_is_not_proved (test_backend.BackendTests.test_unfilled_is_not_proved) ... ok
+test_false_assumption_cannot_refute_vacuous_contract (test_kernel.KernelTests.test_false_assumption_cannot_refute_vacuous_contract) ... skipped 'requires Isabelle with HOL heap'
+test_kernel_rejects_sorry_even_without_lexical_guard (test_kernel.KernelTests.test_kernel_rejects_sorry_even_without_lexical_guard) ... skipped 'requires Isabelle with HOL heap'
+test_positive_counterexample_and_vacuous_contract (test_kernel.KernelTests.test_positive_counterexample_and_vacuous_contract) ... skipped 'requires Isabelle with HOL heap'
+test_quantified_assumptions_keep_binders_and_distinct_types (test_kernel.KernelTests.test_quantified_assumptions_keep_binders_and_distinct_types) ... skipped 'requires Isabelle with HOL heap'
+test_continuation_seed_is_bound_and_rendered (test_recovery.RecoveryTests.test_continuation_seed_is_bound_and_rendered) ... ok
+test_interrupted_call_charged_and_completed_eval_reused (test_recovery.RecoveryTests.test_interrupted_call_charged_and_completed_eval_reused) ... ok
+test_running_process_cannot_be_recovered (test_recovery.RecoveryTests.test_running_process_cannot_be_recovered) ... ok
+test_timeout_kills_prover_in_separate_session (test_recovery.RecoveryTests.test_timeout_kills_prover_in_separate_session) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.690s
+
+OK (skipped=4)

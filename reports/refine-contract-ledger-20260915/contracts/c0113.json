@@ -1,0 +1,59 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0113",
+  "last_attempt": null,
+  "last_legacy_target_evidence": {
+    "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_ArchAcc_R.thy');s=p.read_text();s=s.replace('apply (clarsimp simp: obj_at\\\\'_real_def ko_wp_at\\\\'_def)\\\\n    subgoal for s ko obj\\\\n      apply (cases ko; simp add: projectKO_opts_defs)\\\\n      subgoal for ao by (cases ao; auto simp: projectKO_opts_defs)','apply (clarsimp simp: typ_at\\\\'_def ko_wp_at\\\\'_def)\\\\n    subgoal for s ko\\\\n      apply (cases ko; simp add: koTypeOf_def)\\\\n      subgoal for ao by (cases ao; auto simp: koTypeOf_def archTypeOf_def)');p.write_text(s)\np=Path('Vero_Refine_Ipc_R.thy');s=p.read_text();src=Path('Vero_Refine_TcbAcc_R.thy').read_text();body=re.search(r'\\\\(\\\\* VERO START c0197 prove \\\\*\\\\)(.*?)\\\\(\\\\* VERO END c0197 prove \\\\*\\\\)',src,re.S)[1];body=body.replace('proof -','proof -\\\\n  assume y: \\\"y < unat max_ipc_words\\\" and eq: \\\"y\\\\' = of_nat y * 4\\\"',1).replace('  show ?thesis\\\\n','  show ?thesis using eq\\\\n');s=re.sub(r'(\\\\(\\\\* VERO START c0113 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0113 prove \\\\*\\\\))',lambda m:m[1]+body+m[2],s,flags=re.S);p.write_text(s)\nPY\"",
+    "exit_code": 0,
+    "line": 269,
+    "output": "",
+    "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+  },
+  "legacy_evidence": [
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_ArchAcc_R.thy');s=p.read_text();s=s.replace('apply (clarsimp simp: obj_at\\\\'_real_def ko_wp_at\\\\'_def)\\\\n    subgoal for s ko obj\\\\n      apply (cases ko; simp add: projectKO_opts_defs)\\\\n      subgoal for ao by (cases ao; auto simp: projectKO_opts_defs)','apply (clarsimp simp: typ_at\\\\'_def ko_wp_at\\\\'_def)\\\\n    subgoal for s ko\\\\n      apply (cases ko; simp add: koTypeOf_def)\\\\n      subgoal for ao by (cases ao; auto simp: koTypeOf_def archTypeOf_def)');p.write_text(s)\np=Path('Vero_Refine_Ipc_R.thy');s=p.read_text();src=Path('Vero_Refine_TcbAcc_R.thy').read_text();body=re.search(r'\\\\(\\\\* VERO START c0197 prove \\\\*\\\\)(.*?)\\\\(\\\\* VERO END c0197 prove \\\\*\\\\)',src,re.S)[1];body=body.replace('proof -','proof -\\\\n  assume y: \\\"y < unat max_ipc_words\\\" and eq: \\\"y\\\\' = of_nat y * 4\\\"',1).replace('  show ?thesis\\\\n','  show ?thesis using eq\\\\n');s=re.sub(r'(\\\\(\\\\* VERO START c0113 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0113 prove \\\\*\\\\))',lambda m:m[1]+body+m[2],s,flags=re.S);p.write_text(s)\nPY\"",
+      "exit_code": 0,
+      "line": 269,
+      "output": "",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "module": "Vero_Refine_Ipc_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 0,
+      "line": 56,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 274,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 288,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 296,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 340,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 347,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "loadWordUser_corres'",
+  "withdrawn_since_observed_candidate": false
+}

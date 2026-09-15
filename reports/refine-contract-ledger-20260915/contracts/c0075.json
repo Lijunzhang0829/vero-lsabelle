@@ -1,0 +1,84 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0075",
+  "last_attempt": null,
+  "last_legacy_target_evidence": {
+    "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\np=Path('Vero_Refine_KHeap_R.thy');s=p.read_text().replace('by (auto simp: ps_clear_def shiftl_t2n)','by (auto simp: ps_clear_def shiftl_t2n disjoint_iff_not_equal intro: less_imp_le)');p.write_text(s)\np=Path('Vero_Refine_InterruptAcc_R.thy');s=p.read_text();a='(* VERO START c0075 prove *)';b='(* VERO END c0075 prove *)';i=s.index(a)+len(a);j=s.index(b,i);s=s[:i]+r'''\n\nby (auto simp: preemption_point_def preemptionPoint_def OR_choiceE_def wrap_ext_bool_det_ext_ext_def work_units_limit_reached_def update_work_units_def reset_work_units_def modifyWorkUnits_def getWorkUnits_def setWorkUnits_def work_units_limit_def FaultMonad_H.workUnitsLimit_def Kernel_Config.workUnitsLimit_def mk_ef_def whenE_def liftE_def bindE_def lift_def throwError_def returnOk_def do_machine_op_def doMachineOp_def getActiveIRQ_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases dc_def split: option.splits if_splits)\n\n'''+s[j:];p.write_text(s)\nPY\npython3 /backend/tool.py check Vero_Refine_KHeap_R\"",
+    "exit_code": 1,
+    "line": 68,
+    "output": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_Refine_KHeap_R\")\n### theory \"Draft.Vero_Support\"\n### 0.186s elapsed time, 0.248s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_Refine_KHeap_R\"\n### Introduced fixed type variable(s): 'b in \"s__\"\n*** Failed to finish proof (line 24 of \"/tmp/vero-check-wh8iv4je/Vero_Refine_KHeap_R.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>y.\n***        \\<lbrakk>\\<forall>x\\<in>{p..p + 2 ^ n - 1} - {p}.\n***                    \\<forall>y\\<in>dom (ksPSpace s). x \\<noteq> y;\n***         p < q; q \\<le> p + 2 ^ n - 1; ksPSpace s q = Some y\\<rbrakk>\n***        \\<Longrightarrow> False\n*** At command \"by\" (line 24 of \"/tmp/vero-check-wh8iv4je/Vero_Refine_KHeap_R.thy\")\n### theory \"Draft.Vero_Refine_KHeap_R\"\n### 4.803s elapsed time, 4.929s cpu time, 0.175s GC time\n*** Failed to finish proof (line 24 of \"/tmp/vero-check-wh8iv4je/Vero_Refine_KHeap_R.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>y.\n***        \\<lbrakk>\\<forall>x\\<in>{p..p + 2 ^ n - 1} - {p}.\n***                    \\<forall>y\\<in>dom (ksPSpace s). x \\<noteq> y;\n***         p < q; q \\<le> p + 2 ^ n - 1; ksPSpace s q = Some y\\<rbrakk>\n***        \\<Longrightarrow> False\n*** At command \"by\" (line 24 of \"/tmp/vero-check-wh8iv4je/Vero_Refine_KHeap_R.thy\")\n*** At command \"vero_prove\" (line 8 of \"/tmp/vero-check-wh8iv4je/Vero_Refine_KHeap_R.thy\")\n*** Failed to finish proof (line 24 of \"/tmp/vero-check-wh8iv4je/Vero_Refine_KHeap_R.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>y.\n***        \\<lbrakk>\\<forall>x\\<in>{p..p + 2 ^ n - 1} - {p}.\n***                    \\<forall>y\\<in>dom (ksPSpace s). x \\<noteq> y;\n***         p < q; q \\<le> p + 2 ^ n - 1; ksPSpace s q = Some y\\<rbrakk>\n***        \\<Longrightarrow> False\n*** At command \"by\" (line 24 of \"/tmp/vero-check-wh8iv4je/Vero_Refine_KHeap_R.thy\")\nException- TOPLEVEL_ERROR raised\n\n{\n  \"status\": \"build_error\",\n  \"returncode\": 1,\n  \"elapsed_seconds\": 9.223402845207602,\n  \"audited\": []\n}\n",
+    "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+  },
+  "legacy_evidence": [
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\np=Path('Vero_Refine_KHeap_R.thy');s=p.read_text().replace('by (auto simp: ps_clear_def shiftl_t2n)','by (auto simp: ps_clear_def shiftl_t2n disjoint_iff_not_equal intro: less_imp_le)');p.write_text(s)\np=Path('Vero_Refine_InterruptAcc_R.thy');s=p.read_text();a='(* VERO START c0075 prove *)';b='(* VERO END c0075 prove *)';i=s.index(a)+len(a);j=s.index(b,i);s=s[:i]+r'''\n\nby (auto simp: preemption_point_def preemptionPoint_def OR_choiceE_def wrap_ext_bool_det_ext_ext_def work_units_limit_reached_def update_work_units_def reset_work_units_def modifyWorkUnits_def getWorkUnits_def setWorkUnits_def work_units_limit_def FaultMonad_H.workUnitsLimit_def Kernel_Config.workUnitsLimit_def mk_ef_def whenE_def liftE_def bindE_def lift_def throwError_def returnOk_def do_machine_op_def doMachineOp_def getActiveIRQ_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def state_relation_def swp_def cte_wp_at_cases dc_def split: option.splits if_splits)\n\n'''+s[j:];p.write_text(s)\nPY\npython3 /backend/tool.py check Vero_Refine_KHeap_R\"",
+      "exit_code": 1,
+      "line": 68,
+      "output": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_Refine_KHeap_R\")\n### theory \"Draft.Vero_Support\"\n### 0.186s elapsed time, 0.248s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_Refine_KHeap_R\"\n### Introduced fixed type variable(s): 'b in \"s__\"\n*** Failed to finish proof (line 24 of \"/tmp/vero-check-wh8iv4je/Vero_Refine_KHeap_R.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>y.\n***        \\<lbrakk>\\<forall>x\\<in>{p..p + 2 ^ n - 1} - {p}.\n***                    \\<forall>y\\<in>dom (ksPSpace s). x \\<noteq> y;\n***         p < q; q \\<le> p + 2 ^ n - 1; ksPSpace s q = Some y\\<rbrakk>\n***        \\<Longrightarrow> False\n*** At command \"by\" (line 24 of \"/tmp/vero-check-wh8iv4je/Vero_Refine_KHeap_R.thy\")\n### theory \"Draft.Vero_Refine_KHeap_R\"\n### 4.803s elapsed time, 4.929s cpu time, 0.175s GC time\n*** Failed to finish proof (line 24 of \"/tmp/vero-check-wh8iv4je/Vero_Refine_KHeap_R.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>y.\n***        \\<lbrakk>\\<forall>x\\<in>{p..p + 2 ^ n - 1} - {p}.\n***                    \\<forall>y\\<in>dom (ksPSpace s). x \\<noteq> y;\n***         p < q; q \\<le> p + 2 ^ n - 1; ksPSpace s q = Some y\\<rbrakk>\n***        \\<Longrightarrow> False\n*** At command \"by\" (line 24 of \"/tmp/vero-check-wh8iv4je/Vero_Refine_KHeap_R.thy\")\n*** At command \"vero_prove\" (line 8 of \"/tmp/vero-check-wh8iv4je/Vero_Refine_KHeap_R.thy\")\n*** Failed to finish proof (line 24 of \"/tmp/vero-check-wh8iv4je/Vero_Refine_KHeap_R.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>y.\n***        \\<lbrakk>\\<forall>x\\<in>{p..p + 2 ^ n - 1} - {p}.\n***                    \\<forall>y\\<in>dom (ksPSpace s). x \\<noteq> y;\n***         p < q; q \\<le> p + 2 ^ n - 1; ksPSpace s q = Some y\\<rbrakk>\n***        \\<Longrightarrow> False\n*** At command \"by\" (line 24 of \"/tmp/vero-check-wh8iv4je/Vero_Refine_KHeap_R.thy\")\nException- TOPLEVEL_ERROR raised\n\n{\n  \"status\": \"build_error\",\n  \"returncode\": 1,\n  \"elapsed_seconds\": 9.223402845207602,\n  \"audited\": []\n}\n",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "module": "Vero_Refine_InterruptAcc_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 1,
+      "line": 149,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 170,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 196,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 227,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 244,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 328,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 338,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 346,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 71,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 82,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 321,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "preemptionPoint_corres",
+  "withdrawn_since_observed_candidate": false
+}

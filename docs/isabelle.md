@@ -43,3 +43,17 @@ ruff format --check src/vero/isabelle scripts/deploy_isabelle_worker.py tests/is
 ```
 
 The second command additionally checks real HOL proofs, counterexamples, vacuous assumptions, quantified assumptions of different types, and rejection of `sorry` even when Isabelle's `quick_and_dirty` option is enabled. `reference/IsabelleMini` is the Isabelle fixture; the Lean canonical example is unchanged.
+
+## Per-contract diagnostic records
+
+Each `tool.py check MODULE` writes `.vero-attempts/<unique-id>/submitted.json` before checking, including the frozen benchmark identity, every slot body in that module, and a candidate hash. It preserves the rendered `source.thy`, `checker.log`, and `result.json`. A process killed before completion leaves a submission without a result. The first diagnostic line is mapped to the relevant declaration/proof range; a module failure does not blame its siblings, and timeouts without locations remain unattributed.
+
+These are agent-writable diagnostic records, not independent proof certificates. The supervisor archives regular files to `iter-NNN/attempts/` and writes `attempt-ledger.json` after independent evaluation, including recovery. A malformed diagnostic archive produces an explicit telemetry error without changing independent evaluation results. Repeated checks of an unchanged body remain distinguishable by body hash; they are not different candidate proofs. Changes never submitted to the check tool are not captured by this mechanism.
+
+To build a readable ledger with one JSON file per contract:
+
+```bash
+PYTHONPATH=src python3 -m vero.isabelle.attempts --benchmark benchmarks/RefineIsabelle/benchmark.json --evaluation /results/trial/iter-000/eval/report.json --attempt-root /results/trial/iter-000/attempts --output /results/ledger
+```
+
+For old runs, repeat `--trace PATH` in chronological run order. Legacy marker mentions and module checks are evidence only, not precise attempt counts; absent history is reported as unknown. Use `contracts/cNNNN.json` for full evidence, latest candidate diagnostic, final status and candidate-withdrawal indicators. The first historical Refine ledger is in `reports/refine-contract-ledger-20260915/`.

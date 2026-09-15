@@ -1,0 +1,113 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0197",
+  "last_attempt": null,
+  "last_legacy_target_evidence": {
+    "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_TcbAcc_R.thy');s=p.read_text();body=re.search(r'\\\\(\\\\* VERO START c0197 prove \\\\*\\\\)(.*?)\\\\(\\\\* VERO END c0197 prove \\\\*\\\\)',s,re.S)[1]\na=body.index('  show ?thesis');body=body[:a]+r'''  have sz: \\\"\\\\<And>sz. msg_align_bits \\\\<le> pageBitsForSize sz\\\"\n    by (case_tac sz; simp add: msg_align_bits; arith)\n  have mask2: \\\"\\\\<And>a::word32. \\\\<And>sz. is_aligned a msg_align_bits \\\\<Longrightarrow> (a + of_nat y * 4) && ~~ mask (pageBitsForSize sz) = a && ~~ mask (pageBitsForSize sz)\\\"\n    using mask_out_first_mask_some[OF neg_mask_add_aligned[OF _ off] sz] by blast\n  have frame: \\\"\\\\<And>a s. \\\\<lbrakk>is_aligned a msg_align_bits; in_user_frame a s\\\\<rbrakk> \\\\<Longrightarrow> in_user_frame (a + of_nat y * 4) s\\\"\n    by (simp add: in_user_frame_def mask2)\n  show ?thesis\n    by (auto simp: store_word_offs_def word_size_def storeWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def storeWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases valid_ipc_buffer_ptr'_def mask al al[unfolded is_aligned_mask] frame frame[unfolded is_aligned_mask] is_aligned_mask dc_def)\nqed\n\n''';s=re.sub(r'(\\\\(\\\\* VERO START c0210 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0210 prove \\\\*\\\\))',lambda m:m[1]+body+m[2],s,flags=re.S);p.write_text(s)\nPY\npython3 /backend/tool.py check Vero_Refine_TcbAcc_R\"",
+    "exit_code": 1,
+    "line": 286,
+    "output": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_Refine_TcbAcc_R\")\n### theory \"Draft.Vero_Support\"\n### 0.185s elapsed time, 0.247s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_Refine_TcbAcc_R\"\nVERO_RESULT c0182 prove clean\nVERO_RESULT c0183 prove clean\n### Introduced fixed type variable(s): 'd in \"s__\"\n### Ignoring duplicate rewrite rule:\n### ?i1 \\<in> {?l1..?u1} \\<equiv> ?l1 \\<le> ?i1 \\<and> ?i1 \\<le> ?u1\n### Introduced fixed type variable(s): 'd in \"s__\"\n### Ignoring duplicate rewrite rule:\n### psMap \\<equiv> id\n### Ignoring duplicate rewrite rule:\n### loadObject ?p ?q ?n ?obj \\<equiv> loadObject_default ?p ?q ?n ?obj\n### Ignoring duplicate rewrite rule:\n### maybeToMonad \\<equiv> assert_opt\n### Ignoring duplicate rewrite rule:\n### maybe \\<equiv> case_option\nVERO_RESULT c0189 prove clean\nVERO_RESULT c0193 prove clean\nVERO_RESULT c0194 prove clean\n### Ignoring duplicate rewrite rule:\n### HaskellLib_H.bit ?x \\<equiv> shiftL (1::?'a) ?x\nVERO_RESULT c0197 prove clean\nVERO_RESULT c0198 prove clean\nVERO_RESULT c0206 prove clean\n### Ignoring duplicate rewrite rule:\n### HaskellLib_H.bit ?x \\<equiv> shiftL (1::?'a) ?x\n*** Failed to apply initial proof method (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\"):\n*** using this:\n***   is_aligned ?p2 msg_align_bits \\<Longrightarrow>\n***   ?p2 + word_of_nat y * 4 && ~~ mask (pageBitsForSize ?sz1) =\n***   (?p2 && ~~ mask msg_align_bits) && ~~ mask (pageBitsForSize ?sz1)\n*** goal (1 subgoal):\n***  1. \\<And>a sz.\n***        is_aligned a msg_align_bits \\<Longrightarrow>\n***        a + word_of_nat y * 4 && ~~ mask (pageBitsForSize sz) =\n***        a && ~~ mask (pageBitsForSize sz)\n*** At command \"by\" (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\")\n### theory \"Draft.Vero_Refine_TcbAcc_R\"\n### 17.257s elapsed time, 17.427s cpu time, 0.210s GC time\n*** Failed to apply initial proof method (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\"):\n*** using this:\n***   is_aligned ?p2 msg_align_bits \\<Longrightarrow>\n***   ?p2 + word_of_nat y * 4 && ~~ mask (pageBitsForSize ?sz1) =\n***   (?p2 && ~~ mask msg_align_bits) && ~~ mask (pageBitsForSize ?sz1)\n*** goal (1 subgoal):\n***  1. \\<And>a sz.\n***        is_aligned a msg_align_bits \\<Longrightarrow>\n***        a + word_of_nat y * 4 && ~~ mask (pageBitsForSize sz) =\n***        a && ~~ mask (pageBitsForSize sz)\n*** At command \"by\" (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\")\n*** At command \"vero_prove\" (line 750 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\")\n*** Failed to apply initial proof method (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\"):\n*** using this:\n***   is_aligned ?p2 msg_align_bits \\<Longrightarrow>\n***   ?p2 + word_of_nat y * 4 && ~~ mask (pageBitsForSize ?sz1) =\n***   (?p2 && ~~ mask msg_align_bits) && ~~ mask (pageBitsForSize ?sz1)\n*** goal (1 subgoal):\n***  1. \\<And>a sz.\n***        is_aligned a msg_align_bits \\<Longrightarrow>\n***        a + word_of_nat y * 4 && ~~ mask (pageBitsForSize sz) =\n***        a && ~~ mask (pageBitsForSize sz)\n*** At command \"by\" (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\")\nException- TOPLEVEL_ERROR raised\n\n{\n  \"status\": \"build_error\",\n  \"returncode\": 1,\n  \"elapsed_seconds\": 21.644776773173362,\n  \"audited\": [\n    \"c0182:prove\",\n    \"c0183:prove\",\n    \"c0189:prove\",\n    \"c0193:prove\",\n    \"c0194:prove\",\n    \"c0197:prove\",\n    \"c0198:prove\",\n    \"c0206:prove\"\n  ]\n}\n",
+    "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+  },
+  "legacy_evidence": [
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_TcbAcc_R.thy');s=p.read_text();body=r'''proof -\n  have off: \\\"(of_nat y * 4 :: word32) < 2 \"'^ msg_align_bits\"\n    using y by (simp add: max_ipc_words_def msg_align_bits word_less_nat_alt unat_of_nat)\n  have mask: \"'\"\\\\<And>a::word32. is_aligned a msg_align_bits \\\\<Longrightarrow> (a + of_nat y * 4) && ~~ mask pageBits = a && ~~ mask pageBits\\\"\n    using mask_out_first_mask_some[OF neg_mask_add_aligned[OF _ off]] by (simp add: msg_align_bits pageBits_def)\n  have al: \\\"\\\\<And>a::word32. is_aligned a msg_align_bits \\\\<Longrightarrow> is_aligned (a + of_nat y * 4) 2\\\"\n    by (rule is_aligned_add_multI[where n=2, simplified]; simp add: msg_align_bits)\n  show ?thesis\n    by (auto simp: load_word_offs_def word_size loadWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def loadWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases valid_ipc_buffer_ptr'_def mask al is_aligned_mask)\nqed''';s=re.sub(r'(\\\\(\\\\* VERO START c0197 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0197 prove \\\\*\\\\))',lambda m:m[1]+'\\\\n\\\\n'+body+'\\\\n\\\\n'+m[2],s,flags=re.S);p.write_text(s)\nPY\npython3 /backend/tool.py check Vero_Refine_TcbAcc_R\"",
+      "exit_code": 1,
+      "line": 221,
+      "output": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_Refine_TcbAcc_R\")\n### theory \"Draft.Vero_Support\"\n### 0.188s elapsed time, 0.253s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_Refine_TcbAcc_R\"\nVERO_RESULT c0182 prove clean\nVERO_RESULT c0183 prove clean\nVERO_RESULT c0193 prove clean\nVERO_RESULT c0194 prove clean\n*** Failed to finish proof (line 337 of \"/tmp/vero-check-j6x520zu/Vero_Refine_TcbAcc_R.thy\"):\n*** goal (1 subgoal):\n***  1. y < unat\n***          (capTransferDataSize + msgMaxLength + msgMaxExtraCaps +\n***           2) \\<Longrightarrow>\n***     unat (word_of_nat y * 4) < 512\n*** At command \"by\" (line 337 of \"/tmp/vero-check-j6x520zu/Vero_Refine_TcbAcc_R.thy\")\n### theory \"Draft.Vero_Refine_TcbAcc_R\"\n### 6.230s elapsed time, 6.368s cpu time, 0.175s GC time\n*** Failed to finish proof (line 337 of \"/tmp/vero-check-j6x520zu/Vero_Refine_TcbAcc_R.thy\"):\n*** goal (1 subgoal):\n***  1. y < unat\n***          (capTransferDataSize + msgMaxLength + msgMaxExtraCaps +\n***           2) \\<Longrightarrow>\n***     unat (word_of_nat y * 4) < 512\n*** At command \"by\" (line 337 of \"/tmp/vero-check-j6x520zu/Vero_Refine_TcbAcc_R.thy\")\n*** At command \"vero_prove\" (line 329 of \"/tmp/vero-check-j6x520zu/Vero_Refine_TcbAcc_R.thy\")\n*** Failed to finish proof (line 337 of \"/tmp/vero-check-j6x520zu/Vero_Refine_TcbAcc_R.thy\"):\n*** goal (1 subgoal):\n***  1. y < unat\n***          (capTransferDataSize + msgMaxLength + msgMaxExtraCaps +\n***           2) \\<Longrightarrow>\n***     unat (word_of_nat y * 4) < 512\n*** At command \"by\" (line 337 of \"/tmp/vero-check-j6x520zu/Vero_Refine_TcbAcc_R.thy\")\nException- TOPLEVEL_ERROR raised\n\n{\n  \"status\": \"build_error\",\n  \"returncode\": 1,\n  \"elapsed_seconds\": 10.628546538762748,\n  \"audited\": [\n    \"c0182:prove\",\n    \"c0183:prove\",\n    \"c0193:prove\",\n    \"c0194:prove\"\n  ]\n}\n",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_ArchAcc_R.thy');s=p.read_text();s=s.replace('apply (clarsimp simp: obj_at\\\\'_real_def ko_wp_at\\\\'_def)\\\\n    subgoal for s ko obj\\\\n      apply (cases ko; simp add: projectKO_opts_defs)\\\\n      subgoal for ao by (cases ao; auto simp: projectKO_opts_defs)','apply (clarsimp simp: typ_at\\\\'_def ko_wp_at\\\\'_def)\\\\n    subgoal for s ko\\\\n      apply (cases ko; simp add: koTypeOf_def)\\\\n      subgoal for ao by (cases ao; auto simp: koTypeOf_def archTypeOf_def)');p.write_text(s)\np=Path('Vero_Refine_Ipc_R.thy');s=p.read_text();src=Path('Vero_Refine_TcbAcc_R.thy').read_text();body=re.search(r'\\\\(\\\\* VERO START c0197 prove \\\\*\\\\)(.*?)\\\\(\\\\* VERO END c0197 prove \\\\*\\\\)',src,re.S)[1];body=body.replace('proof -','proof -\\\\n  assume y: \\\"y < unat max_ipc_words\\\" and eq: \\\"y\\\\' = of_nat y * 4\\\"',1).replace('  show ?thesis\\\\n','  show ?thesis using eq\\\\n');s=re.sub(r'(\\\\(\\\\* VERO START c0113 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0113 prove \\\\*\\\\))',lambda m:m[1]+body+m[2],s,flags=re.S);p.write_text(s)\nPY\"",
+      "exit_code": 0,
+      "line": 269,
+      "output": "",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_TcbAcc_R.thy');s=p.read_text();body=re.search(r'\\\\(\\\\* VERO START c0197 prove \\\\*\\\\)(.*?)\\\\(\\\\* VERO END c0197 prove \\\\*\\\\)',s,re.S)[1]\na=body.index('  show ?thesis');body=body[:a]+r'''  have sz: \\\"\\\\<And>sz. msg_align_bits \\\\<le> pageBitsForSize sz\\\"\n    by (case_tac sz; simp add: msg_align_bits; arith)\n  have mask2: \\\"\\\\<And>a::word32. \\\\<And>sz. is_aligned a msg_align_bits \\\\<Longrightarrow> (a + of_nat y * 4) && ~~ mask (pageBitsForSize sz) = a && ~~ mask (pageBitsForSize sz)\\\"\n    using mask_out_first_mask_some[OF neg_mask_add_aligned[OF _ off] sz] by blast\n  have frame: \\\"\\\\<And>a s. \\\\<lbrakk>is_aligned a msg_align_bits; in_user_frame a s\\\\<rbrakk> \\\\<Longrightarrow> in_user_frame (a + of_nat y * 4) s\\\"\n    by (simp add: in_user_frame_def mask2)\n  show ?thesis\n    by (auto simp: store_word_offs_def word_size_def storeWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def storeWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases valid_ipc_buffer_ptr'_def mask al al[unfolded is_aligned_mask] frame frame[unfolded is_aligned_mask] is_aligned_mask dc_def)\nqed\n\n''';s=re.sub(r'(\\\\(\\\\* VERO START c0210 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0210 prove \\\\*\\\\))',lambda m:m[1]+body+m[2],s,flags=re.S);p.write_text(s)\nPY\npython3 /backend/tool.py check Vero_Refine_TcbAcc_R\"",
+      "exit_code": 1,
+      "line": 286,
+      "output": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_Refine_TcbAcc_R\")\n### theory \"Draft.Vero_Support\"\n### 0.185s elapsed time, 0.247s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_Refine_TcbAcc_R\"\nVERO_RESULT c0182 prove clean\nVERO_RESULT c0183 prove clean\n### Introduced fixed type variable(s): 'd in \"s__\"\n### Ignoring duplicate rewrite rule:\n### ?i1 \\<in> {?l1..?u1} \\<equiv> ?l1 \\<le> ?i1 \\<and> ?i1 \\<le> ?u1\n### Introduced fixed type variable(s): 'd in \"s__\"\n### Ignoring duplicate rewrite rule:\n### psMap \\<equiv> id\n### Ignoring duplicate rewrite rule:\n### loadObject ?p ?q ?n ?obj \\<equiv> loadObject_default ?p ?q ?n ?obj\n### Ignoring duplicate rewrite rule:\n### maybeToMonad \\<equiv> assert_opt\n### Ignoring duplicate rewrite rule:\n### maybe \\<equiv> case_option\nVERO_RESULT c0189 prove clean\nVERO_RESULT c0193 prove clean\nVERO_RESULT c0194 prove clean\n### Ignoring duplicate rewrite rule:\n### HaskellLib_H.bit ?x \\<equiv> shiftL (1::?'a) ?x\nVERO_RESULT c0197 prove clean\nVERO_RESULT c0198 prove clean\nVERO_RESULT c0206 prove clean\n### Ignoring duplicate rewrite rule:\n### HaskellLib_H.bit ?x \\<equiv> shiftL (1::?'a) ?x\n*** Failed to apply initial proof method (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\"):\n*** using this:\n***   is_aligned ?p2 msg_align_bits \\<Longrightarrow>\n***   ?p2 + word_of_nat y * 4 && ~~ mask (pageBitsForSize ?sz1) =\n***   (?p2 && ~~ mask msg_align_bits) && ~~ mask (pageBitsForSize ?sz1)\n*** goal (1 subgoal):\n***  1. \\<And>a sz.\n***        is_aligned a msg_align_bits \\<Longrightarrow>\n***        a + word_of_nat y * 4 && ~~ mask (pageBitsForSize sz) =\n***        a && ~~ mask (pageBitsForSize sz)\n*** At command \"by\" (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\")\n### theory \"Draft.Vero_Refine_TcbAcc_R\"\n### 17.257s elapsed time, 17.427s cpu time, 0.210s GC time\n*** Failed to apply initial proof method (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\"):\n*** using this:\n***   is_aligned ?p2 msg_align_bits \\<Longrightarrow>\n***   ?p2 + word_of_nat y * 4 && ~~ mask (pageBitsForSize ?sz1) =\n***   (?p2 && ~~ mask msg_align_bits) && ~~ mask (pageBitsForSize ?sz1)\n*** goal (1 subgoal):\n***  1. \\<And>a sz.\n***        is_aligned a msg_align_bits \\<Longrightarrow>\n***        a + word_of_nat y * 4 && ~~ mask (pageBitsForSize sz) =\n***        a && ~~ mask (pageBitsForSize sz)\n*** At command \"by\" (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\")\n*** At command \"vero_prove\" (line 750 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\")\n*** Failed to apply initial proof method (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\"):\n*** using this:\n***   is_aligned ?p2 msg_align_bits \\<Longrightarrow>\n***   ?p2 + word_of_nat y * 4 && ~~ mask (pageBitsForSize ?sz1) =\n***   (?p2 && ~~ mask msg_align_bits) && ~~ mask (pageBitsForSize ?sz1)\n*** goal (1 subgoal):\n***  1. \\<And>a sz.\n***        is_aligned a msg_align_bits \\<Longrightarrow>\n***        a + word_of_nat y * 4 && ~~ mask (pageBitsForSize sz) =\n***        a && ~~ mask (pageBitsForSize sz)\n*** At command \"by\" (line 773 of \"/tmp/vero-check-pdrtczah/Vero_Refine_TcbAcc_R.thy\")\nException- TOPLEVEL_ERROR raised\n\n{\n  \"status\": \"build_error\",\n  \"returncode\": 1,\n  \"elapsed_seconds\": 21.644776773173362,\n  \"audited\": [\n    \"c0182:prove\",\n    \"c0183:prove\",\n    \"c0189:prove\",\n    \"c0193:prove\",\n    \"c0194:prove\",\n    \"c0197:prove\",\n    \"c0198:prove\",\n    \"c0206:prove\"\n  ]\n}\n",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "module": "Vero_Refine_TcbAcc_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 1,
+      "line": 55,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 89,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 122,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 160,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 442,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 221,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 229,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 238,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 245,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 253,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 263,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 286,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 294,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 320,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "loadWordUser_corres",
+  "withdrawn_since_observed_candidate": false
+}

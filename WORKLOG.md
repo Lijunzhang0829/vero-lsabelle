@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+- Added per-contract diagnostic check snapshots, rendered-source attribution, interrupted submissions, supervisor archives and automatic post-evaluation ledgers. Backfilled all 287 contracts conservatively: 56 independently proved, 2 unresolved with explicit legacy slot evidence, 229 unresolved with incomplete per-contract history. See [current ledger](reports/refine-contract-ledger-20260915/README.md).
+
 - Added configuration-bound initial proof slots for the user-requested network retry, preserving prior charged budgets and imported-proof provenance. Started `refine-002` from 39 independently verified proofs with a fresh 1,800-second allowance after a successful transport probe; final independent evaluation retained all 39 and added 17 (56/287, zero build errors). Temporary credentials and worker were removed; see [retry report](reports/refine-machine-b-network-retry-20260915/README.md). Closed the runner lock deterministically and added a seed/binding regression test.
 
 - Added the Isabelle proof-mode backend on `feat/isabelle-proof-backend`: fixed contracts, positive/negative slots, one repository-level Codex agent, artifact extraction, independent kernel-audited evaluation, and bounded recovery. See [usage and semantics](docs/isabelle.md).

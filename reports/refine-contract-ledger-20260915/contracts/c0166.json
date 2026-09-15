@@ -1,0 +1,81 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0166",
+  "last_attempt": null,
+  "last_legacy_target_evidence": {
+    "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\np=Path('Vero_Refine_Interrupt_R.thy');s=p.read_text();a=s.index('(* VERO START c0083 prove *)');b=s.index('(* VERO END c0083 prove *)',a);body=s[a:b];pre=body[:body.index('  show ?thesis')];tail=r'''  assume r: \\\"list_all2 cap_relation (map fst caps) (map fst caps')\\\"\n  assume sl: \\\"list_all2 (\\\\<lambda>p pa. snd pa = cte_map (snd p)) caps caps'\\\"\n  show ?thesis\n  proof (cases caps)\n    case Nil\n    then have cs: \\\"caps' = []\\\" using r by simp\n    show ?thesis using Nil cs labels\n      by (cases \\\"genInvocationType label\\\"; simp add: decode_irq_handler_invocation_def decodeIRQHandlerInvocation_def corres_underlying_def returnOk_def throwError_def return_def dc_def)\n  next\n    case (Cons x xs)\n    obtain c p where xp: \\\"x = (c,p)\\\" by (cases x)\n    obtain c' p' ys where cs: \\\"caps' = (c',p')#ys\\\" and cp: \\\"cap_relation c c'\\\" and pp: \\\"p' = cte_map p\\\"\n      using r sl Cons xp by (cases caps'; auto)\n    show ?thesis using Cons xp cs cp pp labels\n      by (cases \\\"genInvocationType label\\\"; cases c; auto simp: decode_irq_handler_invocation_def decodeIRQHandlerInvocation_def Let_def corres_underlying_def returnOk_def throwError_def return_def dc_def split: bool.splits)\n  qed\nqed\n\n''';s=s[:a]+pre+tail+s[b:];p.write_text(s)\np=Path('Vero_Refine_Syscall_R.thy');s=p.read_text();a=s.index('(* VERO START c0166 prove *)');b=s.index('(* VERO END c0166 prove *)',a);body=s[a:b];pre=body[:body.index('  show ?thesis')];base='decode_domain_invocation_def decodeDomainInvocation_def whenE_def throwError_def returnOk_def bindE_def lift_def bind_def return_def corres_underlying_def dc_def';tail=r'''  assume r: \\\"list_all2 cap_relation (map fst cs) (map fst cs')\\\"\n  assume sl: \\\"list_all2 (\\\\<lambda>p pa. snd pa = cte_map (snd p)) cs cs'\\\"\n  show ?thesis\n  proof (cases cs)\n    case Nil\n    then have eq: \\\"cs' = []\\\" using r by simp\n    show ?thesis using Nil eq labels\n      by (cases args; auto simp: BASE split: if_splits)\n  next\n    case (Cons x xs)\n    obtain c p where xp: \\\"x = (c,p)\\\" by (cases x)\n    obtain c' p' ys where eq: \\\"cs' = (c',p')#ys\\\" and cp: \\\"cap_relation c c'\\\"\n      using r Cons xp by (cases cs'; auto)\n    show ?thesis using Cons xp eq cp labels\n      by (cases args; cases c; auto simp: BASE split: if_splits)\n  qed\nqed\n\n'''.replace('BASE',base);s=s[:a]+pre+tail+s[b:];p.write_text(s)\nPY\nps -eo pid,ppid,etime,comm | tail -25\"",
+    "exit_code": 0,
+    "line": 198,
+    "output": "    PID    PPID     ELAPSED COMMAND\n      1       0       16:46 sleep\n     65       0       16:08 bash\n     71      65       16:08 python3\n    212       0       15:00 bash\n    218     212       15:00 python3\n    219     218       15:00 runuser\n    220     219       15:00 codex\n    329     220       14:51 codex-code-mode\n   5792       1       09:58 java <defunct>\n   5900       1       09:56 bash_process <defunct>\n   5901       1       09:56 bash <defunct>\n   5904       1       09:56 poly <defunct>\n   7442       1       06:10 java <defunct>\n   7561       1       06:07 bash_process <defunct>\n   7562       1       06:07 bash <defunct>\n   7563       1       06:07 poly <defunct>\n  10109       1       02:22 java <defunct>\n  10264       1       02:19 bash_process <defunct>\n  10265       1       02:19 bash <defunct>\n  10266       1       02:19 poly <defunct>\n  11050     220       00:00 bash\n  11052   11050       00:00 ps\n  11053   11050       00:00 tail\n",
+    "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+  },
+  "legacy_evidence": [
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\nbase='whenE_def throwError_def returnOk_def bindE_def lift_def bind_def return_def corres_underlying_def dc_def'\np=Path('Vero_Refine_Syscall_R.thy');s=p.read_text();b='by (cases args; cases cs; cases cs\\\\'; auto simp: decode_domain_invocation_def decodeDomainInvocation_def '+base+' split: cap.splits capability.splits prod.splits if_splits)';s=re.sub(r'(\\\\(\\\\* VERO START c0166 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0166 prove \\\\*\\\\))',lambda m:m[1]+'\\\\n\\\\n'+b+'\\\\n\\\\n'+m[2],s,flags=re.S);p.write_text(s)\np=Path('Vero_Refine_Interrupt_R.thy');s=p.read_text();b='by (cases caps; cases caps\\\\'; auto simp: decode_irq_handler_invocation_def decodeIRQHandlerInvocation_def Let_def '+base+' split: cap.splits capability.splits prod.splits invocation_label.splits if_splits)';s=re.sub(r'(\\\\(\\\\* VERO START c0083 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0083 prove \\\\*\\\\))',lambda m:m[1]+'\\\\n\\\\n'+b+'\\\\n\\\\n'+m[2],s,flags=re.S);p.write_text(s)\nPY\"",
+      "exit_code": 0,
+      "line": 120,
+      "output": "",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\np=Path('Vero_Refine_Interrupt_R.thy');s=p.read_text();a=s.index('(* VERO START c0083 prove *)');b=s.index('(* VERO END c0083 prove *)',a);body=s[a:b];pre=body[:body.index('  show ?thesis')];tail=r'''  assume r: \\\"list_all2 cap_relation (map fst caps) (map fst caps')\\\"\n  assume sl: \\\"list_all2 (\\\\<lambda>p pa. snd pa = cte_map (snd p)) caps caps'\\\"\n  show ?thesis\n  proof (cases caps)\n    case Nil\n    then have cs: \\\"caps' = []\\\" using r by simp\n    show ?thesis using Nil cs labels\n      by (cases \\\"genInvocationType label\\\"; simp add: decode_irq_handler_invocation_def decodeIRQHandlerInvocation_def corres_underlying_def returnOk_def throwError_def return_def dc_def)\n  next\n    case (Cons x xs)\n    obtain c p where xp: \\\"x = (c,p)\\\" by (cases x)\n    obtain c' p' ys where cs: \\\"caps' = (c',p')#ys\\\" and cp: \\\"cap_relation c c'\\\" and pp: \\\"p' = cte_map p\\\"\n      using r sl Cons xp by (cases caps'; auto)\n    show ?thesis using Cons xp cs cp pp labels\n      by (cases \\\"genInvocationType label\\\"; cases c; auto simp: decode_irq_handler_invocation_def decodeIRQHandlerInvocation_def Let_def corres_underlying_def returnOk_def throwError_def return_def dc_def split: bool.splits)\n  qed\nqed\n\n''';s=s[:a]+pre+tail+s[b:];p.write_text(s)\np=Path('Vero_Refine_Syscall_R.thy');s=p.read_text();a=s.index('(* VERO START c0166 prove *)');b=s.index('(* VERO END c0166 prove *)',a);body=s[a:b];pre=body[:body.index('  show ?thesis')];base='decode_domain_invocation_def decodeDomainInvocation_def whenE_def throwError_def returnOk_def bindE_def lift_def bind_def return_def corres_underlying_def dc_def';tail=r'''  assume r: \\\"list_all2 cap_relation (map fst cs) (map fst cs')\\\"\n  assume sl: \\\"list_all2 (\\\\<lambda>p pa. snd pa = cte_map (snd p)) cs cs'\\\"\n  show ?thesis\n  proof (cases cs)\n    case Nil\n    then have eq: \\\"cs' = []\\\" using r by simp\n    show ?thesis using Nil eq labels\n      by (cases args; auto simp: BASE split: if_splits)\n  next\n    case (Cons x xs)\n    obtain c p where xp: \\\"x = (c,p)\\\" by (cases x)\n    obtain c' p' ys where eq: \\\"cs' = (c',p')#ys\\\" and cp: \\\"cap_relation c c'\\\"\n      using r Cons xp by (cases cs'; auto)\n    show ?thesis using Cons xp eq cp labels\n      by (cases args; cases c; auto simp: BASE split: if_splits)\n  qed\nqed\n\n'''.replace('BASE',base);s=s[:a]+pre+tail+s[b:];p.write_text(s)\nPY\nps -eo pid,ppid,etime,comm | tail -25\"",
+      "exit_code": 0,
+      "line": 198,
+      "output": "    PID    PPID     ELAPSED COMMAND\n      1       0       16:46 sleep\n     65       0       16:08 bash\n     71      65       16:08 python3\n    212       0       15:00 bash\n    218     212       15:00 python3\n    219     218       15:00 runuser\n    220     219       15:00 codex\n    329     220       14:51 codex-code-mode\n   5792       1       09:58 java <defunct>\n   5900       1       09:56 bash_process <defunct>\n   5901       1       09:56 bash <defunct>\n   5904       1       09:56 poly <defunct>\n   7442       1       06:10 java <defunct>\n   7561       1       06:07 bash_process <defunct>\n   7562       1       06:07 bash <defunct>\n   7563       1       06:07 poly <defunct>\n  10109       1       02:22 java <defunct>\n  10264       1       02:19 bash_process <defunct>\n  10265       1       02:19 bash <defunct>\n  10266       1       02:19 poly <defunct>\n  11050     220       00:00 bash\n  11052   11050       00:00 ps\n  11053   11050       00:00 tail\n",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "module": "Vero_Refine_Syscall_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 1,
+      "line": 120,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 152,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 147,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 175,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 195,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 201,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 218,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 231,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 328,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "decodeDomainInvocation_corres",
+  "withdrawn_since_observed_candidate": false
+}

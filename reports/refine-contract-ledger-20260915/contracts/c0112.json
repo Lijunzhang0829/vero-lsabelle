@@ -1,0 +1,73 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": true,
+  "current_state": "unresolved_with_legacy_target_evidence",
+  "final_status": "unfilled",
+  "id": "c0112",
+  "last_attempt": null,
+  "last_legacy_target_evidence": {
+    "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_Ipc_R.thy');s=p.read_text();s,n=re.subn(r'(\\\\(\\\\* VERO START c0112 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0112 prove \\\\*\\\\))',lambda m:m[1]+'\\\\n\\\\noops\\\\n\\\\n'+m[2],s,flags=re.S);assert n==1;p.write_text(s)\nPY\"",
+    "exit_code": 0,
+    "line": 342,
+    "output": "",
+    "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+  },
+  "legacy_evidence": [
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_Ipc_R.thy');s=p.read_text();body=r'''proof -\n  have al: \\\"\\\\<And>a::word32. \\\\<And>x. is_aligned a msg_align_bits \\\\<Longrightarrow> is_aligned (a + of_nat x * 4) 2\\\"\n    by (rule is_aligned_add_multI[where n=2, simplified]; simp add: msg_align_bits; arith)\n  have als: \\\"\\\\<And>a::word32. is_aligned a msg_align_bits \\\\<Longrightarrow> is_aligned (a+500) 2 \\\\<and> is_aligned (a+504) 2 \\\\<and> is_aligned (a+508) 2\\\"\n    using al[where x=125] al[where x=126] al[where x=127] by simp\n  have m: \\\"\\\\<And>a::word32. \\\\<And>x::word32. \\\\<lbrakk>is_aligned a msg_align_bits; x < 512\\\\<rbrakk> \\\\<Longrightarrow> (a+x) && ~~ mask pageBits = a && ~~ mask pageBits\\\"\n    using mask_out_first_mask_some[OF neg_mask_add_aligned] by (simp add: msg_align_bits pageBits_def)\n  have ms: \\\"\\\\<And>a::word32. is_aligned a msg_align_bits \\\\<Longrightarrow> (a+500) && ~~ mask pageBits = a && ~~ mask pageBits \\\\<and> (a+504) && ~~ mask pageBits = a && ~~ mask pageBits \\\\<and> (a+508) && ~~ mask pageBits = a && ~~ mask pageBits\\\"\n    using m[where x=500] m[where x=504] m[where x=508] by simp\n  show ?thesis\n    by (auto simp: load_cap_transfer_def loadCapTransfer_def captransfer_from_words_def capTransferFromWords_def msg_max_length_def msg_max_extra_caps_def msgMaxLength_def msgMaxExtraCaps_def msgExtraCapBits_def HaskellLib_H.bit_def wordSize_def ARM_H.wordBits_def word_size_def ARM_H.PPtr_def ct_relation_def data_to_cptr_def loadWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def loadWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases valid_ipc_buffer_ptr'_def ms als als[unfolded is_aligned_mask] is_aligned_mask add.assoc)\nqed''';s=re.sub(r'(\\\\(\\\\* VERO START c0112 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0112 prove \\\\*\\\\))',lambda m:m[1]+'\\\\n\\\\n'+body+'\\\\n\\\\n'+m[2],s,flags=re.S);p.write_text(s)\nPY\npython3 /backend/tool.py check Vero_Refine_Ipc_R\"",
+      "exit_code": 1,
+      "line": 288,
+      "output": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_Refine_Ipc_R\")\n### theory \"Draft.Vero_Support\"\n### 0.184s elapsed time, 0.246s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_Refine_Ipc_R\"\nVERO_RESULT c0107 prove clean\n*** Failed to finish proof (line 469 of \"/tmp/vero-check-aq6tpotp/Vero_Refine_Ipc_R.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>a x.\n***        \\<lbrakk>is_aligned a 9; x < 0x200;\n***         \\<And>p n q m.\n***            \\<lbrakk>is_aligned p n; q < 2 ^ n; n \\<le> m\\<rbrakk>\n***            \\<Longrightarrow> p + q && ~~ mask m =\n***                              (p && ~~ mask n) && ~~ mask m\\<rbrakk>\n***        \\<Longrightarrow> a + x && ~~ mask 12 = a && ~~ mask 12\n*** At command \"by\" (line 469 of \"/tmp/vero-check-aq6tpotp/Vero_Refine_Ipc_R.thy\")\n### theory \"Draft.Vero_Refine_Ipc_R\"\n### 4.861s elapsed time, 4.978s cpu time, 0.167s GC time\n*** Failed to finish proof (line 469 of \"/tmp/vero-check-aq6tpotp/Vero_Refine_Ipc_R.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>a x.\n***        \\<lbrakk>is_aligned a 9; x < 0x200;\n***         \\<And>p n q m.\n***            \\<lbrakk>is_aligned p n; q < 2 ^ n; n \\<le> m\\<rbrakk>\n***            \\<Longrightarrow> p + q && ~~ mask m =\n***                              (p && ~~ mask n) && ~~ mask m\\<rbrakk>\n***        \\<Longrightarrow> a + x && ~~ mask 12 = a && ~~ mask 12\n*** At command \"by\" (line 469 of \"/tmp/vero-check-aq6tpotp/Vero_Refine_Ipc_R.thy\")\n*** At command \"vero_prove\" (line 458 of \"/tmp/vero-check-aq6tpotp/Vero_Refine_Ipc_R.thy\")\n*** Failed to finish proof (line 469 of \"/tmp/vero-check-aq6tpotp/Vero_Refine_Ipc_R.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>a x.\n***        \\<lbrakk>is_aligned a 9; x < 0x200;\n***         \\<And>p n q m.\n***            \\<lbrakk>is_aligned p n; q < 2 ^ n; n \\<le> m\\<rbrakk>\n***            \\<Longrightarrow> p + q && ~~ mask m =\n***                              (p && ~~ mask n) && ~~ mask m\\<rbrakk>\n***        \\<Longrightarrow> a + x && ~~ mask 12 = a && ~~ mask 12\n*** At command \"by\" (line 469 of \"/tmp/vero-check-aq6tpotp/Vero_Refine_Ipc_R.thy\")\nException- TOPLEVEL_ERROR raised\n\n{\n  \"status\": \"build_error\",\n  \"returncode\": 1,\n  \"elapsed_seconds\": 9.1024847519584,\n  \"audited\": [\n    \"c0107:prove\"\n  ]\n}\n",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "command": "/bin/bash -lc \"rg -n -A 38 'VERO START c0112 prove' Vero_Refine_Ipc_R.thy\"",
+      "exit_code": 0,
+      "line": 339,
+      "output": "461:(* VERO START c0112 prove *)\n462-\n463-proof -\n464-  have al: \"\\<And>a::word32. \\<And>x. is_aligned a msg_align_bits \\<Longrightarrow> is_aligned (a + of_nat x * 4) 2\"\n465-    by (rule is_aligned_add_multI[where n=2, simplified]; simp add: msg_align_bits; arith)\n466-  have als: \"\\<And>a::word32. is_aligned a msg_align_bits \\<Longrightarrow> is_aligned (a+500) 2 \\<and> is_aligned (a+504) 2 \\<and> is_aligned (a+508) 2\"\n467-    using al[where x=125] al[where x=126] al[where x=127] by simp\n468-  have m: \"\\<And>a::word32. \\<And>x::word32. \\<lbrakk>is_aligned a msg_align_bits; x < 512\\<rbrakk> \\<Longrightarrow> (a+x) && ~~ mask pageBits = a && ~~ mask pageBits\"\n469-  proof -\n470-    fix a x :: word32\n471-    assume a: \"is_aligned a msg_align_bits\" and x: \"x < 512\"\n472-    have off: \"x < 2 ^ msg_align_bits\" using x by (simp add: msg_align_bits)\n473-    have eq: \"(a+x) && ~~ mask msg_align_bits = a && ~~ mask msg_align_bits\"\n474-      by (rule neg_mask_add_aligned[OF a off])\n475-    show \"(a+x) && ~~ mask pageBits = a && ~~ mask pageBits\"\n476-      using mask_out_first_mask_some[OF eq mab_pb] by (simp add: msg_align_bits pageBits_def word_bw_assocs neg_mask_combine)\n477-  qed\n478-  have ms: \"\\<And>a::word32. is_aligned a msg_align_bits \\<Longrightarrow> (a+500) && ~~ mask pageBits = a && ~~ mask pageBits \\<and> (a+504) && ~~ mask pageBits = a && ~~ mask pageBits \\<and> (a+508) && ~~ mask pageBits = a && ~~ mask pageBits\"\n479-    using m[where x=500] m[where x=504] m[where x=508] by simp\n480-  show ?thesis\n481-    by (auto simp: load_cap_transfer_def loadCapTransfer_def captransfer_from_words_def capTransferFromWords_def msg_max_length_def msg_max_extra_caps_def msgMaxLength_def msgMaxExtraCaps_def msgExtraCapBits_def HaskellLib_H.bit_def wordSize_def ARM_H.wordBits_def word_size_def ARM_H.PPtr_def ct_relation_def data_to_cptr_def loadWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def loadWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases valid_ipc_buffer_ptr'_def ms als als[unfolded is_aligned_mask] is_aligned_mask add.assoc)\n482-qed\n483-\n484-(* VERO END c0112 prove *)\n485-\n486-vero_disprove \"c0112\" c0112_disprove:\n487-  \"corres ct_relation \\<top> (valid_ipc_buffer_ptr' buffer) (load_cap_transfer buffer) (loadCapTransfer buffer)\"\n488-\n489-(* VERO START c0112 disprove *)\n490-\n491-oops\n492-\n493-(* VERO END c0112 disprove *)\n494-\n495-vero_prove \"c0113\" c0113_prove:\n496-  \"\\<lbrakk> y < unat max_ipc_words; y' = of_nat y * 4 \\<rbrakk> \\<Longrightarrow>\n497-  corres (=) \\<top> (valid_ipc_buffer_ptr' a) (load_word_offs a y) (loadWordUser (a + y'))\"\n498-\n499-(* VERO START c0113 prove *)\n",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_Ipc_R.thy');s=p.read_text();s,n=re.subn(r'(\\\\(\\\\* VERO START c0112 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0112 prove \\\\*\\\\))',lambda m:m[1]+'\\\\n\\\\noops\\\\n\\\\n'+m[2],s,flags=re.S);assert n==1;p.write_text(s)\nPY\"",
+      "exit_code": 0,
+      "line": 342,
+      "output": "",
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "module": "Vero_Refine_Ipc_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 0,
+      "line": 56,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 274,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 288,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 296,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 340,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 347,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "loadCapTransfer_corres",
+  "withdrawn_since_observed_candidate": false
+}

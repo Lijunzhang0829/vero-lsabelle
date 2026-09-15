@@ -1,0 +1,99 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0198",
+  "last_attempt": null,
+  "last_legacy_target_evidence": {
+    "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_TcbAcc_R.thy');s=p.read_text();proof=r'''by (auto simp: loadWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def loadWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases is_aligned_mask)''';s=re.sub(r'(\\\\(\\\\* VERO START c0198 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0198 prove \\\\*\\\\))',lambda m:m[1]+'\\\\n'+proof+'\\\\n'+m[2],s,flags=re.S);p.write_text(s)\nPY\npython3 /backend/tool.py check Vero_Refine_TcbAcc_R\"",
+    "exit_code": 0,
+    "line": 442,
+    "output": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_Refine_TcbAcc_R\")\n### theory \"Draft.Vero_Support\"\n### 0.186s elapsed time, 0.249s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_Refine_TcbAcc_R\"\nVERO_RESULT c0182 prove clean\nVERO_RESULT c0183 prove clean\nVERO_RESULT c0193 prove clean\nVERO_RESULT c0194 prove clean\nVERO_RESULT c0198 prove clean\nVERO_RESULT c0206 prove clean\nVERO_RESULT c0215 prove clean\n### theory \"Draft.Vero_Refine_TcbAcc_R\"\n### 10.324s elapsed time, 10.475s cpu time, 0.174s GC time\nval it = (): unit\n\n{\n  \"status\": \"ok\",\n  \"returncode\": 0,\n  \"elapsed_seconds\": 14.792360329069197,\n  \"audited\": [\n    \"c0182:prove\",\n    \"c0183:prove\",\n    \"c0193:prove\",\n    \"c0194:prove\",\n    \"c0198:prove\",\n    \"c0206:prove\",\n    \"c0215:prove\"\n  ]\n}\n",
+    "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+  },
+  "legacy_evidence": [
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_TcbAcc_R.thy');s=p.read_text();proof=r'''by (auto simp: loadWordUser_def HaskellLemmaBucket.stateAssert_def pointerInUserData_def loadWord_def do_machine_op_def doMachineOp_def corres_underlying_def gets_def get_def bind_def select_f_def modify_def put_def return_def assert_def state_relation_def swp_def cte_wp_at_cases is_aligned_mask)''';s=re.sub(r'(\\\\(\\\\* VERO START c0198 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0198 prove \\\\*\\\\))',lambda m:m[1]+'\\\\n'+proof+'\\\\n'+m[2],s,flags=re.S);p.write_text(s)\nPY\npython3 /backend/tool.py check Vero_Refine_TcbAcc_R\"",
+      "exit_code": 0,
+      "line": 442,
+      "output": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_Refine_TcbAcc_R\")\n### theory \"Draft.Vero_Support\"\n### 0.186s elapsed time, 0.249s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_Refine_TcbAcc_R\"\nVERO_RESULT c0182 prove clean\nVERO_RESULT c0183 prove clean\nVERO_RESULT c0193 prove clean\nVERO_RESULT c0194 prove clean\nVERO_RESULT c0198 prove clean\nVERO_RESULT c0206 prove clean\nVERO_RESULT c0215 prove clean\n### theory \"Draft.Vero_Refine_TcbAcc_R\"\n### 10.324s elapsed time, 10.475s cpu time, 0.174s GC time\nval it = (): unit\n\n{\n  \"status\": \"ok\",\n  \"returncode\": 0,\n  \"elapsed_seconds\": 14.792360329069197,\n  \"audited\": [\n    \"c0182:prove\",\n    \"c0183:prove\",\n    \"c0193:prove\",\n    \"c0194:prove\",\n    \"c0198:prove\",\n    \"c0206:prove\",\n    \"c0215:prove\"\n  ]\n}\n",
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "module": "Vero_Refine_TcbAcc_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 1,
+      "line": 55,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 89,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 122,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 160,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 442,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 221,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 229,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 238,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 245,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 253,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 263,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 286,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 294,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 320,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "load_word_corres",
+  "withdrawn_since_observed_candidate": false
+}

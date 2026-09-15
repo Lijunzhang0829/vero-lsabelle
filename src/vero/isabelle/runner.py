@@ -8,6 +8,7 @@ import time
 from pathlib import Path
 
 from .agent import CodexAgent
+from .attempts import archive, summarize
 from .benchmark import digest, extract, read, render, save, validate
 from .checker import Checker, evaluate
 
@@ -160,9 +161,14 @@ def _run_locked(benchmark_path, config_path, root, *, resume):
         result = agent.run(
             sandbox_dir=workspace, instruction_file=workspace / "INSTRUCTION.md"
         )
+        archive(workspace, iteration / "attempts")
         artifact = extract(bench, workspace)
         save(iteration / "artifact.json", artifact)
         report = evaluate(bench, artifact, iteration / "eval", Checker(cfg["checker"]))
+        save(
+            iteration / "attempt-ledger.json",
+            summarize(bench, report, iteration / "attempts"),
+        )
         cumulative += result["elapsed_seconds"]
         journal["iterations"].append(
             {
@@ -212,6 +218,7 @@ def recover_iteration(bench, cfg, root, iteration, workspace, journal):
             "total_cost_usd": None,
             "budget_charge": "full reserved call allowance; actual usage unknown",
         }
+    archive(workspace, iteration / "attempts")
     artifact_path = iteration / "artifact.json"
     artifact = (
         read(artifact_path) if artifact_path.exists() else extract(bench, workspace)
@@ -227,6 +234,10 @@ def recover_iteration(bench, cfg, root, iteration, workspace, journal):
         if evaluation.exists():
             evaluation.rename(iteration / ("eval-interrupted-" + str(time.time_ns())))
         report = evaluate(bench, artifact, evaluation, Checker(cfg["checker"]))
+    save(
+        iteration / "attempt-ledger.json",
+        summarize(bench, report, iteration / "attempts"),
+    )
     rec = {
         "index": len(journal["iterations"]),
         "agent": result,

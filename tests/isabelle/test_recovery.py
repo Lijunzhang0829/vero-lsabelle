@@ -91,6 +91,8 @@ class RecoveryTests(unittest.TestCase):
                         "proved_specs": 1,
                         "disproved_specs": 0,
                         "complete": True,
+                        "benchmark_id": bench["benchmark_id"],
+                        "contracts": {"c0001": {"status": "proved"}},
                     },
                 ),
             ):

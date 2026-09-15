@@ -1,0 +1,64 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0149",
+  "last_attempt": null,
+  "last_legacy_target_evidence": {
+    "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\nupdates={1:('Arch.deriveCap_def','ArchRetype_H.ARM_H.deriveCap_def'),74:('objBits_def','objBits_def objBitsKO_def cte_level_bits_def PPtr_def fromPPtr_def'),87:('by (auto simp: is_irq_active_def','by (fastforce simp: is_irq_active_def'),225:('arch_cap.splits if_splits','arch_cap.splits bool.splits if_splits')}\nfor p in Path('.').glob('Vero_Refine_*.thy'):\n s=p.read_text()\n for n,(a,b) in updates.items():\n  pat=rf'(\\\\(\\\\* VERO START c{n:04} prove \\\\*\\\\))(.*?)(\\\\(\\\\* VERO END c{n:04} prove \\\\*\\\\))'\n  s=re.sub(pat,lambda m:m[1]+m[2].replace(a,b)+m[3],s,flags=re.S)\n p.write_text(s)\np=Path('Vero_Refine_Schedule_R.thy');s=p.read_text();s=re.sub(r'(\\\\(\\\\* VERO START c0149 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0149 prove \\\\*\\\\))',r'\\\\1\\\\nby (simp add: numDomains_def curDomain_def state_relation_def)\\\\n\\\\2',s,flags=re.S);p.write_text(s)\nPY\"",
+    "exit_code": 0,
+    "line": 162,
+    "output": "",
+    "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+  },
+  "legacy_evidence": [
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\nupdates={1:('Arch.deriveCap_def','ArchRetype_H.ARM_H.deriveCap_def'),74:('objBits_def','objBits_def objBitsKO_def cte_level_bits_def PPtr_def fromPPtr_def'),87:('by (auto simp: is_irq_active_def','by (fastforce simp: is_irq_active_def'),225:('arch_cap.splits if_splits','arch_cap.splits bool.splits if_splits')}\nfor p in Path('.').glob('Vero_Refine_*.thy'):\n s=p.read_text()\n for n,(a,b) in updates.items():\n  pat=rf'(\\\\(\\\\* VERO START c{n:04} prove \\\\*\\\\))(.*?)(\\\\(\\\\* VERO END c{n:04} prove \\\\*\\\\))'\n  s=re.sub(pat,lambda m:m[1]+m[2].replace(a,b)+m[3],s,flags=re.S)\n p.write_text(s)\np=Path('Vero_Refine_Schedule_R.thy');s=p.read_text();s=re.sub(r'(\\\\(\\\\* VERO START c0149 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0149 prove \\\\*\\\\))',r'\\\\1\\\\nby (simp add: numDomains_def curDomain_def state_relation_def)\\\\n\\\\2',s,flags=re.S);p.write_text(s)\nPY\"",
+      "exit_code": 0,
+      "line": 162,
+      "output": "",
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "module": "Vero_Refine_Schedule_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 0,
+      "line": 54,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 172,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 200,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 30,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 36,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 267,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 322,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "curDomain_corres'",
+  "withdrawn_since_observed_candidate": false
+}

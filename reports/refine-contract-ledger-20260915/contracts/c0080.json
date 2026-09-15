@@ -1,0 +1,104 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0080",
+  "last_attempt": null,
+  "last_legacy_target_evidence": {
+    "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_Interrupt_R.thy');s=p.read_text();pat=r'(\\\\(\\\\* VERO START c0080 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0080 prove \\\\*\\\\))';proof=r'''by (auto simp: arch_check_irq_def ArchInterrupt_H.ARM_H.checkIRQ_def rangeCheck_def minIRQ_def maxIRQ_def unlessE_def whenE_def throwError_def returnOk_def return_def corres_underlying_def dc_def)''';s=re.sub(pat,lambda m:m[1]+'\\\\n'+proof+'\\\\n'+m[2],s,flags=re.S);p.write_text(s)\nPY\"",
+    "exit_code": 0,
+    "line": 269,
+    "output": "",
+    "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+  },
+  "legacy_evidence": [
+    {
+      "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport re\np=Path('Vero_Refine_Interrupt_R.thy');s=p.read_text();pat=r'(\\\\(\\\\* VERO START c0080 prove \\\\*\\\\)).*?(\\\\(\\\\* VERO END c0080 prove \\\\*\\\\))';proof=r'''by (auto simp: arch_check_irq_def ArchInterrupt_H.ARM_H.checkIRQ_def rangeCheck_def minIRQ_def maxIRQ_def unlessE_def whenE_def throwError_def returnOk_def return_def corres_underlying_def dc_def)''';s=re.sub(pat,lambda m:m[1]+'\\\\n'+proof+'\\\\n'+m[2],s,flags=re.S);p.write_text(s)\nPY\"",
+      "exit_code": 0,
+      "line": 269,
+      "output": "",
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "module": "Vero_Refine_Interrupt_R",
+  "module_checks_observed": [
+    {
+      "exit_code": 1,
+      "line": 49,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 88,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 121,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 151,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 198,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 199,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 234,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 275,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 327,
+      "trace": "../reports/vero-isabelle-refine-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 123,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 174,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 190,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 1,
+      "line": 202,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 222,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    },
+    {
+      "exit_code": 0,
+      "line": 331,
+      "trace": "../reports/vero-isabelle-refine-retry-20260915/trial-001/iter-000/agent/agent_events.jsonl"
+    }
+  ],
+  "name": "checkIRQ_corres",
+  "withdrawn_since_observed_candidate": false
+}

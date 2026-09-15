@@ -9,6 +9,7 @@ import tempfile
 from pathlib import Path
 
 sys.path.insert(0, os.environ.get("VERO_SRC", "/vero-src"))
+from vero.isabelle.attempts import begin, finish
 from vero.isabelle.benchmark import extract, read, render
 from vero.isabelle.checker import Checker, filled, hygiene
 
@@ -68,6 +69,7 @@ def main():
     modules = {c["module"] for c in bench["contracts"]}
     if a.module not in modules:
         raise SystemExit("unknown module")
+    attempt = begin(Path.cwd() / ".vero-attempts", bench, a.module, artifact)
     bodies = {}
     for c in bench["contracts"]:
         if c["module"] != a.module:
@@ -78,11 +80,23 @@ def main():
             if slot["found"] and filled(slot["body"]):
                 error = hygiene(slot["body"])
                 if error:
+                    finish(
+                        attempt,
+                        {
+                            "status": "rejected",
+                            "log": key + ": " + error,
+                            "audited": [],
+                        },
+                        None,
+                    )
                     raise SystemExit(key + ": " + error)
                 bodies[key] = slot["body"]
     with tempfile.TemporaryDirectory(prefix="vero-check-") as tmp:
         render(bench, tmp, bodies)
+        source = Path(tmp) / (a.module + ".thy")
+        (attempt / "source.thy").write_text(source.read_text())
         result = Checker(read("/benchmark/checker.json")).check(tmp, a.module)
+        finish(attempt, result, source)
         print(result["log"])
         print(
             json.dumps(
