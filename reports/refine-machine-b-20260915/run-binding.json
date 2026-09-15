@@ -1,0 +1,64 @@
+{
+  "benchmark_id": "4a9653c8e4b28ccd9a68e0c9f2b35cd1a6a6d3fe0b664670bdb6ecdd44f18be8",
+  "config": {
+    "agent": {
+      "codex": "/opt/vero/codex",
+      "command_prefix": [
+        "runuser",
+        "-u",
+        "agent",
+        "--"
+      ],
+      "env": {
+        "http_proxy": "http://127.0.0.1:18894",
+        "https_proxy": "http://127.0.0.1:18894"
+      },
+      "external_isolation": "docker-nonroot",
+      "home": "/home/agent",
+      "model": "gpt-6-astra",
+      "reasoning_effort": "medium",
+      "sandbox_mode": "danger-full-access",
+      "timeout_seconds": 1800,
+      "user": "agent"
+    },
+    "checker": {
+      "command_prefix": [
+        "runuser",
+        "-u",
+        "checker",
+        "--"
+      ],
+      "env": {
+        "HOME": "/home/checker",
+        "L4V_ARCH": "ARM",
+        "USER_HOME": "/home/checker"
+      },
+      "isabelle": "/workspace/verification/isabelle/bin/isabelle",
+      "session": "Semantic_Base",
+      "session_dirs": [
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "/sel4-project/verification/l4v/lib",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "/sel4-project/verification/l4v/spec",
+        "/sel4-project/verification/l4v/proof",
+        "/semantic-base"
+      ],
+      "threads": 4,
+      "timeout_seconds": 120
+    },
+    "feedback": true,
+    "max_iterations": 1,
+    "resume_artifact": false,
+    "sandbox": "/sandbox",
+    "sandbox_uid": 1001,
+    "total_agent_seconds": 1800
+  },
+  "implementation_id": "5c59bae61a4d2d28d4c062f8b573047526ded1d66f1781488677dd897bf901f2"
+}

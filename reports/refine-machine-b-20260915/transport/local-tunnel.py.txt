@@ -1,0 +1,13 @@
+import pathlib,subprocess,time,re,shlex
+start=time.monotonic(); attempt=100000
+while time.monotonic()-start<7200 and not pathlib.Path('/tmp/vero-stop-dynamic').exists():
+ attempt+=1;path='/tmp/vero-dynamic-'+str(attempt)
+ p=subprocess.Popen(['ssh','-M','-S',path,'-o','ControlPersist=no','-o','ForkAfterAuthentication=no','-o','BatchMode=yes','-o','ConnectTimeout=10','-o','ExitOnForwardFailure=yes','-o','ServerAliveInterval=10','-o','ServerAliveCountMax=3','-N','-R','127.0.0.1:0:127.0.0.1:7890','zljj@114.212.82.105'],stderr=subprocess.PIPE,text=True)
+ for line in p.stderr:
+  m=re.search(r'Allocated port (\d+) for remote forward',line)
+  if m:
+   port=int(m[1]);cmd='printf %s '+shlex.quote(str(port))+' > /data/zljj/vero-runs/refine-001/control/proxy-port'
+   r=subprocess.run(['ssh','-S',path,'-o','ConnectTimeout=10','zljj@114.212.82.105',cmd])
+   print('forwarding target',port,'configured',r.returncode==0,flush=True)
+  else:print(line.strip(),flush=True)
+ p.wait();time.sleep(2)

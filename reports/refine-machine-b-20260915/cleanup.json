@@ -1,0 +1,8 @@
+{
+  "completed_at": "2026-09-15T19:13:23.182026+00:00",
+  "private_auth_exists": false,
+  "agent_auth_exists": false,
+  "agent_codex_home_exists": false,
+  "worker_exists": false,
+  "main_container_running": true
+}

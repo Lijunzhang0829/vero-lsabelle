@@ -1,0 +1,34 @@
+import asyncio
+from pathlib import Path
+connections={}
+async def handle(reader,writer):
+ remote=None
+ try:
+  port=int(Path('/control/proxy-port').read_text())
+  r,w=await asyncio.wait_for(asyncio.open_connection('127.0.0.1',port),5);remote=w
+  connections[writer]=(port,w)
+  async def copy(src,dst):
+   try:
+    while True:
+     b=await src.read(65536)
+     if not b:break
+     dst.write(b);await dst.drain()
+   finally:dst.close()
+  await asyncio.gather(copy(reader,w),copy(r,writer))
+ except (OSError,ValueError,asyncio.TimeoutError):pass
+ finally:
+  connections.pop(writer,None)
+  writer.close()
+  if remote:remote.close()
+async def watch():
+ while True:
+  try:
+   port=int(Path('/control/proxy-port').read_text())
+   for client,(old,remote) in list(connections.items()):
+    if old!=port:client.close();remote.close()
+  except (OSError,ValueError):pass
+  await asyncio.sleep(1)
+async def main():
+ server=await asyncio.start_server(handle,'127.0.0.1',18894)
+ async with server:await asyncio.gather(server.serve_forever(),watch())
+asyncio.run(main())

@@ -1,6 +1,6 @@
 # 机器 B：Vero 的 Isabelle proof 模式实现计划
 
-状态：用户已批准实施。Isabelle proof-mode 后端与机器 B 环境已部署，正在执行首轮 Refine 试点。原计划保留如下；当前实现及限制见 `docs/isabelle.md`。
+状态：用户已批准实施。Isabelle proof-mode 后端与机器 B 环境已部署，首轮 Refine 试点已完成，独立验证 39/287 个正向证明；结果与限制见 `reports/refine-machine-b-20260915/README.md`。原计划保留如下；当前实现及限制见 `docs/isabelle.md`。
 
 ## 1. 目标与范围
 

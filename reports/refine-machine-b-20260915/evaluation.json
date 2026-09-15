@@ -1,0 +1,1708 @@
+{
+  "artifact_sha256": "61ac3d85a55a9a1163e907450f8611f5f28b5ed699254d220818998bd973b53c",
+  "benchmark_id": "4a9653c8e4b28ccd9a68e0c9f2b35cd1a6a6d3fe0b664670bdb6ecdd44f18be8",
+  "complete": false,
+  "contracts": {
+    "c0001": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0002": {
+      "status": "unfilled"
+    },
+    "c0003": {
+      "status": "unfilled"
+    },
+    "c0004": {
+      "status": "unfilled"
+    },
+    "c0005": {
+      "status": "unfilled"
+    },
+    "c0006": {
+      "status": "unfilled"
+    },
+    "c0007": {
+      "status": "unfilled"
+    },
+    "c0008": {
+      "status": "unfilled"
+    },
+    "c0009": {
+      "status": "unfilled"
+    },
+    "c0010": {
+      "status": "unfilled"
+    },
+    "c0011": {
+      "status": "unfilled"
+    },
+    "c0012": {
+      "status": "unfilled"
+    },
+    "c0013": {
+      "status": "unfilled"
+    },
+    "c0014": {
+      "status": "unfilled"
+    },
+    "c0015": {
+      "status": "unfilled"
+    },
+    "c0016": {
+      "status": "unfilled"
+    },
+    "c0017": {
+      "status": "unfilled"
+    },
+    "c0018": {
+      "status": "unfilled"
+    },
+    "c0019": {
+      "status": "unfilled"
+    },
+    "c0020": {
+      "status": "unfilled"
+    },
+    "c0021": {
+      "status": "unfilled"
+    },
+    "c0022": {
+      "status": "unfilled"
+    },
+    "c0023": {
+      "status": "unfilled"
+    },
+    "c0024": {
+      "status": "unfilled"
+    },
+    "c0025": {
+      "status": "unfilled"
+    },
+    "c0026": {
+      "status": "unfilled"
+    },
+    "c0027": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0028": {
+      "status": "unfilled"
+    },
+    "c0029": {
+      "status": "unfilled"
+    },
+    "c0030": {
+      "status": "unfilled"
+    },
+    "c0031": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0032": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0033": {
+      "status": "unfilled"
+    },
+    "c0034": {
+      "status": "unfilled"
+    },
+    "c0035": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0036": {
+      "status": "unfilled"
+    },
+    "c0037": {
+      "status": "unfilled"
+    },
+    "c0038": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0039": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0040": {
+      "status": "unfilled"
+    },
+    "c0041": {
+      "status": "unfilled"
+    },
+    "c0042": {
+      "status": "unfilled"
+    },
+    "c0043": {
+      "status": "unfilled"
+    },
+    "c0044": {
+      "status": "unfilled"
+    },
+    "c0045": {
+      "status": "unfilled"
+    },
+    "c0046": {
+      "status": "unfilled"
+    },
+    "c0047": {
+      "status": "unfilled"
+    },
+    "c0048": {
+      "status": "unfilled"
+    },
+    "c0049": {
+      "status": "unfilled"
+    },
+    "c0050": {
+      "status": "unfilled"
+    },
+    "c0051": {
+      "status": "unfilled"
+    },
+    "c0052": {
+      "status": "unfilled"
+    },
+    "c0053": {
+      "status": "unfilled"
+    },
+    "c0054": {
+      "status": "unfilled"
+    },
+    "c0055": {
+      "status": "unfilled"
+    },
+    "c0056": {
+      "status": "unfilled"
+    },
+    "c0057": {
+      "status": "unfilled"
+    },
+    "c0058": {
+      "status": "unfilled"
+    },
+    "c0059": {
+      "status": "unfilled"
+    },
+    "c0060": {
+      "status": "unfilled"
+    },
+    "c0061": {
+      "status": "unfilled"
+    },
+    "c0062": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0063": {
+      "status": "unfilled"
+    },
+    "c0064": {
+      "status": "unfilled"
+    },
+    "c0065": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0066": {
+      "status": "unfilled"
+    },
+    "c0067": {
+      "status": "unfilled"
+    },
+    "c0068": {
+      "status": "unfilled"
+    },
+    "c0069": {
+      "status": "unfilled"
+    },
+    "c0070": {
+      "status": "unfilled"
+    },
+    "c0071": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0072": {
+      "status": "unfilled"
+    },
+    "c0073": {
+      "status": "unfilled"
+    },
+    "c0074": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0075": {
+      "status": "unfilled"
+    },
+    "c0076": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0077": {
+      "status": "unfilled"
+    },
+    "c0078": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0079": {
+      "status": "unfilled"
+    },
+    "c0080": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0081": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0082": {
+      "status": "unfilled"
+    },
+    "c0083": {
+      "status": "unfilled"
+    },
+    "c0084": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0085": {
+      "status": "unfilled"
+    },
+    "c0086": {
+      "status": "unfilled"
+    },
+    "c0087": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0088": {
+      "status": "unfilled"
+    },
+    "c0089": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0090": {
+      "status": "unfilled"
+    },
+    "c0091": {
+      "status": "unfilled"
+    },
+    "c0092": {
+      "status": "unfilled"
+    },
+    "c0093": {
+      "status": "unfilled"
+    },
+    "c0094": {
+      "status": "unfilled"
+    },
+    "c0095": {
+      "status": "unfilled"
+    },
+    "c0096": {
+      "status": "unfilled"
+    },
+    "c0097": {
+      "status": "unfilled"
+    },
+    "c0098": {
+      "status": "unfilled"
+    },
+    "c0099": {
+      "status": "unfilled"
+    },
+    "c0100": {
+      "status": "unfilled"
+    },
+    "c0101": {
+      "status": "unfilled"
+    },
+    "c0102": {
+      "status": "unfilled"
+    },
+    "c0103": {
+      "status": "unfilled"
+    },
+    "c0104": {
+      "status": "unfilled"
+    },
+    "c0105": {
+      "status": "unfilled"
+    },
+    "c0106": {
+      "status": "unfilled"
+    },
+    "c0107": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0108": {
+      "status": "unfilled"
+    },
+    "c0109": {
+      "status": "unfilled"
+    },
+    "c0110": {
+      "status": "unfilled"
+    },
+    "c0111": {
+      "status": "unfilled"
+    },
+    "c0112": {
+      "status": "unfilled"
+    },
+    "c0113": {
+      "status": "unfilled"
+    },
+    "c0114": {
+      "status": "unfilled"
+    },
+    "c0115": {
+      "status": "unfilled"
+    },
+    "c0116": {
+      "status": "unfilled"
+    },
+    "c0117": {
+      "status": "unfilled"
+    },
+    "c0118": {
+      "status": "unfilled"
+    },
+    "c0119": {
+      "status": "unfilled"
+    },
+    "c0120": {
+      "status": "unfilled"
+    },
+    "c0121": {
+      "status": "unfilled"
+    },
+    "c0122": {
+      "status": "unfilled"
+    },
+    "c0123": {
+      "status": "unfilled"
+    },
+    "c0124": {
+      "status": "unfilled"
+    },
+    "c0125": {
+      "status": "unfilled"
+    },
+    "c0126": {
+      "status": "unfilled"
+    },
+    "c0127": {
+      "polarity": "prove",
+      "status": "build_error"
+    },
+    "c0128": {
+      "polarity": "prove",
+      "status": "build_error"
+    },
+    "c0129": {
+      "status": "unfilled"
+    },
+    "c0130": {
+      "status": "unfilled"
+    },
+    "c0131": {
+      "status": "unfilled"
+    },
+    "c0132": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0133": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0134": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0135": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0136": {
+      "status": "unfilled"
+    },
+    "c0137": {
+      "status": "unfilled"
+    },
+    "c0138": {
+      "status": "unfilled"
+    },
+    "c0139": {
+      "status": "unfilled"
+    },
+    "c0140": {
+      "status": "unfilled"
+    },
+    "c0141": {
+      "status": "unfilled"
+    },
+    "c0142": {
+      "status": "unfilled"
+    },
+    "c0143": {
+      "status": "unfilled"
+    },
+    "c0144": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0145": {
+      "status": "unfilled"
+    },
+    "c0146": {
+      "status": "unfilled"
+    },
+    "c0147": {
+      "status": "unfilled"
+    },
+    "c0148": {
+      "status": "unfilled"
+    },
+    "c0149": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0150": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0151": {
+      "status": "unfilled"
+    },
+    "c0152": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0153": {
+      "status": "unfilled"
+    },
+    "c0154": {
+      "status": "unfilled"
+    },
+    "c0155": {
+      "status": "unfilled"
+    },
+    "c0156": {
+      "status": "unfilled"
+    },
+    "c0157": {
+      "status": "unfilled"
+    },
+    "c0158": {
+      "status": "unfilled"
+    },
+    "c0159": {
+      "status": "unfilled"
+    },
+    "c0160": {
+      "status": "unfilled"
+    },
+    "c0161": {
+      "status": "unfilled"
+    },
+    "c0162": {
+      "status": "unfilled"
+    },
+    "c0163": {
+      "status": "unfilled"
+    },
+    "c0164": {
+      "status": "unfilled"
+    },
+    "c0165": {
+      "status": "unfilled"
+    },
+    "c0166": {
+      "status": "unfilled"
+    },
+    "c0167": {
+      "status": "unfilled"
+    },
+    "c0168": {
+      "status": "unfilled"
+    },
+    "c0169": {
+      "status": "unfilled"
+    },
+    "c0170": {
+      "status": "unfilled"
+    },
+    "c0171": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0172": {
+      "status": "unfilled"
+    },
+    "c0173": {
+      "status": "unfilled"
+    },
+    "c0174": {
+      "status": "unfilled"
+    },
+    "c0175": {
+      "status": "unfilled"
+    },
+    "c0176": {
+      "status": "unfilled"
+    },
+    "c0177": {
+      "status": "unfilled"
+    },
+    "c0178": {
+      "status": "unfilled"
+    },
+    "c0179": {
+      "status": "unfilled"
+    },
+    "c0180": {
+      "status": "unfilled"
+    },
+    "c0181": {
+      "status": "unfilled"
+    },
+    "c0182": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0183": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0184": {
+      "status": "unfilled"
+    },
+    "c0185": {
+      "status": "unfilled"
+    },
+    "c0186": {
+      "status": "unfilled"
+    },
+    "c0187": {
+      "status": "unfilled"
+    },
+    "c0188": {
+      "status": "unfilled"
+    },
+    "c0189": {
+      "status": "unfilled"
+    },
+    "c0190": {
+      "status": "unfilled"
+    },
+    "c0191": {
+      "status": "unfilled"
+    },
+    "c0192": {
+      "status": "unfilled"
+    },
+    "c0193": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0194": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0195": {
+      "status": "unfilled"
+    },
+    "c0196": {
+      "status": "unfilled"
+    },
+    "c0197": {
+      "status": "unfilled"
+    },
+    "c0198": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0199": {
+      "status": "unfilled"
+    },
+    "c0200": {
+      "status": "unfilled"
+    },
+    "c0201": {
+      "status": "unfilled"
+    },
+    "c0202": {
+      "status": "unfilled"
+    },
+    "c0203": {
+      "status": "unfilled"
+    },
+    "c0204": {
+      "status": "unfilled"
+    },
+    "c0205": {
+      "status": "unfilled"
+    },
+    "c0206": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0207": {
+      "status": "unfilled"
+    },
+    "c0208": {
+      "status": "unfilled"
+    },
+    "c0209": {
+      "status": "unfilled"
+    },
+    "c0210": {
+      "status": "unfilled"
+    },
+    "c0211": {
+      "status": "unfilled"
+    },
+    "c0212": {
+      "status": "unfilled"
+    },
+    "c0213": {
+      "status": "unfilled"
+    },
+    "c0214": {
+      "status": "unfilled"
+    },
+    "c0215": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0216": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0217": {
+      "status": "unfilled"
+    },
+    "c0218": {
+      "status": "unfilled"
+    },
+    "c0219": {
+      "status": "unfilled"
+    },
+    "c0220": {
+      "status": "unfilled"
+    },
+    "c0221": {
+      "status": "unfilled"
+    },
+    "c0222": {
+      "status": "unfilled"
+    },
+    "c0223": {
+      "status": "unfilled"
+    },
+    "c0224": {
+      "status": "unfilled"
+    },
+    "c0225": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0226": {
+      "status": "unfilled"
+    },
+    "c0227": {
+      "status": "unfilled"
+    },
+    "c0228": {
+      "status": "unfilled"
+    },
+    "c0229": {
+      "status": "unfilled"
+    },
+    "c0230": {
+      "status": "unfilled"
+    },
+    "c0231": {
+      "status": "unfilled"
+    },
+    "c0232": {
+      "status": "unfilled"
+    },
+    "c0233": {
+      "status": "unfilled"
+    },
+    "c0234": {
+      "status": "unfilled"
+    },
+    "c0235": {
+      "status": "unfilled"
+    },
+    "c0236": {
+      "status": "unfilled"
+    },
+    "c0237": {
+      "status": "unfilled"
+    },
+    "c0238": {
+      "status": "unfilled"
+    },
+    "c0239": {
+      "status": "unfilled"
+    },
+    "c0240": {
+      "status": "unfilled"
+    },
+    "c0241": {
+      "status": "unfilled"
+    },
+    "c0242": {
+      "status": "unfilled"
+    },
+    "c0243": {
+      "status": "unfilled"
+    },
+    "c0244": {
+      "status": "unfilled"
+    },
+    "c0245": {
+      "status": "unfilled"
+    },
+    "c0246": {
+      "status": "unfilled"
+    },
+    "c0247": {
+      "status": "unfilled"
+    },
+    "c0248": {
+      "status": "unfilled"
+    },
+    "c0249": {
+      "status": "unfilled"
+    },
+    "c0250": {
+      "status": "unfilled"
+    },
+    "c0251": {
+      "status": "unfilled"
+    },
+    "c0252": {
+      "status": "unfilled"
+    },
+    "c0253": {
+      "status": "unfilled"
+    },
+    "c0254": {
+      "status": "unfilled"
+    },
+    "c0255": {
+      "status": "unfilled"
+    },
+    "c0256": {
+      "status": "unfilled"
+    },
+    "c0257": {
+      "status": "unfilled"
+    },
+    "c0258": {
+      "status": "unfilled"
+    },
+    "c0259": {
+      "status": "unfilled"
+    },
+    "c0260": {
+      "status": "unfilled"
+    },
+    "c0261": {
+      "status": "unfilled"
+    },
+    "c0262": {
+      "status": "unfilled"
+    },
+    "c0263": {
+      "status": "unfilled"
+    },
+    "c0264": {
+      "status": "unfilled"
+    },
+    "c0265": {
+      "status": "unfilled"
+    },
+    "c0266": {
+      "status": "unfilled"
+    },
+    "c0267": {
+      "status": "unfilled"
+    },
+    "c0268": {
+      "status": "unfilled"
+    },
+    "c0269": {
+      "status": "unfilled"
+    },
+    "c0270": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0271": {
+      "status": "unfilled"
+    },
+    "c0272": {
+      "status": "unfilled"
+    },
+    "c0273": {
+      "status": "unfilled"
+    },
+    "c0274": {
+      "status": "unfilled"
+    },
+    "c0275": {
+      "status": "unfilled"
+    },
+    "c0276": {
+      "status": "unfilled"
+    },
+    "c0277": {
+      "status": "unfilled"
+    },
+    "c0278": {
+      "status": "unfilled"
+    },
+    "c0279": {
+      "status": "unfilled"
+    },
+    "c0280": {
+      "status": "unfilled"
+    },
+    "c0281": {
+      "polarity": "prove",
+      "status": "proved"
+    },
+    "c0282": {
+      "status": "unfilled"
+    },
+    "c0283": {
+      "status": "unfilled"
+    },
+    "c0284": {
+      "status": "unfilled"
+    },
+    "c0285": {
+      "status": "unfilled"
+    },
+    "c0286": {
+      "status": "unfilled"
+    },
+    "c0287": {
+      "status": "unfilled"
+    }
+  },
+  "disproved_specs": 0,
+  "elapsed_seconds": 178.65922091109678,
+  "integration": null,
+  "modules": {
+    "Vero_Refine_ArchAcc_R": {
+      "audited": [
+        "c0001:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_ArchAcc_R"
+      ],
+      "elapsed_seconds": 9.174353206064552,
+      "returncode": 0,
+      "status": "ok"
+    },
+    "Vero_Refine_Arch_R": {
+      "audited": [
+        "c0027:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_Arch_R"
+      ],
+      "elapsed_seconds": 9.03022487135604,
+      "returncode": 0,
+      "status": "ok"
+    },
+    "Vero_Refine_Bits_R": {
+      "audited": [
+        "c0031:prove",
+        "c0032:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_Bits_R"
+      ],
+      "elapsed_seconds": 8.990293435752392,
+      "returncode": 0,
+      "status": "ok"
+    },
+    "Vero_Refine_CNodeInv_R": {
+      "audited": [
+        "c0035:prove",
+        "c0038:prove",
+        "c0039:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_CNodeInv_R"
+      ],
+      "elapsed_seconds": 9.391459798905998,
+      "returncode": 0,
+      "status": "ok"
+    },
+    "Vero_Refine_Finalise_R": {
+      "audited": [
+        "c0062:prove",
+        "c0065:prove",
+        "c0071:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_Finalise_R"
+      ],
+      "elapsed_seconds": 16.26661647623405,
+      "returncode": 0,
+      "status": "ok"
+    },
+    "Vero_Refine_InterruptAcc_R": {
+      "audited": [
+        "c0074:prove",
+        "c0076:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_InterruptAcc_R"
+      ],
+      "elapsed_seconds": 9.509536622092128,
+      "returncode": 0,
+      "status": "ok"
+    },
+    "Vero_Refine_Interrupt_R": {
+      "audited": [
+        "c0078:prove",
+        "c0080:prove",
+        "c0081:prove",
+        "c0084:prove",
+        "c0087:prove",
+        "c0089:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_Interrupt_R"
+      ],
+      "elapsed_seconds": 13.257669023703784,
+      "returncode": 0,
+      "status": "ok"
+    },
+    "Vero_Refine_Ipc_R": {
+      "audited": [
+        "c0107:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_Ipc_R"
+      ],
+      "elapsed_seconds": 9.299074145033956,
+      "returncode": 0,
+      "status": "ok"
+    },
+    "Vero_Refine_KHeap_R": {
+      "audited": [],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_KHeap_R"
+      ],
+      "elapsed_seconds": 17.808977966662496,
+      "returncode": 1,
+      "status": "build_error"
+    },
+    "Vero_Refine_Refine": {
+      "audited": [
+        "c0132:prove",
+        "c0133:prove",
+        "c0134:prove",
+        "c0135:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_Refine"
+      ],
+      "elapsed_seconds": 14.536025050096214,
+      "returncode": 0,
+      "status": "ok"
+    },
+    "Vero_Refine_Retype_R": {
+      "audited": [
+        "c0144:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_Retype_R"
+      ],
+      "elapsed_seconds": 8.964005173183978,
+      "returncode": 0,
+      "status": "ok"
+    },
+    "Vero_Refine_Schedule_R": {
+      "audited": [
+        "c0149:prove",
+        "c0150:prove",
+        "c0152:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_Schedule_R"
+      ],
+      "elapsed_seconds": 9.137040285859257,
+      "returncode": 0,
+      "status": "ok"
+    },
+    "Vero_Refine_Syscall_R": {
+      "audited": [
+        "c0171:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_Syscall_R"
+      ],
+      "elapsed_seconds": 9.06423487700522,
+      "returncode": 0,
+      "status": "ok"
+    },
+    "Vero_Refine_TcbAcc_R": {
+      "audited": [
+        "c0182:prove",
+        "c0183:prove",
+        "c0193:prove",
+        "c0194:prove",
+        "c0198:prove",
+        "c0206:prove",
+        "c0215:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_TcbAcc_R"
+      ],
+      "elapsed_seconds": 14.37403553724289,
+      "returncode": 0,
+      "status": "ok"
+    },
+    "Vero_Refine_Tcb_R": {
+      "audited": [
+        "c0216:prove",
+        "c0225:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_Tcb_R"
+      ],
+      "elapsed_seconds": 10.0511200199835,
+      "returncode": 0,
+      "status": "ok"
+    },
+    "Vero_Refine_VSpace_R": {
+      "audited": [
+        "c0270:prove",
+        "c0281:prove"
+      ],
+      "command": [
+        "runuser",
+        "-u",
+        "checker",
+        "--",
+        "/workspace/verification/isabelle/bin/isabelle",
+        "process",
+        "-o",
+        "threads=4",
+        "-l",
+        "Semantic_Base",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "-d",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "-d",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "-d",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "-d",
+        "/sel4-project/verification/l4v/lib",
+        "-d",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "-d",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "-d",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "-d",
+        "/sel4-project/verification/l4v/spec",
+        "-d",
+        "/sel4-project/verification/l4v/proof",
+        "-d",
+        "/semantic-base",
+        "-T",
+        "/results/trial-001/iter-000/eval/source/Vero_Refine_VSpace_R"
+      ],
+      "elapsed_seconds": 9.790722222998738,
+      "returncode": 0,
+      "status": "ok"
+    }
+  },
+  "proved_specs": 39,
+  "resolved_specs": 39,
+  "schema_version": 1,
+  "total_specs": 287
+}

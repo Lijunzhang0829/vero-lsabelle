@@ -1,4 +1,3 @@
 # TODO
 
-- Complete and record the machine B Refine pilot; remove temporary credentials after evaluation.
-- Isabelle limitations: cross-owner generated-fact imports and general `includes`/`obtains` negation are outside this initial backend. See [the implementation plan](plan/20260915-isabelle-proof-backend.md).
+- Initial Isabelle limitations: cross-owner generated-proof imports, additional agent adapters, self mode, and chunked session continuation. See [backend semantics](docs/isabelle.md) and [the pilot report](reports/refine-machine-b-20260915/README.md).
