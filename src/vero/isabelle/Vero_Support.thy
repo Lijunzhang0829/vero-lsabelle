@@ -6,6 +6,12 @@ begin
 ML \<open>
 local
 val trusted_axioms = sort_strings (map #1 (Thm.all_axioms_of \<^theory>));
+val trusted_defs = Theory.defs_of \<^theory>;
+
+fun safe_def_axioms thy =
+  Defs.dest_constdefs [trusted_defs] (Theory.defs_of thy)
+  |> filter (fn (name, _) => String.isPrefix "vero_aux_" (Long_Name.base_name name))
+  |> map #2;
 
 fun audit id polarity baseline results lthy =
   let
@@ -13,8 +19,10 @@ fun audit id polarity baseline results lthy =
     val _ = if null thms then error "Vero: no theorem produced" else ();
     val _ = if Thm_Deps.has_skip_proof thms then error "Vero: skip_proof dependency" else ();
     val _ = if null (Thm_Deps.all_oracles thms) then () else error "Vero: oracle dependency";
-    val axioms = map #1 (Thm.all_axioms_of (Proof_Context.theory_of lthy));
-    val _ = if sort_strings axioms = baseline then () else error "Vero: new axioms";
+    val thy = Proof_Context.theory_of lthy;
+    val axioms = map #1 (Thm.all_axioms_of thy);
+    val allowed = baseline @ safe_def_axioms thy;
+    val _ = if forall (member (op =) allowed) axioms then () else error "Vero: new axioms";
     val _ = writeln ("VERO_RESULT " ^ id ^ " " ^ polarity ^ " clean");
   in lthy end;
 

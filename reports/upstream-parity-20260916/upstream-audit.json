@@ -1,0 +1,62 @@
+{
+  "origin": "https://github.com/sunblaze-ucb/vero.git",
+  "pinned_commit": "0a7325df9e9e6dbc275c0ad483b3d1cbe38d9b09",
+  "remote_head_matches": true,
+  "sources": [
+    {
+      "path": "src/vero/curation/stages/plan.py",
+      "sha256": "459423ff9404d159c59a643690c2388e57d61bb6450d87234a68d47b7cba5c3b",
+      "fork_original_unchanged": true
+    },
+    {
+      "path": "src/vero/curation/orchestrator/models.py",
+      "sha256": "134f6d31d4740a841e93c2c19230598c132fbb52fd599625f83d118e1249dd8f",
+      "fork_original_unchanged": true
+    },
+    {
+      "path": "src/vero/generation/proof_materialize.py",
+      "sha256": "45f460a9b2f8e13976b96b1983cea3ef5fe671c8f0f1cebf0bc692c54b2de5f1",
+      "fork_original_unchanged": true
+    },
+    {
+      "path": "src/vero/generation/extractor.py",
+      "sha256": "2b7dca50f12c8798831377a8657fbfa3d4f8e851b93d928692b42c9031f7b171",
+      "fork_original_unchanged": true
+    },
+    {
+      "path": "src/vero/generation/render.py",
+      "sha256": "19dd69248cc4e63930587a64cd36562c7000c3632a184f213f95bb914401df77",
+      "fork_original_unchanged": true
+    },
+    {
+      "path": "src/vero/generation/agents/codex.py",
+      "sha256": "a803068ea63d15a6ec22c53bfc6dd35f3f65050d19ae8cfddc1cce77c617b309",
+      "fork_original_unchanged": true
+    },
+    {
+      "path": "src/vero/evaluation/hygiene.py",
+      "sha256": "307b5de900cc1284fd50efcb920c8237c83b92bce5cdc3d31e3548a0b6251e8f",
+      "fork_original_unchanged": true
+    },
+    {
+      "path": "src/vero/evaluation/axioms.py",
+      "sha256": "cf8f0bc444cb8719d99b7973c444461bd51076ca9f4ef2753eb4746ab0f229fd",
+      "fork_original_unchanged": true
+    },
+    {
+      "path": "src/vero/cli_iterate.py",
+      "sha256": "0ccb85ec25d14512f0a040e6b8311ecabc741a2b6ca6fae8acbe721bf1b2e792",
+      "fork_original_unchanged": true
+    },
+    {
+      "path": "templates/instruction/base.md.j2",
+      "sha256": "1f306ca8145cef939c8d621e3ebc4cd95991b3f3db7da51ef81022ed6717a6fb",
+      "fork_original_unchanged": true
+    },
+    {
+      "path": "templates/instruction/proof.md.j2",
+      "sha256": "3698ff299b7c41beb15a93200064abcf57c71c1bc8175d35f50ab0d635a75ae2",
+      "fork_original_unchanged": true
+    }
+  ]
+}

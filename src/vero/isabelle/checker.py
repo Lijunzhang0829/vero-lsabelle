@@ -125,7 +125,25 @@ def evaluate(bench, artifact, output, checker):
         raise FileExistsError("evaluation must use a fresh directory")
     output.mkdir(parents=True)
     started = time.monotonic()
+    from .slots import context, schedule, slot_hygiene
+
     statuses, bodies = {}, {}
+    slot_schedule = schedule(bench)
+    auxiliary_errors = {}
+    for key, (module, kind) in slot_schedule.items():
+        slot = artifact["slots"][key]
+        if kind == "proof" or not slot["found"] or not slot["body"].strip():
+            continue
+        error = slot_hygiene(kind, slot["body"])
+        if error:
+            auxiliary_errors[module] = key + ": " + error
+        else:
+            bodies[key] = slot["body"]
+    try:
+        effective = context(bench, bodies)
+        context_error = None
+    except ValueError as exc:
+        effective, context_error = bench, str(exc)
     for c in bench["contracts"]:
         entries = [
             (p, artifact["slots"][c["id"] + ":" + p]) for p in ["prove", "disprove"]
@@ -149,20 +167,41 @@ def evaluate(bench, artifact, output, checker):
     from .planning import dependencies, module_order
 
     module_results = {}
-    for module in module_order(bench):
+    for module in module_order(effective):
         pending = [
             c
             for c in bench["contracts"]
             if c["module"] == module and statuses[c["id"]]["status"] == "pending"
         ]
-        if not pending:
+        has_aux = any(
+            owner == module and kind != "proof" and key in bodies
+            for key, (owner, kind) in slot_schedule.items()
+        )
+        if (
+            not pending
+            and not has_aux
+            and module not in auxiliary_errors
+            and module not in artifact.get("file_errors", {})
+        ):
             continue
         blocked = sorted(
             d
-            for d in dependencies(bench, module)
+            for d in dependencies(effective, module)
             if module_results.get(d, {}).get("status") not in {None, "ok"}
         )
-        if blocked:
+        if (
+            context_error
+            or module in auxiliary_errors
+            or module in artifact.get("file_errors", {})
+        ):
+            result = {
+                "status": "rejected",
+                "audited": [],
+                "log": context_error
+                or auxiliary_errors.get(module)
+                or artifact["file_errors"][module],
+            }
+        elif blocked:
             result = {
                 "status": "blocked_dependency",
                 "audited": [],
@@ -186,7 +225,12 @@ def evaluate(bench, artifact, output, checker):
     negative = sum(s["status"] == "disproved" for s in statuses.values())
     complete = positive == len(statuses)
     integration = None
-    if positive + negative == len(statuses):
+    if (
+        positive + negative == len(statuses)
+        and not context_error
+        and not auxiliary_errors
+        and all(r["status"] == "ok" for r in module_results.values())
+    ):
         integration = checker.check(output / "source", "Vero_All")
         (output / "integration.log").write_text(integration["log"])
         complete = complete and integration["status"] == "ok"
@@ -199,11 +243,18 @@ def evaluate(bench, artifact, output, checker):
         "proved_specs": positive,
         "disproved_specs": negative,
         "resolved_specs": positive + negative,
+        "passed_specs": positive + negative,
+        "all_specs_resolved": positive + negative == len(statuses)
+        and integration is not None
+        and integration["status"] == "ok",
         "complete": complete,
         "elapsed_seconds": time.monotonic() - started,
         "contracts": statuses,
         "modules": module_results,
         "integration": integration,
+        "context_error": context_error,
+        "auxiliary_errors": auxiliary_errors,
+        "effective_imports": effective.get("planning", {}).get("imports", {}),
     }
     save(output / "report.json", report)
     (output / "report.md").write_text(

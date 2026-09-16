@@ -67,9 +67,48 @@ def run(benchmark_path, config_path, run_dir, *, resume=False):
         return _run_locked(benchmark_path, config_path, root, resume=resume)
 
 
+def next_position(journal, cfg):
+    records = journal["iterations"]
+    chunk_seconds = cfg.get("iteration_time_chunk_seconds")
+    if chunk_seconds is None:
+        position = (len(records), 0)
+    elif not records:
+        position = (0, 0)
+    else:
+        if chunk_seconds <= 0:
+            raise ValueError("chunk seconds must be positive")
+        last = records[-1]
+        it = last.get("iteration", 0)
+        used = sum(
+            r["agent"]["elapsed_seconds"]
+            for r in records
+            if r.get("iteration", 0) == it
+        )
+        cap = cfg.get("iteration_max_time_seconds", chunk_seconds)
+        if (
+            not (
+                last["agent"].get("timed_out", False)
+                or last["agent"].get("recovered_interruption", False)
+            )
+            or used >= cap
+        ):
+            position = (it + 1, 0)
+        else:
+            position = (it, last.get("chunk", 0) + 1)
+    return position if position[0] < cfg.get("max_iterations", 1) else None
+
+
 def _run_locked(benchmark_path, config_path, root, *, resume):
     bench = validate(read(benchmark_path))
     cfg = read(config_path)
+    if cfg.get("completion_metric", "positive") not in {"positive", "resolved"}:
+        raise ValueError("completion_metric must be positive or resolved")
+    if (
+        cfg.get("iteration_time_chunk_seconds") is not None
+        and cfg.get("iteration_max_time_seconds", cfg["iteration_time_chunk_seconds"])
+        <= 0
+    ):
+        raise ValueError("iteration time limit must be positive")
     identity = {
         "benchmark_id": bench["benchmark_id"],
         "config": cfg,
@@ -99,7 +138,11 @@ def _run_locked(benchmark_path, config_path, root, *, resume):
         return journal
     cumulative = sum(x["agent"]["elapsed_seconds"] for x in journal["iterations"])
     workspace = Path(cfg["sandbox"])
-    for index in range(len(journal["iterations"]), cfg.get("max_iterations", 1)):
+    while (position := next_position(journal, cfg)) is not None:
+        index = len(journal["iterations"])
+        chunk_seconds = cfg.get("iteration_time_chunk_seconds")
+        if chunk_seconds is not None and chunk_seconds <= 0:
+            raise ValueError("chunk seconds must be positive")
         remaining = cfg["total_agent_seconds"] - cumulative
         if remaining <= 0:
             break
@@ -119,11 +162,9 @@ def _run_locked(benchmark_path, config_path, root, *, resume):
             continue
         iteration.mkdir()
         seed = dict(cfg.get("initial_proofs", {}))
-        allowed = {
-            c["id"] + ":" + polarity
-            for c in bench["contracts"]
-            for polarity in ("prove", "disprove")
-        }
+        from .slots import enabled, schedule
+
+        allowed = set(schedule(bench))
         if set(seed) - allowed or any(
             not isinstance(body, str) for body in seed.values()
         ):
@@ -131,7 +172,8 @@ def _run_locked(benchmark_path, config_path, root, *, resume):
         if cfg.get("resume_artifact", False) and journal["iterations"]:
             previous = read(root / journal["iterations"][-1]["artifact"])
             seed = {k: v["body"] for k, v in previous["slots"].items() if v["found"]}
-        render(bench, workspace, seed)
+        if not (chunk_seconds is not None and index > 0):
+            render(bench, workspace, seed)
         feedback = ""
         if cfg.get("feedback", True) and journal["iterations"]:
             feedback = (
@@ -152,6 +194,23 @@ def _run_locked(benchmark_path, config_path, root, *, resume):
                 "The accepted PLAN supplies real theory imports. Imported completed generated facts may be referenced using their qualified theory names. Unfilled goals supply no facts.",
             )
             instruction += "\n# Accepted PLAN\nRead .vero/plan.json and follow its execution_order and contract order. Prioritize providers before consumers, retain successful providers, and check dependency chains. Only frozen imports are available; do not edit them.\n"
+        if enabled(bench):
+            instruction = instruction.replace(
+                "Owner\nmodules are independent: no hidden original proof dependency graph is supplied.",
+                "Additional generated-theory imports are available through imports slots; no hidden original proof dependency graph is supplied.",
+            )
+            instruction = instruction.replace(
+                "Do not add axioms, sorry, raw ML, tactic, setup, or top-level declarations.",
+                "Do not add axioms, sorry, raw ML, tactic or setup. File-level auxiliary declarations are permitted only in auxiliary slots.",
+            )
+            instruction += "\n# Upstream Vero auxiliary slots\nEach theory has an editable imports slot (additional generated theory names only) and a global_aux slot before contract contexts. Each prove/disprove target has a prove_aux/disprove_aux slot immediately before its declaration, inside its frozen context. These correspond to upstream imports/global_aux/proof_aux. Use auxiliary slots for named lemma/theorem/definition declarations with fresh vero_aux_ names; prove helpers fully before use. They are preserved in artifact extraction and independent evaluation. Do not alter contexts, notation, axioms or frozen declarations. Auxiliary theorems may be reused later in the same file or via generated-theory imports; oops provides no theorem. Additional imports must be acyclic; PLAN imports remain in place.\n"
+            instruction = instruction.replace(
+                "Only frozen imports are available; do not edit them.",
+                "PLAN imports remain fixed; the imports slot may add other generated theories, provided the resulting graph is acyclic.",
+            )
+        instruction += "\n# Persistence and decomposition (adapted from upstream Vero)\nKeep working until the budget is exhausted or every target is resolved. Try at least two genuinely different approaches before setting a failed target aside. Search definitions, use induction, or prove a reusable helper rather than repeatedly applying the same tactic. Preserve proofs that already compile: revert only the newest change that broke a module. Prefer one target at a time and check after each nontrivial edit. Wind down before the deadline: finish or withdraw the current failing candidate, then check affected modules.\n"
+        if feedback:
+            (workspace / "FEEDBACK.md").write_text(feedback)
         (workspace / "INSTRUCTION.md").write_text(instruction)
         if cfg.get("sandbox_uid") is not None:
             uid = cfg["sandbox_uid"]
@@ -159,13 +218,36 @@ def _run_locked(benchmark_path, config_path, root, *, resume):
                 if path.is_symlink():
                     raise ValueError("symlink in sandbox")
                 os.chown(path, uid, uid)
+        allowance = min(cfg["agent"]["timeout_seconds"], remaining)
+        if chunk_seconds is not None:
+            iteration_used = sum(
+                r["agent"]["elapsed_seconds"]
+                for r in journal["iterations"]
+                if r.get("iteration", 0) == position[0]
+            )
+            allowance = min(
+                allowance,
+                chunk_seconds,
+                cfg.get("iteration_max_time_seconds", chunk_seconds) - iteration_used,
+            )
+            with (workspace / "INSTRUCTION.md").open("a") as stream:
+                stream.write(
+                    f"\nThis is checkpoint chunk {position[1]} of iteration {position[0]}, with {allowance:.1f} seconds. The same workspace and conversation resume at the next checkpoint. Preserve successful helpers, imports and proofs; finish or withdraw only the current broken candidate before the cutoff.\n"
+                )
         agent_cfg = {
             **cfg["agent"],
-            "timeout_seconds": min(cfg["agent"]["timeout_seconds"], remaining),
+            "timeout_seconds": allowance,
+            "persistent_session": chunk_seconds is not None,
+            "resume_session": chunk_seconds is not None and index > 0,
         }
         save(
             iteration / "submitted.json",
-            {"max_seconds": agent_cfg["timeout_seconds"], "submitted_at": time.time()},
+            {
+                "max_seconds": agent_cfg["timeout_seconds"],
+                "submitted_at": time.time(),
+                "iteration": position[0],
+                "chunk": position[1],
+            },
         )
         agent = CodexAgent(agent_cfg, iteration / "agent")
         result = agent.run(
@@ -180,24 +262,35 @@ def _run_locked(benchmark_path, config_path, root, *, resume):
             summarize(bench, report, iteration / "attempts"),
         )
         cumulative += result["elapsed_seconds"]
+        done = (
+            report.get("all_specs_resolved", False)
+            if cfg.get("completion_metric") == "resolved"
+            else report["complete"]
+        )
         journal["iterations"].append(
             {
                 "index": index,
+                "iteration": position[0],
+                "chunk": position[1],
                 "agent": result,
                 "proved_specs": report["proved_specs"],
                 "disproved_specs": report["disproved_specs"],
                 "artifact": str((iteration / "artifact.json").relative_to(root)),
                 "report_md": str((iteration / "eval/report.md").relative_to(root)),
-                "complete": report["complete"],
+                "complete": done,
             }
         )
+        journal["best_index"] = max(
+            journal["iterations"],
+            key=lambda r: (r["proved_specs"] + r["disproved_specs"], -r["index"]),
+        )["index"]
         journal["elapsed_agent_seconds"] = cumulative
-        journal["status"] = "complete" if report["complete"] else "running"
+        journal["status"] = "complete" if done else "running"
         save(journal_path, journal)
         if not result["ok"] and not result.get("timed_out", False):
             journal["status"] = "agent_error"
             break
-        if report["complete"]:
+        if done:
             break
     if journal["status"] not in {"complete", "agent_error"}:
         journal["status"] = "budget_exhausted"
@@ -248,17 +341,26 @@ def recover_iteration(bench, cfg, root, iteration, workspace, journal):
         iteration / "attempt-ledger.json",
         summarize(bench, report, iteration / "attempts"),
     )
+    submitted_position = read(iteration / "submitted.json")
     rec = {
+        "iteration": submitted_position.get("iteration", len(journal["iterations"])),
+        "chunk": submitted_position.get("chunk", 0),
         "index": len(journal["iterations"]),
         "agent": result,
         "proved_specs": report["proved_specs"],
         "disproved_specs": report["disproved_specs"],
         "artifact": str(artifact_path.relative_to(root)),
         "report_md": str((iteration / "eval/report.md").relative_to(root)),
-        "complete": report["complete"],
+        "complete": report.get("all_specs_resolved", False)
+        if cfg.get("completion_metric") == "resolved"
+        else report["complete"],
         "recovered": True,
     }
     journal["iterations"].append(rec)
+    journal["best_index"] = max(
+        journal["iterations"],
+        key=lambda r: (r["proved_specs"] + r["disproved_specs"], -r["index"]),
+    )["index"]
     journal["elapsed_agent_seconds"] = sum(
         x["agent"]["elapsed_seconds"] for x in journal["iterations"]
     )

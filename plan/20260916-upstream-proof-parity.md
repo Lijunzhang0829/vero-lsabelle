@@ -1,0 +1,11 @@
+# Restore upstream Vero proof-mode constituents in Isabelle
+
+Baseline upstream origin sunblaze-ucb/vero at 0a7325df9e9e6dbc275c0ad483b3d1cbe38d9b09 (remote HEAD verified). Continue feat/isabelle-proof-backend. Existing Lean implementation is already present in this fork; preserve it and port its slot schedule/materialize/extract/overlay and instruction semantics to Isabelle rather than replacing Vero with a helper-node scheduler.
+
+Audit PLAN versus upstream curation, proof/global auxiliary slots, editable imports, artifact replay, dependency checking, hygiene/kernel audits, prompts, iteration feedback and checkpoint continuation. Introduce explicit versioned auxiliary slot support while retaining legacy benchmark/artifact replay. Fixed target statements/contexts must never be relaxed. Permit proved file-level helpers and definitions with reserved fresh names, preserve them in artifacts, support additional generated-module imports with cycle checking, record full attempted artifacts, and retain all slot types during continuation. Keep language-specific executable-code and declaration/context restrictions explicit. Do not invent helper-node planning as upstream parity.
+
+Validate slot round trips, malformed markers, dynamic imports, context/statement preservation, blocked dependencies, helper failure behavior, malicious auxiliary declarations, helper proof trust and cross-module helper use with native Isabelle. Use a network-disabled checker worker on B without credentials. Keep historical score unchanged; no model performance rerun until constituent compatibility is validated. Document remaining semantic/protocol differences and supported comparison configuration. Archive tests, sync a scoped file list and clean worker.
+
+## Outcome
+
+Implemented auxiliary/import slots, trusted definition auditing, complete artifact/context replay, prompt parity, persistent session checkpoint positions and explicit resolved-versus-positive scoring. 46 tests passed with native Isabelle on B; all 287 unchanged contracts passed v2 preflight. Historical scores remain unchanged. Documented unported sampled/self/other-agent protocols and language/check-cost differences. No model experiment or credential transfer. Worker cleaned. See [audit](../docs/upstream-parity.md).

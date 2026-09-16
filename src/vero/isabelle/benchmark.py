@@ -9,7 +9,8 @@ from pathlib import Path
 
 NAME = re.compile(r"^(lemma|theorem|corollary|proposition)\s+(\S+?)(?=\s|\[|:)")
 MARKER = re.compile(
-    r"^\(\* VERO (START|END) ([a-z0-9_]+) (prove|disprove) \*\)$", re.MULTILINE
+    r"^\(\* VERO (START|END) ([A-Za-z0-9_]+) (prove|disprove|prove_aux|disprove_aux|global_aux|imports) \*\)$",
+    re.MULTILINE,
 )
 
 
@@ -34,6 +35,8 @@ def read(path):
 
 
 def validate(bench):
+    if bench.get("schema_version", 1) not in {1, 2}:
+        raise ValueError("unsupported Isabelle slot schema")
     body = {k: v for k, v in bench.items() if k != "benchmark_id"}
     if bench.get("benchmark_id") != digest(body):
         raise ValueError("benchmark identity mismatch")
@@ -76,7 +79,7 @@ def prepare(
             }
         )
     body = {
-        "schema_version": 1,
+        "schema_version": 2,
         "backend": "isabelle",
         "mode": "proof",
         "base_import": base_import,
@@ -85,7 +88,9 @@ def prepare(
         "policy": {
             "unfilled": "oops",
             "reference_proofs_visible": False,
-            "cross_module_proof_imports": False,
+            "cross_module_proof_imports": True,
+            "auxiliary_slots": True,
+            "editable_generated_imports": True,
         },
     }
     bench = {**body, "benchmark_id": digest(body)}
@@ -110,6 +115,8 @@ def declaration(c, polarity):
 
 
 def render(bench, destination, bodies=None, *, support_path=None):
+    from .slots import block, enabled
+
     validate(bench)
     destination = Path(destination)
     destination.mkdir(parents=True, exist_ok=True)
@@ -123,7 +130,16 @@ def render(bench, destination, bodies=None, *, support_path=None):
     for module in modules:
         dependencies = bench.get("planning", {}).get("imports", {}).get(module, [])
         imports = " ".join(["Vero_Support", *dependencies])
-        chunks = [f"theory {module}\nimports {imports}\nbegin\n"]
+        extra = (
+            "\n" + block(module + ":imports", bodies.get(module + ":imports", ""))
+            if enabled(bench)
+            else ""
+        )
+        chunks = [f"theory {module}\nimports {imports}{extra}\nbegin\n"]
+        if enabled(bench):
+            chunks.append(
+                block(module + ":global_aux", bodies.get(module + ":global_aux", ""))
+            )
         active_context = []
         for c in bench["contracts"]:
             if c["module"] != module:
@@ -133,6 +149,9 @@ def render(bench, destination, bodies=None, *, support_path=None):
                 chunks.extend(c["context"])
                 active_context = c["context"]
             for polarity in ["prove", "disprove"]:
+                if enabled(bench):
+                    key = slot_key(c, polarity) + "_aux"
+                    chunks.append(block(key, bodies.get(key, "")))
                 chunks.extend(
                     [
                         declaration(c, polarity),
@@ -156,9 +175,9 @@ def render(bench, destination, bodies=None, *, support_path=None):
 def extract(bench, source):
     validate(bench)
     source = Path(source)
-    expected = {
-        slot_key(c, p) for c in bench["contracts"] for p in ["prove", "disprove"]
-    }
+    from .slots import schedule
+
+    expected = schedule(bench)
     bodies, errors, extras = {}, {}, []
     for module in sorted({c["module"] for c in bench["contracts"]}):
         path = source / (module + ".thy")
@@ -188,9 +207,7 @@ def extract(bench, source):
                 if key not in expected:
                     extras.append(key)
                     continue
-                owner = next(
-                    c["module"] for c in bench["contracts"] if c["id"] == start[2]
-                )
+                owner = expected[key][0]
                 if owner != module:
                     raise ValueError("slot moved to another module")
                 local[key] = text[start.end() : end.start()].strip()
@@ -213,10 +230,10 @@ def extract(bench, source):
 def validate_artifact(bench, artifact):
     if artifact.get("benchmark_id") != bench["benchmark_id"]:
         raise ValueError("artifact belongs to a different benchmark")
-    expected = {
-        slot_key(c, p) for c in bench["contracts"] for p in ["prove", "disprove"]
-    }
-    if set(artifact.get("slots", {})) != expected:
+    from .slots import schedule
+
+    expected = schedule(bench)
+    if set(artifact.get("slots", {})) != set(expected):
         raise ValueError("artifact slot inventory mismatch")
     for slot in artifact["slots"].values():
         if not isinstance(slot.get("body"), str) or not isinstance(

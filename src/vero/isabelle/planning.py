@@ -125,8 +125,11 @@ Choose grouping/order based on definitions and reusable correspondence results,
 not just alphabetical original owner grouping. Explain each module's role and
 likely reusable prerequisites in its rationale. Do not change specs, create new
 specifications, import external theories, or write proof bodies in the plan.
-Helpers may later be proved locally inside fixed proof slots. Shared new top-level
-helper declarations are not supported by this schema.
+For slot-schema v2 benchmarks, generation may introduce file-level helper lemmas
+and definitions in global_aux/proof_aux slots, or local helpers inside a proof.
+Suggest helper strategies in rationales where useful, but do not add helper IDs
+to the fixed contract inventory. Helpers are not independently scored or scheduled
+nodes. Legacy schema v1 benchmarks support only proof-local helpers.
 
 Run `python3 /backend/tool.py validate-plan .vero/plan.json` for structural feedback.
 Partial plans will fail exact coverage until all IDs are assigned. Read the errors

@@ -15,11 +15,13 @@ from .checker import filled
 def begin(root, bench, module, artifact):
     path = Path(root) / (str(time.time_ns()) + "-" + uuid.uuid4().hex)
     path.mkdir(parents=True)
+    from .slots import schedule
+
+    slot_schedule = schedule(bench)
     slots = {
         k: v
         for k, v in artifact["slots"].items()
-        if k.split(":")[0]
-        in {c["id"] for c in bench["contracts"] if c["module"] == module}
+        if slot_schedule[k] == (module, "proof")
     }
     save(
         path / "submitted.json",
@@ -30,6 +32,8 @@ def begin(root, bench, module, artifact):
             "slots": slots,
             "candidate_sha256": digest(slots),
             "file_errors": artifact.get("file_errors", {}),
+            "context_artifact": artifact,
+            "context_artifact_sha256": digest(artifact),
             "authority": "agent-side diagnostic only",
         },
     )
@@ -45,11 +49,20 @@ def finish(path, result, source):
     # The first diagnostic location is authoritative only for this rendered snapshot.
     match = re.search(r'line (\d+) of "[^"\n]*/' + re.escape(module) + r'\.thy"', log)
     location = None
+    auxiliary_location = None
     if source is not None:
         text = Path(source).read_text()
         (path / "source.thy").write_text(text)
         if match:
             line = int(match[1])
+            from .benchmark import MARKER
+
+            markers = list(MARKER.finditer(text))
+            for start, end in zip(markers[::2], markers[1::2]):
+                lo = text.count("\n", 0, start.start()) + 1
+                hi = text.count("\n", 0, end.end()) + 1
+                if lo <= line <= hi and start[3] not in {"prove", "disprove"}:
+                    auxiliary_location = start[2] + ":" + start[3]
             declarations = list(
                 re.finditer(
                     r'^vero_(?:prove|disprove)\s+"c\d{4}"\s+(c\d{4})_(prove|disprove)\b',
@@ -82,6 +95,7 @@ def finish(path, result, source):
             **result,
             "ended_at": time.time(),
             "diagnostic_slot": location,
+            "diagnostic_auxiliary_slot": auxiliary_location,
             "outcomes": outcomes,
         },
     )

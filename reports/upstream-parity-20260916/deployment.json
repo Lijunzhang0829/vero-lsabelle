@@ -1,0 +1,61 @@
+{
+  "image_id": "sha256:65933e97a11542321961efe22999550b79e12cd909d147e50b3554c7517b3f9f",
+  "network_mode": "none",
+  "mounts": [
+    {
+      "Source": "/data/zljj/vero-isabelle/tests",
+      "Destination": "/tests",
+      "RW": false
+    },
+    {
+      "Source": "/data/zljj/vero-isabelle/reference",
+      "Destination": "/reference",
+      "RW": false
+    },
+    {
+      "Source": "/data/zljj/sel4-dev/verification/isabelle",
+      "Destination": "/workspace/verification/isabelle",
+      "RW": false
+    },
+    {
+      "Source": "/data/zljj/vero-runs/refine-plan-001/results",
+      "Destination": "/original",
+      "RW": false
+    },
+    {
+      "Source": "/data/zljj/vero-environment/Semantic-Base/workspace",
+      "Destination": "/semantic-base",
+      "RW": false
+    },
+    {
+      "Source": "/data/zljj/vero-environment/Semantic-Base/heaps",
+      "Destination": "/trusted-heaps",
+      "RW": false
+    },
+    {
+      "Source": "/data/zljj/vero-isabelle/src",
+      "Destination": "/vero-src",
+      "RW": false
+    },
+    {
+      "Source": "/data/zljj/vero-runs/refine-parity-001/control",
+      "Destination": "/control",
+      "RW": false
+    },
+    {
+      "Source": "/data/zljj/vero-runs/refine-parity-001/results",
+      "Destination": "/results",
+      "RW": true
+    },
+    {
+      "Source": "/data/zljj/vero-environment/Runtime/l4v",
+      "Destination": "/sel4-project/verification/l4v",
+      "RW": false
+    },
+    {
+      "Source": "/data/zljj/sel4-dev/verification/isabelle",
+      "Destination": "/sel4-project/verification/isabelle",
+      "RW": false
+    }
+  ]
+}

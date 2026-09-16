@@ -16,6 +16,9 @@ def main():
     x.add_argument("--contracts", required=True)
     x.add_argument("--output", required=True)
     x.add_argument("--base-import", default="Semantic_Base.Semantic_Root")
+    x = s.add_parser("upgrade-slots")
+    x.add_argument("--benchmark", required=True)
+    x.add_argument("--output", required=True)
     x = s.add_parser("render")
     x.add_argument("--benchmark", required=True)
     x.add_argument("--output", required=True)
@@ -43,6 +46,11 @@ def main():
         result = verify(a.environment)
     elif a.command == "prepare":
         result = prepare(a.contracts, a.output, base_import=a.base_import)
+    elif a.command == "upgrade-slots":
+        from .slots import upgrade
+
+        result = upgrade(read(a.benchmark))
+        save(a.output, result)
     elif a.command == "render":
         result = render(read(a.benchmark), a.output)
     elif a.command == "extract":

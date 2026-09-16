@@ -64,6 +64,29 @@ class CodexAgent:
             "hooks",
             "-",
         ]
+        if cfg.get("persistent_session"):
+            command.remove("--ephemeral")
+        if cfg.get("resume_session"):
+            if not cfg.get("persistent_session"):
+                raise ValueError("session resume requires persistent_session")
+            i = command.index("exec")
+            command[i + 1 : i + 1] = ["resume", "--last"]
+            # Installed resume CLI does not accept exec's --sandbox/--add-dir.
+            for flag in ("--sandbox", "--add-dir"):
+                i = command.index(flag)
+                del command[i : i + 2]
+            command[-1:-1] = (
+                ["--dangerously-bypass-approvals-and-sandbox"]
+                if mode == "danger-full-access"
+                else [
+                    "-c",
+                    'sandbox_mode="' + mode + '"',
+                    "-c",
+                    'sandbox_workspace_write.writable_roots=["'
+                    + cfg["home"]
+                    + '/.isabelle"]',
+                ]
+            )
         env = os.environ.copy()
         env.update(
             {
@@ -76,6 +99,15 @@ class CodexAgent:
         for key in list(env):
             if key.startswith("CODEX_") and key != "CODEX_HOME":
                 env.pop(key)
+        save(
+            self.log_dir / "invocation.json",
+            {
+                "command": command,
+                "cwd": str(sandbox_dir),
+                "persistent_session": bool(cfg.get("persistent_session")),
+                "resume_session": bool(cfg.get("resume_session")),
+            },
+        )
         started = time.time()
         save(
             self.log_dir / "state.json",

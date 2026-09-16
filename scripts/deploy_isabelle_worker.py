@@ -19,6 +19,10 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--repo", required=True)
     p.add_argument("--environment", required=True)
+    p.add_argument(
+        "--benchmark",
+        help="Benchmark directory; defaults to benchmarks/RefineIsabelleV2 (use RefineIsabelle explicitly for legacy replay)",
+    )
     p.add_argument("--isabelle", required=True)
     p.add_argument("--codex", required=True)
     p.add_argument("--auth", required=True)
@@ -30,6 +34,11 @@ def main():
     a = p.parse_args()
     repo = pathlib.Path(a.repo).resolve()
     env = pathlib.Path(a.environment).resolve()
+    benchmark = (
+        pathlib.Path(a.benchmark).resolve()
+        if a.benchmark
+        else repo / "benchmarks/RefineIsabelleV2"
+    )
     run = pathlib.Path(a.run_root).resolve()
     for key in ["sandbox", "results", "control", "agent-home"]:
         (run / key).mkdir(parents=True, exist_ok=True)
@@ -62,9 +71,7 @@ def main():
         + ["/semantic-base"],
         "env": {"HOME": "/home/agent", "USER_HOME": "/home/agent", "L4V_ARCH": "ARM"},
     }
-    (repo / "benchmarks/RefineIsabelle/checker.json").write_text(
-        json.dumps(checker, indent=2) + "\n"
-    )
+    (benchmark / "checker.json").write_text(json.dumps(checker, indent=2) + "\n")
     config = {
         "sandbox": "/sandbox",
         "sandbox_uid": uid,
@@ -153,7 +160,7 @@ def main():
         (env / "Semantic-Base/heaps", "/root/.isabelle/heaps", True),
         (env / "Environment-Dataflow", "/public", True),
         (repo / "src", "/vero-src", True),
-        (repo / "benchmarks/RefineIsabelle", "/benchmark", True),
+        (benchmark, "/benchmark", True),
         (pathlib.Path(a.codex).resolve().parent, "/opt/vero", True),
         (pathlib.Path(a.auth).resolve(), "/run/vero-auth", True),
         (run / "sandbox", "/sandbox", False),

@@ -11,8 +11,9 @@ from pathlib import Path
 sys.path.insert(0, os.environ.get("VERO_SRC", "/vero-src"))
 from vero.isabelle.attempts import begin, finish
 from vero.isabelle.benchmark import extract, read, render
-from vero.isabelle.checker import Checker, filled, hygiene
+from vero.isabelle.checker import Checker, filled
 from vero.isabelle.planning import check_plan_file, dependencies
+from vero.isabelle.slots import context, schedule, slot_hygiene
 
 
 def main():
@@ -77,7 +78,8 @@ def main():
                     "total_specs": len(bench["contracts"]),
                     "filled_slots": sum(
                         s["found"] and filled(s["body"])
-                        for s in artifact["slots"].values()
+                        for key, s in artifact["slots"].items()
+                        if schedule(bench)[key][1] == "proof"
                     ),
                     "errors": artifact["file_errors"],
                 },
@@ -89,28 +91,36 @@ def main():
     if a.module not in modules:
         raise SystemExit("unknown module")
     attempt = begin(Path.cwd() / ".vero-attempts", bench, a.module, artifact)
-    closure = dependencies(bench, a.module) | {a.module}
+    all_bodies = {k: v["body"] for k, v in artifact["slots"].items() if v["found"]}
+    try:
+        effective = context(bench, all_bodies)
+    except ValueError as exc:
+        finish(attempt, {"status": "rejected", "log": str(exc), "audited": []}, None)
+        raise SystemExit(str(exc)) from exc
+    closure = dependencies(effective, a.module) | {a.module}
+    errors = {m: e for m, e in artifact.get("file_errors", {}).items() if m in closure}
+    if errors:
+        finish(
+            attempt,
+            {"status": "extraction_error", "log": str(errors), "audited": []},
+            None,
+        )
+        raise SystemExit(str(errors))
     bodies = {}
-    for c in bench["contracts"]:
-        if c["module"] not in closure:
+    for key, (module, kind) in schedule(bench).items():
+        if module not in closure:
             continue
-        for polarity in ["prove", "disprove"]:
-            key = c["id"] + ":" + polarity
-            slot = artifact["slots"][key]
-            if slot["found"] and filled(slot["body"]):
-                error = hygiene(slot["body"])
-                if error:
-                    finish(
-                        attempt,
-                        {
-                            "status": "rejected",
-                            "log": key + ": " + error,
-                            "audited": [],
-                        },
-                        None,
-                    )
-                    raise SystemExit(key + ": " + error)
-                bodies[key] = slot["body"]
+        slot = artifact["slots"][key]
+        if slot["found"] and filled(slot["body"]):
+            error = slot_hygiene(kind, slot["body"])
+            if error:
+                finish(
+                    attempt,
+                    {"status": "rejected", "log": key + ": " + error, "audited": []},
+                    None,
+                )
+                raise SystemExit(key + ": " + error)
+            bodies[key] = slot["body"]
     with tempfile.TemporaryDirectory(prefix="vero-check-") as tmp:
         render(bench, tmp, bodies)
         source = Path(tmp) / (a.module + ".thy")

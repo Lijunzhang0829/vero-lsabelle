@@ -1,0 +1,54 @@
+test_archive_skips_symlinks (test_attempts.AttemptTests.test_archive_skips_symlinks) ... ok
+test_corrupt_telemetry_does_not_override_evaluation (test_attempts.AttemptTests.test_corrupt_telemetry_does_not_override_evaluation) ... ok
+test_failing_line_does_not_blame_audited_sibling (test_attempts.AttemptTests.test_failing_line_does_not_blame_audited_sibling) ... ok
+test_interrupted_and_final_authority (test_attempts.AttemptTests.test_interrupted_and_final_authority) ... ok
+test_legacy_module_failure_does_not_invent_contract_attempt (test_attempts.AttemptTests.test_legacy_module_failure_does_not_invent_contract_attempt) ... ok
+test_tool_records_real_invocation_and_survives_tmp_cleanup (test_attempts.AttemptTests.test_tool_records_real_invocation_and_survives_tmp_cleanup) ... ok
+test_both_polarities_rejected (test_backend.BackendTests.test_both_polarities_rejected) ... ok
+test_bound_artifact (test_backend.BackendTests.test_bound_artifact) ... ok
+test_duplicate_marker_rejected (test_backend.BackendTests.test_duplicate_marker_rejected) ... ok
+test_fresh_evaluation_required (test_backend.BackendTests.test_fresh_evaluation_required) ... ok
+test_frozen_statement_tamper_not_replayed (test_backend.BackendTests.test_frozen_statement_tamper_not_replayed) ... ok
+test_malformed_and_unsafe_bodies (test_backend.BackendTests.test_malformed_and_unsafe_bodies) ... ok
+test_missing_audit_is_not_proved (test_backend.BackendTests.test_missing_audit_is_not_proved) ... ok
+test_roundtrip (test_backend.BackendTests.test_roundtrip) ... ok
+test_symlink_rejected (test_backend.BackendTests.test_symlink_rejected) ... ok
+test_unfilled_is_not_proved (test_backend.BackendTests.test_unfilled_is_not_proved) ... ok
+test_false_assumption_cannot_refute_vacuous_contract (test_kernel.KernelTests.test_false_assumption_cannot_refute_vacuous_contract) ... ok
+test_kernel_rejects_sorry_even_without_lexical_guard (test_kernel.KernelTests.test_kernel_rejects_sorry_even_without_lexical_guard) ... ok
+test_positive_counterexample_and_vacuous_contract (test_kernel.KernelTests.test_positive_counterexample_and_vacuous_contract) ... ok
+test_quantified_assumptions_keep_binders_and_distinct_types (test_kernel.KernelTests.test_quantified_assumptions_keep_binders_and_distinct_types) ... ok
+test_coverage_cycles_and_reserved_names_rejected (test_planning.PlanningTests.test_coverage_cycles_and_reserved_names_rejected) ... ok
+test_explicit_partial_plan_seed_retains_prior_budget (test_planning.PlanningTests.test_explicit_partial_plan_seed_retains_prior_budget) ... ok
+test_failed_provider_blocks_consumer_without_checking_it (test_planning.PlanningTests.test_failed_provider_blocks_consumer_without_checking_it) ... ok
+test_kernel_accepts_cross_theory_generated_fact (test_planning.PlanningTests.test_kernel_accepts_cross_theory_generated_fact) ... ok
+test_pipeline_consumes_accepted_plan_and_binds_resume (test_planning.PlanningTests.test_pipeline_consumes_accepted_plan_and_binds_resume) ... ok
+test_reorganization_keeps_exact_specs_and_real_imports (test_planning.PlanningTests.test_reorganization_keeps_exact_specs_and_real_imports) ... ok
+test_continuation_seed_is_bound_and_rendered (test_recovery.RecoveryTests.test_continuation_seed_is_bound_and_rendered) ... ok
+test_interrupted_call_charged_and_completed_eval_reused (test_recovery.RecoveryTests.test_interrupted_call_charged_and_completed_eval_reused) ... ok
+test_running_process_cannot_be_recovered (test_recovery.RecoveryTests.test_running_process_cannot_be_recovered) ... ok
+test_timeout_kills_prover_in_separate_session (test_recovery.RecoveryTests.test_timeout_kills_prover_in_separate_session) ... ok
+test_attempt_preserves_complete_dependency_artifact (test_slots.SlotTests.test_attempt_preserves_complete_dependency_artifact) ... ok
+test_auxiliary_only_provider_failure_blocks_consumer (test_slots.SlotTests.test_auxiliary_only_provider_failure_blocks_consumer) ... ok
+test_auxiliary_roundtrip_and_fresh_replay (test_slots.SlotTests.test_auxiliary_roundtrip_and_fresh_replay) ... ok
+test_bad_helper_commands_and_shadowing_rejected (test_slots.SlotTests.test_bad_helper_commands_and_shadowing_rejected) ... ok
+test_cycle_never_reaches_native_checker (test_slots.SlotTests.test_cycle_never_reaches_native_checker) ... ok
+test_import_topology_and_rejection (test_slots.SlotTests.test_import_topology_and_rejection) ... ok
+test_iteration_seed_preserves_helpers_and_imports (test_slots.SlotTests.test_iteration_seed_preserves_helpers_and_imports) ... ok
+test_kernel_helper_sorry_cannot_prove_target_even_bypassing_hygiene (test_slots.SlotTests.test_kernel_helper_sorry_cannot_prove_target_even_bypassing_hygiene) ... ok
+test_kernel_shared_helpers_definitions_and_dynamic_imports (test_slots.SlotTests.test_kernel_shared_helpers_definitions_and_dynamic_imports) ... FAIL
+test_legacy_identity_and_slot_schedule_preserved (test_slots.SlotTests.test_legacy_identity_and_slot_schedule_preserved) ... ok
+
+======================================================================
+FAIL: test_kernel_shared_helpers_definitions_and_dynamic_imports (test_slots.SlotTests.test_kernel_shared_helpers_definitions_and_dynamic_imports)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tests/isabelle/test_slots.py", line 220, in test_kernel_shared_helpers_definitions_and_dynamic_imports
+    self.assertTrue(r["complete"], r)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : {'schema_version': 1, 'benchmark_id': '1912673a918a3117604faa5d2bd02f27e53a9d12e483e424a0d41435158f89a9', 'artifact_sha256': '06019f04918895597bb6a8f43264bdead5e3476de3fd56476abef2dd3b8c3330', 'total_specs': 2, 'proved_specs': 0, 'disproved_specs': 0, 'resolved_specs': 0, 'complete': False, 'elapsed_seconds': 1.8597775329835713, 'contracts': {'c0001': {'status': 'build_error', 'polarity': 'prove'}, 'c0002': {'status': 'blocked_dependency', 'polarity': 'prove'}}, 'modules': {'Vero_Provider': {'status': 'build_error', 'returncode': 1, 'elapsed_seconds': 1.8591643651016057, 'audited': [], 'command': ['/workspace/verification/isabelle/bin/isabelle', 'process', '-o', 'threads=4', '-l', 'HOL', '-T', '/tmp/tmp7i44hs_d/eval/source/Vero_Provider']}, 'Vero_Consumer': {'status': 'blocked_dependency', 'audited': [], 'blocked_by': ['Vero_Provider']}}, 'integration': None, 'context_error': None, 'auxiliary_errors': {}, 'effective_imports': {'Vero_Consumer': ['Vero_Provider'], 'Vero_Provider': []}}
+
+----------------------------------------------------------------------
+Ran 40 tests in 19.500s
+
+FAILED (failures=1)

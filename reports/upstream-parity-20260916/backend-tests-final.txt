@@ -1,0 +1,51 @@
+test_archive_skips_symlinks (test_attempts.AttemptTests.test_archive_skips_symlinks) ... ok
+test_corrupt_telemetry_does_not_override_evaluation (test_attempts.AttemptTests.test_corrupt_telemetry_does_not_override_evaluation) ... ok
+test_failing_line_does_not_blame_audited_sibling (test_attempts.AttemptTests.test_failing_line_does_not_blame_audited_sibling) ... ok
+test_interrupted_and_final_authority (test_attempts.AttemptTests.test_interrupted_and_final_authority) ... ok
+test_legacy_module_failure_does_not_invent_contract_attempt (test_attempts.AttemptTests.test_legacy_module_failure_does_not_invent_contract_attempt) ... ok
+test_tool_records_real_invocation_and_survives_tmp_cleanup (test_attempts.AttemptTests.test_tool_records_real_invocation_and_survives_tmp_cleanup) ... ok
+test_both_polarities_rejected (test_backend.BackendTests.test_both_polarities_rejected) ... ok
+test_bound_artifact (test_backend.BackendTests.test_bound_artifact) ... ok
+test_duplicate_marker_rejected (test_backend.BackendTests.test_duplicate_marker_rejected) ... ok
+test_fresh_evaluation_required (test_backend.BackendTests.test_fresh_evaluation_required) ... ok
+test_frozen_statement_tamper_not_replayed (test_backend.BackendTests.test_frozen_statement_tamper_not_replayed) ... ok
+test_malformed_and_unsafe_bodies (test_backend.BackendTests.test_malformed_and_unsafe_bodies) ... ok
+test_missing_audit_is_not_proved (test_backend.BackendTests.test_missing_audit_is_not_proved) ... ok
+test_roundtrip (test_backend.BackendTests.test_roundtrip) ... ok
+test_symlink_rejected (test_backend.BackendTests.test_symlink_rejected) ... ok
+test_unfilled_is_not_proved (test_backend.BackendTests.test_unfilled_is_not_proved) ... ok
+test_false_assumption_cannot_refute_vacuous_contract (test_kernel.KernelTests.test_false_assumption_cannot_refute_vacuous_contract) ... ok
+test_kernel_rejects_sorry_even_without_lexical_guard (test_kernel.KernelTests.test_kernel_rejects_sorry_even_without_lexical_guard) ... ok
+test_positive_counterexample_and_vacuous_contract (test_kernel.KernelTests.test_positive_counterexample_and_vacuous_contract) ... ok
+test_quantified_assumptions_keep_binders_and_distinct_types (test_kernel.KernelTests.test_quantified_assumptions_keep_binders_and_distinct_types) ... ok
+test_coverage_cycles_and_reserved_names_rejected (test_planning.PlanningTests.test_coverage_cycles_and_reserved_names_rejected) ... ok
+test_explicit_partial_plan_seed_retains_prior_budget (test_planning.PlanningTests.test_explicit_partial_plan_seed_retains_prior_budget) ... ok
+test_failed_provider_blocks_consumer_without_checking_it (test_planning.PlanningTests.test_failed_provider_blocks_consumer_without_checking_it) ... ok
+test_kernel_accepts_cross_theory_generated_fact (test_planning.PlanningTests.test_kernel_accepts_cross_theory_generated_fact) ... ok
+test_pipeline_consumes_accepted_plan_and_binds_resume (test_planning.PlanningTests.test_pipeline_consumes_accepted_plan_and_binds_resume) ... ok
+test_reorganization_keeps_exact_specs_and_real_imports (test_planning.PlanningTests.test_reorganization_keeps_exact_specs_and_real_imports) ... ok
+test_continuation_seed_is_bound_and_rendered (test_recovery.RecoveryTests.test_continuation_seed_is_bound_and_rendered) ... ok
+test_interrupted_call_charged_and_completed_eval_reused (test_recovery.RecoveryTests.test_interrupted_call_charged_and_completed_eval_reused) ... ok
+test_running_process_cannot_be_recovered (test_recovery.RecoveryTests.test_running_process_cannot_be_recovered) ... ok
+test_timeout_kills_prover_in_separate_session (test_recovery.RecoveryTests.test_timeout_kills_prover_in_separate_session) ... ok
+test_checkpoint_keeps_workspace_helpers_and_feedback (test_session_chunks.ChunkTests.test_checkpoint_keeps_workspace_helpers_and_feedback) ... ok
+test_persistent_resume_command_uses_installed_cli_options (test_session_chunks.ChunkTests.test_persistent_resume_command_uses_installed_cli_options) ... ok
+test_two_axis_position_and_charged_interruption (test_session_chunks.ChunkTests.test_two_axis_position_and_charged_interruption) ... ok
+test_arbitrary_axiom_with_reserved_name_is_not_a_definition (test_slots.AuxiliaryAxiomTests.test_arbitrary_axiom_with_reserved_name_is_not_a_definition) ... ok
+test_helper_error_location_is_distinct_from_contract (test_slots.AuxiliaryScopeTests.test_helper_error_location_is_distinct_from_contract) ... ok
+test_proof_aux_keeps_fixed_context_and_is_shared_later (test_slots.AuxiliaryScopeTests.test_proof_aux_keeps_fixed_context_and_is_shared_later) ... ok
+test_attempt_preserves_complete_dependency_artifact (test_slots.SlotTests.test_attempt_preserves_complete_dependency_artifact) ... ok
+test_auxiliary_only_provider_failure_blocks_consumer (test_slots.SlotTests.test_auxiliary_only_provider_failure_blocks_consumer) ... ok
+test_auxiliary_roundtrip_and_fresh_replay (test_slots.SlotTests.test_auxiliary_roundtrip_and_fresh_replay) ... ok
+test_bad_helper_commands_and_shadowing_rejected (test_slots.SlotTests.test_bad_helper_commands_and_shadowing_rejected) ... ok
+test_cycle_never_reaches_native_checker (test_slots.SlotTests.test_cycle_never_reaches_native_checker) ... ok
+test_import_topology_and_rejection (test_slots.SlotTests.test_import_topology_and_rejection) ... ok
+test_iteration_seed_preserves_helpers_and_imports (test_slots.SlotTests.test_iteration_seed_preserves_helpers_and_imports) ... ok
+test_kernel_helper_sorry_cannot_prove_target_even_bypassing_hygiene (test_slots.SlotTests.test_kernel_helper_sorry_cannot_prove_target_even_bypassing_hygiene) ... ok
+test_kernel_shared_helpers_definitions_and_dynamic_imports (test_slots.SlotTests.test_kernel_shared_helpers_definitions_and_dynamic_imports) ... ok
+test_legacy_identity_and_slot_schedule_preserved (test_slots.SlotTests.test_legacy_identity_and_slot_schedule_preserved) ... ok
+
+----------------------------------------------------------------------
+Ran 46 tests in 29.515s
+
+OK
