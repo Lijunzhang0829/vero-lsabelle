@@ -52,7 +52,9 @@ def _execute(benchmark_path, config_path, root, resume):
         if not (stage / "submitted.json").exists():
             render(source, workspace)
             (workspace / ".vero").mkdir(exist_ok=True)
-            if plan_path.exists():
+            if cfg.get("initial_plan") is not None:
+                save(plan_path, cfg["initial_plan"])
+            elif plan_path.exists():
                 raise ValueError("fresh PLAN workspace must not contain a prior plan")
             instruction = workspace / "PLAN_INSTRUCTION.md"
             instruction.write_text(
@@ -62,6 +64,11 @@ def _execute(benchmark_path, config_path, root, resume):
                     count=len(source["contracts"]),
                 )
             )
+            if cfg.get("initial_plan") is not None:
+                with instruction.open("a") as stream:
+                    stream.write(
+                        "\nAn incomplete plan from a previous charged planning call is present at .vero/plan.json. Inspect and continue it; retain useful decisions and finish exact coverage. Previous budget is recorded separately, not reset. Prioritize completing and validating the artifact.\n"
+                    )
             if cfg.get("sandbox_uid") is not None:
                 for p in [workspace, *workspace.rglob("*")]:
                     if p.is_symlink():
@@ -139,6 +146,8 @@ def _execute(benchmark_path, config_path, root, resume):
                     },
                 )
         try:
+            if plan_path.exists() and not plan_path.is_symlink():
+                save(stage / "submitted-plan.json", read(plan_path))
             bench = check_plan_file(source, plan_path)
             save(stage / "plan.json", read(plan_path))
             render(bench, stage / "preflight/source")
@@ -196,6 +205,7 @@ def _execute(benchmark_path, config_path, root, resume):
     summary = {
         "planning": read(accepted),
         "plan_agent": read(stage / "agent-result.json"),
+        "planning_continuation": cfg.get("planning_continuation"),
         "generation": journal,
     }
     save(root / "summary.json", summary)

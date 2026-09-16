@@ -146,6 +146,46 @@ class PlanningTests(unittest.TestCase):
                 resume=True,
             )
 
+    def test_explicit_partial_plan_seed_retains_prior_budget(self):
+        partial = copy.deepcopy(self.plan)
+        partial["modules"] = partial["modules"][:1]
+        partial["execution_order"] = partial["execution_order"][:1]
+        cfg = {
+            "sandbox": str(self.root / "sandbox"),
+            "agent": {"timeout_seconds": 10},
+            "checker": {},
+            "plan_seconds": 10,
+            "initial_plan": partial,
+            "planning_continuation": {"previous_charged_plan_seconds": 600},
+        }
+        save(self.root / "config.json", cfg)
+
+        def agent_run(**kwargs):
+            path = Path(kwargs["sandbox_dir"]) / ".vero/plan.json"
+            self.assertEqual(read(path), partial)
+            save(path, self.plan)
+            return {"ok": True, "elapsed_seconds": 1}
+
+        with (
+            patch("vero.isabelle.planned_run.CodexAgent.run", side_effect=agent_run),
+            patch(
+                "vero.isabelle.planned_run.Checker.check",
+                return_value={"status": "ok", "log": "", "audited": []},
+            ),
+            patch(
+                "vero.isabelle.planned_run.run",
+                return_value={"status": "budget_exhausted"},
+            ),
+        ):
+            result = execute(
+                self.root / "benchmark/benchmark.json",
+                self.root / "config.json",
+                self.root / "pipeline",
+            )
+        self.assertEqual(
+            result["planning_continuation"]["previous_charged_plan_seconds"], 600
+        )
+
     @unittest.skipUnless(
         os.environ.get("VERO_TEST_ISABELLE"), "requires real Isabelle HOL"
     )
