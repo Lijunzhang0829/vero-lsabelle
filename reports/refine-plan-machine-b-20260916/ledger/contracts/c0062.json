@@ -1,0 +1,41 @@
+{
+  "attempts": [
+    {
+      "body_sha256": "00a0469656ac25d6e5ad59c2e6fff552458211211fb68fd7f595219b3310f741",
+      "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_FinaliseSlot\")\n### theory \"Draft.Vero_Support\"\n### 0.195s elapsed time, 0.258s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_IrqPrimitives\" (required by \"Draft.Vero_FinaliseSlot\")\nLoading theory \"Draft.Vero_ThreadObjects\" (required by \"Draft.Vero_FinaliseSlot\" via \"Draft.Vero_CapReads\")\nVERO_RESULT c0074 prove clean\n### theory \"Draft.Vero_ThreadObjects\"\n### 7.290s elapsed time, 13.581s cpu time, 0.407s GC time\nLoading theory \"Draft.Vero_CapReads\" (required by \"Draft.Vero_FinaliseSlot\")\nVERO_RESULT c0084 prove clean\nVERO_RESULT c0087 prove clean\n### Ignoring duplicate rewrite rule:\n### throw \\<equiv> throwError\n### Ignoring duplicate rewrite rule:\n### ser ?x ?y \\<equiv> ?y = syscall_error_map ?x\nVERO_RESULT c0080 prove clean\nVERO_RESULT c0089 prove clean\n### theory \"Draft.Vero_IrqPrimitives\"\n### 8.644s elapsed time, 16.295s cpu time, 0.407s GC time\n### theory \"Draft.Vero_CapReads\"\n### 2.986s elapsed time, 4.432s cpu time, 0.133s GC time\nLoading theory \"Draft.Vero_FinaliseSlot\"\nVERO_RESULT c0062 prove clean\n### theory \"Draft.Vero_FinaliseSlot\"\n### 3.190s elapsed time, 3.195s cpu time, 0.000s GC time\nval it = (): unit\n",
+      "diagnostic_slot": null,
+      "outcome": "check_passed_provisional",
+      "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789563044744953586-8ae69dbd9d184ae5b707d56f0e1ab5df",
+      "slot": "c0062:prove",
+      "submitted_at": 1789563044.7497556
+    },
+    {
+      "body_sha256": "00a0469656ac25d6e5ad59c2e6fff552458211211fb68fd7f595219b3310f741",
+      "diagnostic": "No completion record.",
+      "diagnostic_slot": null,
+      "outcome": "submitted_no_result",
+      "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789563142513285724-4b17374bec2a428e9b47b5e6417a9974",
+      "slot": "c0062:prove",
+      "submitted_at": 1789563142.518397
+    }
+  ],
+  "candidate_absent_at_final": false,
+  "current_state": "unresolved_with_attempt_records",
+  "final_status": "build_error",
+  "id": "c0062",
+  "last_attempt": {
+    "body_sha256": "00a0469656ac25d6e5ad59c2e6fff552458211211fb68fd7f595219b3310f741",
+    "diagnostic": "No completion record.",
+    "diagnostic_slot": null,
+    "outcome": "submitted_no_result",
+    "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789563142513285724-4b17374bec2a428e9b47b5e6417a9974",
+    "slot": "c0062:prove",
+    "submitted_at": 1789563142.518397
+  },
+  "last_legacy_target_evidence": null,
+  "legacy_evidence": [],
+  "module": "Vero_FinaliseSlot",
+  "module_checks_observed": [],
+  "name": "arch_postCapDeletion_corres",
+  "withdrawn_since_observed_candidate": false
+}

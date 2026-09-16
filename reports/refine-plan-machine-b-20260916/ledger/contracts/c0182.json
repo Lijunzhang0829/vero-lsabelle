@@ -1,0 +1,32 @@
+{
+  "attempts": [
+    {
+      "body_sha256": "200041004037d096146ee4a5c80a592d10c12a128a3d6ec011af835ced460403",
+      "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_ReadyQueues\")\n### theory \"Draft.Vero_Support\"\n### 0.186s elapsed time, 0.248s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_StateFields\" (required by \"Draft.Vero_ReadyQueues\")\nLoading theory \"Draft.Vero_ThreadObjects\" (required by \"Draft.Vero_ReadyQueues\")\n### Ignoring duplicate rewrite rule:\n### corres_underlying ?sr1 ?nf1 ?nf'1 ?r1 ?P1 ?P'1 (gets ?a1)\n###  (gets ?b1) \\<equiv>\n### \\<forall>s s'.\n###    ?P1 s \\<and> ?P'1 s' \\<and> (s, s') \\<in> ?sr1 \\<longrightarrow>\n###    ?r1 (?a1 s) (?b1 s')\nVERO_RESULT c0031 prove clean\n### Ignoring duplicate rewrite rule:\n### corres_underlying ?sr1 ?nf1 ?nf'1 ?r1 ?P1 ?P'1 (gets ?a1)\n###  (gets ?b1) \\<equiv>\n### \\<forall>s s'.\n###    ?P1 s \\<and> ?P'1 s' \\<and> (s, s') \\<in> ?sr1 \\<longrightarrow>\n###    ?r1 (?a1 s) (?b1 s')\nVERO_RESULT c0032 prove clean\n### Ignoring duplicate rewrite rule:\n### corres_underlying ?sr1 ?nf1 ?nf'1 ?r1 ?P1 ?P'1 (gets ?a1)\n###  (gets ?b1) \\<equiv>\n### \\<forall>s s'.\n###    ?P1 s \\<and> ?P'1 s' \\<and> (s, s') \\<in> ?sr1 \\<longrightarrow>\n###    ?r1 (?a1 s) (?b1 s')\n### theory \"Draft.Vero_ThreadObjects\"\n### 7.038s elapsed time, 13.146s cpu time, 0.306s GC time\nVERO_RESULT c0150 prove clean\nVERO_RESULT c0144 prove clean\n### Ignoring duplicate rewrite rule:\n### corres_underlying ?sr1 ?nf1 ?nf'1 ?r1 ?P1 ?P'1 (gets ?a1)\n###  (gets ?b1) \\<equiv>\n### \\<forall>s s'.\n###    ?P1 s \\<and> ?P'1 s' \\<and> (s, s') \\<in> ?sr1 \\<longrightarrow>\n###    ?r1 (?a1 s) (?b1 s')\nVERO_RESULT c0149 prove clean\n### Ignoring duplicate rewrite rule:\n### corres_underlying ?sr1 ?nf1 ?nf'1 ?r1 ?P1 ?P'1 (gets ?a1)\n###  (gets ?b1) \\<equiv>\n### \\<forall>s s'.\n###    ?P1 s \\<and> ?P'1 s' \\<and> (s, s') \\<in> ?sr1 \\<longrightarrow>\n###    ?r1 (?a1 s) (?b1 s')\nVERO_RESULT c0152 prove clean\nVERO_RESULT c0081 prove clean\n### Ignoring duplicate rewrite rule:\n### corres_underlying ?sr1 ?nf1 ?nf'1 ?r1 ?P1 ?P'1 (gets ?a1)\n###  (gets ?b1) \\<equiv>\n### \\<forall>s s'.\n###    ?P1 s \\<and> ?P'1 s' \\<and> (s, s') \\<in> ?sr1 \\<longrightarrow>\n###    ?r1 (?a1 s) (?b1 s')\nVERO_RESULT c0194 prove clean\nVERO_RESULT c0206 prove clean\nVERO_RESULT c0156 prove clean\n### theory \"Draft.Vero_StateFields\"\n### 7.986s elapsed time, 14.115s cpu time, 0.306s GC time\nLoading theory \"Draft.Vero_ReadyQueues\"\nVERO_RESULT c0183 prove clean\nVERO_RESULT c0182 prove clean\n### theory \"Draft.Vero_ReadyQueues\"\n### 3.793s elapsed time, 3.809s cpu time, 0.000s GC time\nval it = (): unit\n",
+      "diagnostic_slot": null,
+      "outcome": "check_passed_provisional",
+      "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562382860727666-a7433b6883d540b681e246bf803b4743",
+      "slot": "c0182:prove",
+      "submitted_at": 1789562382.8659813
+    }
+  ],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0182",
+  "last_attempt": {
+    "body_sha256": "200041004037d096146ee4a5c80a592d10c12a128a3d6ec011af835ced460403",
+    "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_ReadyQueues\")\n### theory \"Draft.Vero_Support\"\n### 0.186s elapsed time, 0.248s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_StateFields\" (required by \"Draft.Vero_ReadyQueues\")\nLoading theory \"Draft.Vero_ThreadObjects\" (required by \"Draft.Vero_ReadyQueues\")\n### Ignoring duplicate rewrite rule:\n### corres_underlying ?sr1 ?nf1 ?nf'1 ?r1 ?P1 ?P'1 (gets ?a1)\n###  (gets ?b1) \\<equiv>\n### \\<forall>s s'.\n###    ?P1 s \\<and> ?P'1 s' \\<and> (s, s') \\<in> ?sr1 \\<longrightarrow>\n###    ?r1 (?a1 s) (?b1 s')\nVERO_RESULT c0031 prove clean\n### Ignoring duplicate rewrite rule:\n### corres_underlying ?sr1 ?nf1 ?nf'1 ?r1 ?P1 ?P'1 (gets ?a1)\n###  (gets ?b1) \\<equiv>\n### \\<forall>s s'.\n###    ?P1 s \\<and> ?P'1 s' \\<and> (s, s') \\<in> ?sr1 \\<longrightarrow>\n###    ?r1 (?a1 s) (?b1 s')\nVERO_RESULT c0032 prove clean\n### Ignoring duplicate rewrite rule:\n### corres_underlying ?sr1 ?nf1 ?nf'1 ?r1 ?P1 ?P'1 (gets ?a1)\n###  (gets ?b1) \\<equiv>\n### \\<forall>s s'.\n###    ?P1 s \\<and> ?P'1 s' \\<and> (s, s') \\<in> ?sr1 \\<longrightarrow>\n###    ?r1 (?a1 s) (?b1 s')\n### theory \"Draft.Vero_ThreadObjects\"\n### 7.038s elapsed time, 13.146s cpu time, 0.306s GC time\nVERO_RESULT c0150 prove clean\nVERO_RESULT c0144 prove clean\n### Ignoring duplicate rewrite rule:\n### corres_underlying ?sr1 ?nf1 ?nf'1 ?r1 ?P1 ?P'1 (gets ?a1)\n###  (gets ?b1) \\<equiv>\n### \\<forall>s s'.\n###    ?P1 s \\<and> ?P'1 s' \\<and> (s, s') \\<in> ?sr1 \\<longrightarrow>\n###    ?r1 (?a1 s) (?b1 s')\nVERO_RESULT c0149 prove clean\n### Ignoring duplicate rewrite rule:\n### corres_underlying ?sr1 ?nf1 ?nf'1 ?r1 ?P1 ?P'1 (gets ?a1)\n###  (gets ?b1) \\<equiv>\n### \\<forall>s s'.\n###    ?P1 s \\<and> ?P'1 s' \\<and> (s, s') \\<in> ?sr1 \\<longrightarrow>\n###    ?r1 (?a1 s) (?b1 s')\nVERO_RESULT c0152 prove clean\nVERO_RESULT c0081 prove clean\n### Ignoring duplicate rewrite rule:\n### corres_underlying ?sr1 ?nf1 ?nf'1 ?r1 ?P1 ?P'1 (gets ?a1)\n###  (gets ?b1) \\<equiv>\n### \\<forall>s s'.\n###    ?P1 s \\<and> ?P'1 s' \\<and> (s, s') \\<in> ?sr1 \\<longrightarrow>\n###    ?r1 (?a1 s) (?b1 s')\nVERO_RESULT c0194 prove clean\nVERO_RESULT c0206 prove clean\nVERO_RESULT c0156 prove clean\n### theory \"Draft.Vero_StateFields\"\n### 7.986s elapsed time, 14.115s cpu time, 0.306s GC time\nLoading theory \"Draft.Vero_ReadyQueues\"\nVERO_RESULT c0183 prove clean\nVERO_RESULT c0182 prove clean\n### theory \"Draft.Vero_ReadyQueues\"\n### 3.793s elapsed time, 3.809s cpu time, 0.000s GC time\nval it = (): unit\n",
+    "diagnostic_slot": null,
+    "outcome": "check_passed_provisional",
+    "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562382860727666-a7433b6883d540b681e246bf803b4743",
+    "slot": "c0182:prove",
+    "submitted_at": 1789562382.8659813
+  },
+  "last_legacy_target_evidence": null,
+  "legacy_evidence": [],
+  "module": "Vero_ReadyQueues",
+  "module_checks_observed": [],
+  "name": "addToBitmap_if_null_noop_corres",
+  "withdrawn_since_observed_candidate": false
+}

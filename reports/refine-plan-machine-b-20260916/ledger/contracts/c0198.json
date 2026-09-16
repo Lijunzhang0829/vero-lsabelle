@@ -1,0 +1,41 @@
+{
+  "attempts": [
+    {
+      "body_sha256": "9e28170fef0222af7e18e46c19e1e40bde60923b0be15ce8a1174ff7b3d35353",
+      "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_UserMemory\")\n### theory \"Draft.Vero_Support\"\n### 0.192s elapsed time, 0.254s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_UserMemory\"\n*** Failed to finish proof (line 15 of \"/tmp/vero-check-ul0vdukz/Vero_UserMemory.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>aa b.\n***        \\<lbrakk>pspace_relation (kheap aa) (ksPSpace b);\n***         ekheap_relation (ekheap aa) (ksPSpace b);\n***         sched_act_relation (scheduler_action aa) (ksSchedulerAction b);\n***         ready_queues_relation aa b;\n***         ghost_relation (kheap aa) (gsUserPages b) (gsCNodes b);\n***         cdt_relation (swp (cte_wp_at (\\<lambda>_. True)) aa) (cdt aa)\n***          (ctes_of b);\n***         cdt_list_relation (cdt_list aa) (cdt aa) (ctes_of b);\n***         revokable_relation (is_original_cap aa)\n***          (null_filter (caps_of_state aa)) (ctes_of b);\n***         (arch_state aa, ksArchState b) \\<in> arch_state_relation;\n***         interrupt_state_relation (interrupt_irq_node aa)\n***          (interrupt_states aa) (ksInterruptState b);\n***         cur_thread aa = ksCurThread b; idle_thread aa = ksIdleThread b;\n***         machine_state aa = ksMachineState b;\n***         work_units_completed aa = ksWorkUnitsCompleted b;\n***         domain_index aa = ksDomScheduleIdx b;\n***         domain_list aa = ksDomSchedule b; cur_domain aa = ksCurDomain b;\n***         domain_time aa = ksDomainTime b;\n***         typ_at' UserDataT (a && ~~ mask pageBits) b;\n***         a && mask 2 = 0\\<rbrakk>\n***        \\<Longrightarrow> cdt_relation\n***                           (swp (cte_wp_at (\\<lambda>_. True))\n***                             (aa\\<lparr>machine_state :=\n***    ksMachineState b\\<rparr>))\n***                           (cdt aa) (ctes_of b)\n*** At command \"by\" (line 15 of \"/tmp/vero-check-ul0vdukz/Vero_UserMemory.thy\")\n### theory \"Draft.Vero_UserMemory\"\n### 5.460s elapsed time, 5.581s cpu time, 0.167s GC time\n*** Failed to finish proof (line 15 of \"/tmp/vero-check-ul0vdukz/Vero_UserMemory.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>aa b.\n***        \\<lbrakk>pspace_relation (kheap aa) (ksPSpace b);\n***         ekheap_relation (ekheap aa) (ksPSpace b);\n***         sched_act_relation (scheduler_action aa) (ksSchedulerAction b);\n***         ready_queues_relation aa b;\n***         ghost_relation (kheap aa) (gsUserPages b) (gsCNodes b);\n***         cdt_relation (swp (cte_wp_at (\\<lambda>_. True)) aa) (cdt aa)\n***          (ctes_of b);\n***         cdt_list_relation (cdt_list aa) (cdt aa) (ctes_of b);\n***         revokable_relation (is_original_cap aa)\n***          (null_filter (caps_of_state aa)) (ctes_of b);\n***         (arch_state aa, ksArchState b) \\<in> arch_state_relation;\n***         interrupt_state_relation (interrupt_irq_node aa)\n***          (interrupt_states aa) (ksInterruptState b);\n***         cur_thread aa = ksCurThread b; idle_thread aa = ksIdleThread b;\n***         machine_state aa = ksMachineState b;\n***         work_units_completed aa = ksWorkUnitsCompleted b;\n***         domain_index aa = ksDomScheduleIdx b;\n***         domain_list aa = ksDomSchedule b; cur_domain aa = ksCurDomain b;\n***         domain_time aa = ksDomainTime b;\n***         typ_at' UserDataT (a && ~~ mask pageBits) b;\n***         a && mask 2 = 0\\<rbrakk>\n***        \\<Longrightarrow> cdt_relation\n***                           (swp (cte_wp_at (\\<lambda>_. True))\n***                             (aa\\<lparr>machine_state :=\n***    ksMachineState b\\<rparr>))\n***                           (cdt aa) (ctes_of b)\n*** At command \"by\" (line 15 of \"/tmp/vero-check-ul0vdukz/Vero_UserMemory.thy\")\n*** At command \"vero_prove\" (line 8 of \"/tmp/vero-check-ul0vdukz/Vero_UserMemory.thy\")\n*** Failed to finish proof (line 15 of \"/tmp/vero-check-ul0vdukz/Vero_UserMemory.thy\"):\n*** goal (1 subgoal):\n***  1. \\<And>aa b.\n***        \\<lbrakk>pspace_relation (kheap aa) (ksPSpace b);\n***         ekheap_relation (ekheap aa) (ksPSpace b);\n***         sched_act_relation (scheduler_action aa) (ksSchedulerAction b);\n***         ready_queues_relation aa b;\n***         ghost_relation (kheap aa) (gsUserPages b) (gsCNodes b);\n***         cdt_relation (swp (cte_wp_at (\\<lambda>_. True)) aa) (cdt aa)\n***          (ctes_of b);\n***         cdt_list_relation (cdt_list aa) (cdt aa) (ctes_of b);\n***         revokable_relation (is_original_cap aa)\n***          (null_filter (caps_of_state aa)) (ctes_of b);\n***         (arch_state aa, ksArchState b) \\<in> arch_state_relation;\n***         interrupt_state_relation (interrupt_irq_node aa)\n***          (interrupt_states aa) (ksInterruptState b);\n***         cur_thread aa = ksCurThread b; idle_thread aa = ksIdleThread b;\n***         machine_state aa = ksMachineState b;\n***         work_units_completed aa = ksWorkUnitsCompleted b;\n***         domain_index aa = ksDomScheduleIdx b;\n***         domain_list aa = ksDomSchedule b; cur_domain aa = ksCurDomain b;\n***         domain_time aa = ksDomainTime b;\n***         typ_at' UserDataT (a && ~~ mask pageBits) b;\n***         a && mask 2 = 0\\<rbrakk>\n***        \\<Longrightarrow> cdt_relation\n***                           (swp (cte_wp_at (\\<lambda>_. True))\n***                             (aa\\<lparr>machine_state :=\n***    ksMachineState b\\<rparr>))\n***                           (cdt aa) (ctes_of b)\n*** At command \"by\" (line 15 of \"/tmp/vero-check-ul0vdukz/Vero_UserMemory.thy\")\nException- TOPLEVEL_ERROR raised\n",
+      "diagnostic_slot": "c0198:prove",
+      "outcome": "diagnostic_at_this_contract",
+      "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562354388077163-dc151b6428ca4c69bfdf77755da6fa30",
+      "slot": "c0198:prove",
+      "submitted_at": 1789562354.3933032
+    },
+    {
+      "body_sha256": "bb6211c094fda4fd5e9003d91203fbfe2d9bb56ad9304b8434deedf8220c284c",
+      "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_UserMemory\")\n### theory \"Draft.Vero_Support\"\n### 0.193s elapsed time, 0.258s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_UserMemory\"\nVERO_RESULT c0198 prove clean\n### theory \"Draft.Vero_UserMemory\"\n### 5.804s elapsed time, 5.934s cpu time, 0.177s GC time\nval it = (): unit\n",
+      "diagnostic_slot": null,
+      "outcome": "check_passed_provisional",
+      "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562394222188796-ed62a94076594e6b8f785a8d1dffe6eb",
+      "slot": "c0198:prove",
+      "submitted_at": 1789562394.2268662
+    }
+  ],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0198",
+  "last_attempt": {
+    "body_sha256": "bb6211c094fda4fd5e9003d91203fbfe2d9bb56ad9304b8434deedf8220c284c",
+    "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_UserMemory\")\n### theory \"Draft.Vero_Support\"\n### 0.193s elapsed time, 0.258s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_UserMemory\"\nVERO_RESULT c0198 prove clean\n### theory \"Draft.Vero_UserMemory\"\n### 5.804s elapsed time, 5.934s cpu time, 0.177s GC time\nval it = (): unit\n",
+    "diagnostic_slot": null,
+    "outcome": "check_passed_provisional",
+    "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562394222188796-ed62a94076594e6b8f785a8d1dffe6eb",
+    "slot": "c0198:prove",
+    "submitted_at": 1789562394.2268662
+  },
+  "last_legacy_target_evidence": null,
+  "legacy_evidence": [],
+  "module": "Vero_UserMemory",
+  "module_checks_observed": [],
+  "name": "load_word_corres",
+  "withdrawn_since_observed_candidate": false
+}

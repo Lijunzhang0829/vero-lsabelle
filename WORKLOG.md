@@ -2,7 +2,7 @@
 
 ## 2026-09-16
 
-- Added separate artifact-driven Isabelle PLAN, native declaration preflight, actual generated-theory imports and dependency-aware evaluation. All 29 tests passed on machine B including real cross-theory proof reuse. Started a fresh Refine PLAN (600 seconds) then generation (1,800 seconds) experiment without importing earlier generated proofs; results pending.
+- Added separate artifact-driven Isabelle PLAN, native declaration preflight, actual generated-theory imports and dependency-aware evaluation. All 29 tests passed on machine B including real cross-theory proof reuse. Completed a fresh Refine experiment without earlier proof seeds: first PLAN exhausted 600 seconds at 207 contracts and was rejected; explicit continuation took 478.96 seconds and produced a validated 71-module, 152-import plan covering all 287 contracts. Generation took 1,800.01 seconds; independent evaluation proved 35, with 3 module build errors and 249 unfilled. This is below the prior fresh 39 result. Traces and per-contract records are archived; credentials and worker were removed. See [PLAN experiment](reports/refine-plan-machine-b-20260916/README.md).
 
 ## 2026-09-15
 

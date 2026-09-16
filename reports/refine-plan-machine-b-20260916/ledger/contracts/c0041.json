@@ -1,0 +1,14 @@
+{
+  "attempts": [],
+  "candidate_absent_at_final": true,
+  "current_state": "unresolved_attempt_history_unknown",
+  "final_status": "unfilled",
+  "id": "c0041",
+  "last_attempt": null,
+  "last_legacy_target_evidence": null,
+  "legacy_evidence": [],
+  "module": "Vero_CapInsertion",
+  "module_checks_observed": [],
+  "name": "cteInsert_corres",
+  "withdrawn_since_observed_candidate": false
+}

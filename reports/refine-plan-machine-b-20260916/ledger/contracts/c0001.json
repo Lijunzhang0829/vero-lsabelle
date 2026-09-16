@@ -1,0 +1,59 @@
+{
+  "attempts": [
+    {
+      "body_sha256": "480b1a2060e9116398dea453957cd0b809604a80d34bdb8c7f0ffc80e8d07ac3",
+      "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_CapDerivation\")\n### theory \"Draft.Vero_Support\"\n### 0.186s elapsed time, 0.247s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_ThreadObjects\" (required by \"Draft.Vero_CapDerivation\" via \"Draft.Vero_CapReads\")\n### theory \"Draft.Vero_ThreadObjects\"\n### 4.812s elapsed time, 4.930s cpu time, 0.166s GC time\nLoading theory \"Draft.Vero_CapReads\" (required by \"Draft.Vero_CapDerivation\")\n### theory \"Draft.Vero_CapReads\"\n### 6.800s elapsed time, 6.898s cpu time, 0.138s GC time\nLoading theory \"Draft.Vero_CapDerivation\"\n*** Undefined fact: \"Arch.deriveCap_def\" (line 17 of \"/tmp/vero-check-tcqss0lj/Vero_CapDerivation.thy\")\n*** At command \"by\" (line 17 of \"/tmp/vero-check-tcqss0lj/Vero_CapDerivation.thy\")\n### theory \"Draft.Vero_CapDerivation\"\n### 2.838s elapsed time, 2.842s cpu time, 0.000s GC time\n*** Undefined fact: \"Arch.deriveCap_def\" (line 17 of \"/tmp/vero-check-tcqss0lj/Vero_CapDerivation.thy\")\n*** At command \"by\" (line 17 of \"/tmp/vero-check-tcqss0lj/Vero_CapDerivation.thy\")\n*** At command \"vero_prove\" (line 8 of \"/tmp/vero-check-tcqss0lj/Vero_CapDerivation.thy\")\n*** Undefined fact: \"Arch.deriveCap_def\" (line 17 of \"/tmp/vero-check-tcqss0lj/Vero_CapDerivation.thy\")\n*** At command \"by\" (line 17 of \"/tmp/vero-check-tcqss0lj/Vero_CapDerivation.thy\")\nException- TOPLEVEL_ERROR raised\n",
+      "diagnostic_slot": "c0001:prove",
+      "outcome": "diagnostic_at_this_contract",
+      "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562321032769594-8a8033c91be446d79ecf613c938021da",
+      "slot": "c0001:prove",
+      "submitted_at": 1789562321.0373433
+    },
+    {
+      "body_sha256": "e7952dde66525a91b125c97829a0bec0b5a9aac6518bd7e98cdfe2d500ce893c",
+      "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_CapDerivation\")\n### theory \"Draft.Vero_Support\"\n### 0.183s elapsed time, 0.244s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_ThreadObjects\" (required by \"Draft.Vero_CapDerivation\" via \"Draft.Vero_CapReads\")\n### theory \"Draft.Vero_ThreadObjects\"\n### 4.674s elapsed time, 4.793s cpu time, 0.165s GC time\nLoading theory \"Draft.Vero_CapReads\" (required by \"Draft.Vero_CapDerivation\")\n### theory \"Draft.Vero_CapReads\"\n### 7.234s elapsed time, 7.339s cpu time, 0.145s GC time\nLoading theory \"Draft.Vero_CapDerivation\"\n### Ignoring duplicate rewrite rule:\n### ser ?x ?y \\<equiv> ?y = syscall_error_map ?x\nTerminated\n",
+      "diagnostic_slot": null,
+      "outcome": "module_check_incomplete_unattributed",
+      "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562373164671968-fa1147b1d8144070a70ce6495f641a14",
+      "slot": "c0001:prove",
+      "submitted_at": 1789562373.1697493
+    },
+    {
+      "body_sha256": "5ffd14fa48b2ac8cc926fb00ef01e6502f6ed259bbeb8fabf61d0bad62429dec",
+      "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_CapDerivation\")\n### theory \"Draft.Vero_Support\"\n### 0.189s elapsed time, 0.254s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_ThreadObjects\" (required by \"Draft.Vero_CapDerivation\" via \"Draft.Vero_CapReads\")\n### theory \"Draft.Vero_ThreadObjects\"\n### 4.845s elapsed time, 4.964s cpu time, 0.166s GC time\nLoading theory \"Draft.Vero_CapReads\" (required by \"Draft.Vero_CapDerivation\")\n### theory \"Draft.Vero_CapReads\"\n### 6.843s elapsed time, 6.942s cpu time, 0.135s GC time\nLoading theory \"Draft.Vero_CapDerivation\"\n### Ignoring duplicate rewrite rule:\n### ser ?x ?y \\<equiv> ?y = syscall_error_map ?x\nTerminated\n",
+      "diagnostic_slot": null,
+      "outcome": "module_check_incomplete_unattributed",
+      "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562785279683156-718dd0c217644000979dcf18fc73af43",
+      "slot": "c0001:prove",
+      "submitted_at": 1789562785.2842765
+    },
+    {
+      "body_sha256": "84d435c996169838375c504f40894ca71f2057d2f63f772c57a9622a586de9af",
+      "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_CapDerivation\")\n### theory \"Draft.Vero_Support\"\n### 0.195s elapsed time, 0.279s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_ThreadObjects\" (required by \"Draft.Vero_CapDerivation\" via \"Draft.Vero_CapReads\")\n### theory \"Draft.Vero_ThreadObjects\"\n### 5.178s elapsed time, 5.306s cpu time, 0.177s GC time\nLoading theory \"Draft.Vero_CapReads\" (required by \"Draft.Vero_CapDerivation\")\n### theory \"Draft.Vero_CapReads\"\n### 6.789s elapsed time, 6.893s cpu time, 0.145s GC time\nLoading theory \"Draft.Vero_CapDerivation\"\n### Ignoring duplicate rewrite rule:\n### throw \\<equiv> throwError\n### Ignoring duplicate rewrite rule:\n### ser ?x ?y \\<equiv> ?y = syscall_error_map ?x\nVERO_RESULT c0001 prove clean\n### theory \"Draft.Vero_CapDerivation\"\n### 2.940s elapsed time, 2.945s cpu time, 0.000s GC time\nval it = (): unit\n",
+      "diagnostic_slot": null,
+      "outcome": "check_passed_provisional",
+      "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562833915577851-52ce33b1edf447be8b5b143d7aadf427",
+      "slot": "c0001:prove",
+      "submitted_at": 1789562833.9204807
+    }
+  ],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0001",
+  "last_attempt": {
+    "body_sha256": "84d435c996169838375c504f40894ca71f2057d2f63f772c57a9622a586de9af",
+    "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_CapDerivation\")\n### theory \"Draft.Vero_Support\"\n### 0.195s elapsed time, 0.279s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_ThreadObjects\" (required by \"Draft.Vero_CapDerivation\" via \"Draft.Vero_CapReads\")\n### theory \"Draft.Vero_ThreadObjects\"\n### 5.178s elapsed time, 5.306s cpu time, 0.177s GC time\nLoading theory \"Draft.Vero_CapReads\" (required by \"Draft.Vero_CapDerivation\")\n### theory \"Draft.Vero_CapReads\"\n### 6.789s elapsed time, 6.893s cpu time, 0.145s GC time\nLoading theory \"Draft.Vero_CapDerivation\"\n### Ignoring duplicate rewrite rule:\n### throw \\<equiv> throwError\n### Ignoring duplicate rewrite rule:\n### ser ?x ?y \\<equiv> ?y = syscall_error_map ?x\nVERO_RESULT c0001 prove clean\n### theory \"Draft.Vero_CapDerivation\"\n### 2.940s elapsed time, 2.945s cpu time, 0.000s GC time\nval it = (): unit\n",
+    "diagnostic_slot": null,
+    "outcome": "check_passed_provisional",
+    "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562833915577851-52ce33b1edf447be8b5b143d7aadf427",
+    "slot": "c0001:prove",
+    "submitted_at": 1789562833.9204807
+  },
+  "last_legacy_target_evidence": null,
+  "legacy_evidence": [],
+  "module": "Vero_CapDerivation",
+  "module_checks_observed": [],
+  "name": "arch_deriveCap_corres",
+  "withdrawn_since_observed_candidate": false
+}

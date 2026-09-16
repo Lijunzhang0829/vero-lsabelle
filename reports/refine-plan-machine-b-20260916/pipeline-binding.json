@@ -1,0 +1,749 @@
+{
+  "config": {
+    "agent": {
+      "codex": "/opt/vero/codex",
+      "command_prefix": [
+        "runuser",
+        "-u",
+        "agent",
+        "--"
+      ],
+      "env": {
+        "http_proxy": "http://127.0.0.1:18894",
+        "https_proxy": "http://127.0.0.1:18894"
+      },
+      "external_isolation": "docker-nonroot",
+      "home": "/home/agent",
+      "model": "gpt-6-astra",
+      "reasoning_effort": "medium",
+      "sandbox_mode": "danger-full-access",
+      "timeout_seconds": 1800,
+      "user": "agent"
+    },
+    "checker": {
+      "command_prefix": [
+        "runuser",
+        "-u",
+        "checker",
+        "--"
+      ],
+      "env": {
+        "HOME": "/home/checker",
+        "L4V_ARCH": "ARM",
+        "USER_HOME": "/home/checker"
+      },
+      "isabelle": "/workspace/verification/isabelle/bin/isabelle",
+      "session": "Semantic_Base",
+      "session_dirs": [
+        "/sel4-project/verification/l4v/lib/Word_Lib",
+        "/sel4-project/verification/l4v/lib/ML_Utils",
+        "/sel4-project/verification/l4v/lib/Basics",
+        "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+        "/sel4-project/verification/l4v/lib/Monads",
+        "/sel4-project/verification/l4v/lib/sep_algebra",
+        "/sel4-project/verification/l4v/lib",
+        "/sel4-project/verification/l4v/tools/c-parser",
+        "/sel4-project/verification/l4v/tools/autocorres",
+        "/sel4-project/verification/l4v/tools/asmrefine",
+        "/sel4-project/verification/l4v/spec",
+        "/sel4-project/verification/l4v/proof",
+        "/semantic-base"
+      ],
+      "threads": 4,
+      "timeout_seconds": 120
+    },
+    "feedback": true,
+    "initial_plan": {
+      "execution_order": [
+        "Vero_CorresCombinators",
+        "Vero_StateFields",
+        "Vero_HeapObjects",
+        "Vero_ThreadObjects",
+        "Vero_CapReads",
+        "Vero_CapLookup",
+        "Vero_CapDerivation",
+        "Vero_UntypedIndices",
+        "Vero_CapInsertion",
+        "Vero_CapMovement",
+        "Vero_UserRegisters",
+        "Vero_UserMemory",
+        "Vero_MessageBuffers",
+        "Vero_ReadyQueues",
+        "Vero_ThreadState",
+        "Vero_NotificationBindings",
+        "Vero_IpcCancellation",
+        "Vero_IrqPrimitives",
+        "Vero_FinaliseSlot",
+        "Vero_FastDelete",
+        "Vero_AsidPoolObjects",
+        "Vero_PageTableObjects",
+        "Vero_VSpaceLookup",
+        "Vero_MappingEntries",
+        "Vero_HardwareAsids",
+        "Vero_VMRoots",
+        "Vero_VSpaceCleanup",
+        "Vero_SchedulerSwitch",
+        "Vero_Scheduler",
+        "Vero_ThreadLifecycle",
+        "Vero_ThreadActivation",
+        "Vero_GeneralFinalise",
+        "Vero_RecursiveDelete",
+        "Vero_CNodeDecode",
+        "Vero_CNodeExecute",
+        "Vero_Detype",
+        "Vero_RetypeObjects",
+        "Vero_UntypedReset",
+        "Vero_UntypedDecode",
+        "Vero_UntypedExecute",
+        "Vero_AsidPoolExecute",
+        "Vero_VSpaceExecute",
+        "Vero_ArchDecode",
+        "Vero_ArchExecute"
+      ],
+      "modules": [
+        {
+          "contracts": [
+            "c0035",
+            "c0038",
+            "c0039",
+            "c0107",
+            "c0215",
+            "c0181"
+          ],
+          "imports": [],
+          "name": "Vero_CorresCombinators",
+          "rationale": "General correspondence combinators for spec_corres, conditional errors, ignored reads, zipped monadic iteration and the syscall exception pipeline. These are fixed polymorphic contracts, not new helper declarations. Independent of kernel operation proofs; consumers may instantiate completed c0035/c0038, c0039, c0215 and c0181 locally."
+        },
+        {
+          "contracts": [
+            "c0031",
+            "c0032",
+            "c0150",
+            "c0144",
+            "c0149",
+            "c0152",
+            "c0081",
+            "c0194",
+            "c0206",
+            "c0162",
+            "c0156"
+          ],
+          "imports": [],
+          "name": "Vero_StateFields",
+          "rationale": "State-relation projections and updates for current/idle threads, domain, domain time and scheduler action. Put direct curDomain c0150 before its equivalent c0144 and conditional c0149. Supplies cheap shared reads and writes without importing the full scheduler."
+        },
+        {
+          "contracts": [
+            "c0131",
+            "c0127",
+            "c0128",
+            "c0129",
+            "c0130"
+          ],
+          "imports": [],
+          "name": "Vero_HeapObjects",
+          "rationale": "Generic non-TCB object update c0131 precedes endpoint and notification setters; getters use the corresponding object relations. These are the heap primitives needed by IPC and notification lifecycle operations, independent of message transfer and scheduling."
+        },
+        {
+          "contracts": [
+            "c0192",
+            "c0204",
+            "c0205",
+            "c0213",
+            "c0189",
+            "c0208",
+            "c0209",
+            "c0151",
+            "c0195",
+            "c0190",
+            "c0202",
+            "c0214",
+            "c0243"
+          ],
+          "imports": [],
+          "name": "Vero_ThreadObjects",
+          "rationale": "TCB read/update and extended-TCB relations, followed by field projections and runnable tests. Raw object results c0192/c0204 support c0205/c0213 and asUser consumers. Keep setThreadState out because its concrete definition invokes rescheduleRequired; this branch contains only object-level access."
+        },
+        {
+          "contracts": [
+            "c0036",
+            "c0044",
+            "c0045",
+            "c0196"
+          ],
+          "imports": [
+            "Vero_ThreadObjects"
+          ],
+          "name": "Vero_CapReads",
+          "rationale": "Relate get_cap to getCTE first, then getSlotCap and the TCB embedded-capability projections. Reuse c0192/c0213 where useful for TCB reads. c0036 and c0044 provide slot reads for both CSpace traversal and mutation, despite originating in different owner theories."
+        },
+        {
+          "contracts": [
+            "c0048",
+            "c0047",
+            "c0046",
+            "c0058",
+            "c0057",
+            "c0114"
+          ],
+          "imports": [
+            "Vero_CapReads"
+          ],
+          "name": "Vero_CapLookup",
+          "rationale": "Address-bit resolution c0048 precedes thread-slot lookup c0047, capability lookup c0046 and its c0058 reformulation, CNode-operation lookup c0057, and paired cap/slot lookup c0114. All use cap reads; no mutation, IPC transfer or invocation imports are needed."
+        },
+        {
+          "contracts": [
+            "c0001",
+            "c0043",
+            "c0055",
+            "c0056"
+          ],
+          "imports": [
+            "Vero_CapReads"
+          ],
+          "name": "Vero_CapDerivation",
+          "rationale": "Architecture derive-cap is a small case analysis provider for generic deriveCap c0055; ensureNoChildren c0043 precedes it. ensureEmptySlot uses slot reads. This isolates capability validation used by decoders and transfers from insertion and deletion."
+        },
+        {
+          "contracts": [
+            "c0049",
+            "c0050",
+            "c0253",
+            "c0254"
+          ],
+          "imports": [
+            "Vero_CapReads"
+          ],
+          "name": "Vero_UntypedIndices",
+          "rationale": "Untyped capability field updates: raw setCTE c0049 supports marking a parent full c0050; updateCap for untyped caps c0253 and updateFreeIndex c0254 expose reusable index updates. Keep these below insertion, reset and ASID-pool creation, not behind the whole untyped invocation."
+        },
+        {
+          "contracts": [
+            "c0041",
+            "c0053",
+            "c0052",
+            "c0059"
+          ],
+          "imports": [
+            "Vero_UntypedIndices"
+          ],
+          "name": "Vero_CapInsertion",
+          "rationale": "General cteInsert c0041 uses cap reads and setUntypedCapAsFull c0050; derive the simple-cap specialization c0053 afterward. Reply-master construction c0052 precedes setupReplyMaster c0059. Supplies insertion and reply setup without importing finalisation."
+        },
+        {
+          "contracts": [
+            "c0054",
+            "c0042",
+            "c0040"
+          ],
+          "imports": [
+            "Vero_CapReads"
+          ],
+          "name": "Vero_CapMovement",
+          "rationale": "Capability move and swap preserve capability/MDB relations. cteSwap c0042 precedes capSwapForDelete c0040. They can use object/slot access and sanitized move definitions, independently of recursive deletion and invocation dispatch."
+        },
+        {
+          "contracts": [
+            "c0184",
+            "c0185",
+            "c0186",
+            "c0187",
+            "c0096",
+            "c0097",
+            "c0218",
+            "c0219",
+            "c0105",
+            "c0282",
+            "c0267"
+          ],
+          "imports": [
+            "Vero_ThreadObjects"
+          ],
+          "name": "Vero_UserRegisters",
+          "rationale": "General asUser c0184 precedes invariant-strengthened c0185 and register/PC instances. Message-info get/set and VM-fault register handling reuse those instances. Grouping crosses TCB, IPC and VSpace owners but shares the same user-context relation and avoids full VSpace imports."
+        },
+        {
+          "contracts": [
+            "c0198",
+            "c0197",
+            "c0113",
+            "c0210"
+          ],
+          "imports": [],
+          "name": "Vero_UserMemory",
+          "rationale": "Machine/user-memory word correspondence c0198 supports offset load c0197 and its argument-rewritten form c0113; c0210 handles stores. These are buffer-access providers independent of IPC protocols and capability operations."
+        },
+        {
+          "contracts": [
+            "c0199",
+            "c0200",
+            "c0191",
+            "c0203",
+            "c0188",
+            "c0112"
+          ],
+          "imports": [
+            "Vero_CapReads",
+            "Vero_UserRegisters",
+            "Vero_UserMemory"
+          ],
+          "name": "Vero_MessageBuffers",
+          "rationale": "IPC-buffer lookup general c0199 precedes its invariant wrapper c0200. getMRs, setMRs, copyMRs and loadCapTransfer compose register and user-word access. Consumers receive message transport primitives without endpoint protocol or invocation dependencies."
+        },
+        {
+          "contracts": [
+            "c0183",
+            "c0182",
+            "c0193",
+            "c0211",
+            "c0212",
+            "c0165",
+            "c0201",
+            "c0157",
+            "c0155",
+            "c0160"
+          ],
+          "imports": [
+            "Vero_StateFields",
+            "Vero_ThreadObjects"
+          ],
+          "name": "Vero_ReadyQueues",
+          "rationale": "Bitmap no-op c0183 precedes conditional c0182; queue access and dequeue/enqueue/append precede rescheduleRequired c0201 and possibleSwitchTo c0157, matching their definitions. Priority and fast-fail queries remain here. Provides scheduling mutations without importing address-space switching or the complete schedule proof."
+        },
+        {
+          "contracts": [
+            "c0207"
+          ],
+          "imports": [
+            "Vero_ReadyQueues"
+          ],
+          "name": "Vero_ThreadState",
+          "rationale": "setThreadState updates the TCB, tests runnable/current thread/action, and may call rescheduleRequired. Import the queue/action providers before proving c0207; IPC cancellation and activation can use it without depending on complete scheduling."
+        },
+        {
+          "contracts": [
+            "c0072",
+            "c0073",
+            "c0220"
+          ],
+          "imports": [
+            "Vero_HeapObjects",
+            "Vero_ThreadObjects"
+          ],
+          "name": "Vero_NotificationBindings",
+          "rationale": "Unbind notification from either side and bindNotification use notification objects plus bound-notification TCB fields c0190/c0202. No cancellation or finaliseCap import is required. These operations feed finalisation and TCB notification invocation."
+        },
+        {
+          "contracts": [
+            "c0091",
+            "c0094",
+            "c0092",
+            "c0095",
+            "c0093"
+          ],
+          "imports": [
+            "Vero_HeapObjects",
+            "Vero_ThreadState"
+          ],
+          "name": "Vero_IpcCancellation",
+          "rationale": "Blocked endpoint cancellation and cancelSignal use endpoint/notification setters and setThreadState. Batch cancellation and badged-send cancellation additionally use ready queues and rescheduleRequired. All are below finalisation; full cancelIPC and suspend, which are not fixed contracts, may be handled locally using these facts."
+        },
+        {
+          "contracts": [
+            "c0074",
+            "c0076",
+            "c0084",
+            "c0087",
+            "c0080",
+            "c0089",
+            "c0078",
+            "c0075"
+          ],
+          "imports": [],
+          "name": "Vero_IrqPrimitives",
+          "rationale": "IRQ-slot/state operations, activity and range tests, trigger machine operation, architecture handler case and preemption point. getIRQState c0084 precedes isIRQActive c0087. This independent branch supplies finalisation, untyped reset and IRQ decoding without importing interrupt handling."
+        },
+        {
+          "contracts": [
+            "c0069",
+            "c0070",
+            "c0064",
+            "c0062",
+            "c0065",
+            "c0071",
+            "c0066"
+          ],
+          "imports": [
+            "Vero_CapReads",
+            "Vero_IrqPrimitives"
+          ],
+          "name": "Vero_FinaliseSlot",
+          "rationale": "Final-capability query c0069 precedes its conditional-result wrapper c0070. No-op untyped index clearing and architecture/IRQ post-deletion precede generic postCapDeletion c0071 and emptySlot c0066. These slot-cleanup facts are usable before general finaliseCap and recursive deletion."
+        },
+        {
+          "contracts": [
+            "c0067",
+            "c0063"
+          ],
+          "imports": [
+            "Vero_FinaliseSlot",
+            "Vero_NotificationBindings",
+            "Vero_IpcCancellation"
+          ],
+          "name": "Vero_FastDelete",
+          "rationale": "Prove restricted fast_finaliseCap c0067 directly from can_fast_finalise cases, notification unbinding and IPC cancellation, then cap_delete_one c0063 using finality and emptySlot. Deliberately precedes general finaliseCap: this breaks the apparent cancelIPC/suspend/finaliseCap cycle and supplies reply-cap deletion for restart and IPC."
+        },
+        {
+          "contracts": [
+            "c0006",
+            "c0007",
+            "c0017",
+            "c0018"
+          ],
+          "imports": [
+            "Vero_HeapObjects"
+          ],
+          "name": "Vero_AsidPoolObjects",
+          "rationale": "Raw ASID-pool read c0006 precedes typed c0007; raw update c0017 precedes c0018. Generic non-TCB update c0131 is available for the setters. Provides pools to ASID lookup and assignment without page-table or VM-root consumers."
+        },
+        {
+          "contracts": [
+            "c0008",
+            "c0009",
+            "c0010",
+            "c0011",
+            "c0012",
+            "c0013",
+            "c0014",
+            "c0015",
+            "c0019",
+            "c0020",
+            "c0021",
+            "c0022",
+            "c0023",
+            "c0024",
+            "c0257",
+            "c0142"
+          ],
+          "imports": [],
+          "name": "Vero_PageTableObjects",
+          "rationale": "PDE/PTE aligned reads precede master-entry reads and their typed wrappers. Whole-directory/table updates precede storePDE/storePTE raw and typed forms; clearing a table c0257 and copying global mappings c0142 reuse entry stores. Isolate low-level page representations from ASID management and invocation decoding."
+        },
+        {
+          "contracts": [
+            "c0004",
+            "c0005",
+            "c0261",
+            "c0262"
+          ],
+          "imports": [
+            "Vero_AsidPoolObjects"
+          ],
+          "name": "Vero_VSpaceLookup",
+          "rationale": "Known-PD ASID lookup c0004 precedes the disjunctive c0005; findPDForASIDAssert c0261 and its continuation rule c0262 follow. This small module is the shared lookup provider for ASID management and architecture decoding."
+        },
+        {
+          "contracts": [
+            "c0016",
+            "c0275",
+            "c0280",
+            "c0274",
+            "c0256",
+            "c0002",
+            "c0003",
+            "c0030",
+            "c0027",
+            "c0028"
+          ],
+          "imports": [
+            "Vero_PageTableObjects",
+            "Vero_VSpaceLookup"
+          ],
+          "name": "Vero_MappingEntries",
+          "rationale": "Page-table slot lookup, mapped-entry checks, table-mapped query and physical-pointer check precede constructing/checking mapping entries and resolveVAddr. Alignment and page-flush decoding are small consumers of these lookups. Reuse master PDE/PTE access and c0005; avoid importing VM-root switching, flushing or finalisation."
+        },
+        {
+          "contracts": [
+            "c0270",
+            "c0269",
+            "c0272",
+            "c0273",
+            "c0285",
+            "c0268",
+            "c0260",
+            "c0266",
+            "c0271",
+            "c0264",
+            "c0281",
+            "c0255"
+          ],
+          "imports": [
+            "Vero_VSpaceLookup"
+          ],
+          "name": "Vero_HardwareAsids",
+          "rationale": "ASID invalidation and its existential variant precede replacement search; load/store HWASID precede invalidateASIDEntry and getHWASID. TLB invalidation and flushSpace reuse loadHWASID. setCurrentPD and armv_contextSwitch finish the branch. Ordering follows published ARM_H definitions and assertion lookup c0261/c0262, without requiring full VM-root or page-unmap proofs."
+        },
+        {
+          "contracts": [
+            "c0284",
+            "c0283"
+          ],
+          "imports": [
+            "Vero_HardwareAsids",
+            "Vero_CapReads",
+            "Vero_StateFields"
+          ],
+          "name": "Vero_VMRoots",
+          "rationale": "setVMRoot uses the TCB vspace cap, ASID lookup and armv_contextSwitch; setVMRootForFlush compares the current root and conditionally switches it. Supplies c0284/c0283 to both scheduler switching and page flushing, without importing either consumer."
+        },
+        {
+          "contracts": [
+            "c0263",
+            "c0265",
+            "c0258",
+            "c0259",
+            "c0286",
+            "c0287"
+          ],
+          "imports": [
+            "Vero_VMRoots",
+            "Vero_MappingEntries"
+          ],
+          "name": "Vero_VSpaceCleanup",
+          "rationale": "Flush page/table using VM-root switching and HWASID access; delete ASID pool/ASID using flushSpace and invalidateASIDEntry. Then unmap page table/page using slot lookup, pointer checks, stores and flush operations. These resource cleanup correspondences feed architecture finalisation independently of invocation dispatch."
+        },
+        {
+          "contracts": [
+            "c0146",
+            "c0147",
+            "c0164",
+            "c0154",
+            "c0153",
+            "c0163"
+          ],
+          "imports": [
+            "Vero_VMRoots",
+            "Vero_ReadyQueues"
+          ],
+          "name": "Vero_SchedulerSwitch",
+          "rationale": "Architecture idle/thread switches consume VM-root correspondence. General switchToThread c0164 combines architecture switching, dequeue and current-thread update; guarded variants c0154/c0153 follow, then idle switch c0163. Kept separate from queue mutation so IPC does not depend on the full VSpace branch."
+        },
+        {
+          "contracts": [
+            "c0148",
+            "c0159",
+            "c0158",
+            "c0161"
+          ],
+          "imports": [
+            "Vero_SchedulerSwitch"
+          ],
+          "name": "Vero_Scheduler",
+          "rationale": "chooseThread consumes guarded switches and queue/bitmap facts, then the domain-transition fragment c0159 precedes scheduleChooseNewThread c0158. schedule c0161 composes these with append/enqueue, priority tests and scheduler actions inherited through SchedulerSwitch."
+        },
+        {
+          "contracts": [
+            "c0244",
+            "c0245",
+            "c0246",
+            "c0180"
+          ],
+          "imports": [
+            "Vero_FastDelete",
+            "Vero_CapInsertion",
+            "Vero_UserRegisters"
+          ],
+          "name": "Vero_ThreadLifecycle",
+          "rationale": "Restart uses blocked/signal cancellation and single reply-cap deletion locally, reply-master setup, setThreadState and possibleSwitchTo. MCP/priority/domain setters use extended TCB updates and ready-queue operations. Keep these lower than invokeTCB and independent of full scheduling and general capability deletion."
+        },
+        {
+          "contracts": [
+            "c0216",
+            "c0217"
+          ],
+          "imports": [
+            "Vero_ThreadState",
+            "Vero_UserRegisters"
+          ],
+          "name": "Vero_ThreadActivation",
+          "rationale": "Architecture idle activation and activateThread compose current-thread/state reads with getRestartPC, setNextPC and setThreadState. Activation is independent of invokeTCB and full scheduling; kernel composition imports it alongside schedule."
+        },
+        {
+          "contracts": [
+            "c0061",
+            "c0068"
+          ],
+          "imports": [
+            "Vero_VSpaceCleanup",
+            "Vero_FastDelete",
+            "Vero_UserRegisters"
+          ],
+          "name": "Vero_GeneralFinalise",
+          "rationale": "Architecture finaliseCap c0061 reuses ASID deletion and page unmapping. General finaliseCap c0068 then combines that result with endpoint/notification cancellation, unbinding and IRQ/slot facts. Local suspend/cancelIPC reasoning may reuse c0063 and register access; never make FastDelete depend on this module."
+        },
+        {
+          "contracts": [
+            "c0051",
+            "c0033"
+          ],
+          "imports": [
+            "Vero_GeneralFinalise",
+            "Vero_CapMovement",
+            "Vero_CorresCombinators"
+          ],
+          "name": "Vero_RecursiveDelete",
+          "rationale": "Special zombie/CNode/thread updateCap c0051 is the update provider for recursive deletion c0033. Use c0068, c0066, c0040 and final-capability queries; spec_corres introduction/elimination c0035/c0038 guide local recursive helpers inside the fixed slot. No new top-level helper declarations or facts from oops slots are assumed."
+        },
+        {
+          "contracts": [
+            "c0034"
+          ],
+          "imports": [
+            "Vero_CapLookup",
+            "Vero_CapDerivation"
+          ],
+          "name": "Vero_CNodeDecode",
+          "rationale": "decodeCNodeInvocation combines slot resolution, derivation and empty/no-child checks. This decoder does not execute deletion, so keep it independent of RecursiveDelete and CNode execution."
+        },
+        {
+          "contracts": [
+            "c0037"
+          ],
+          "imports": [
+            "Vero_RecursiveDelete",
+            "Vero_CapInsertion",
+            "Vero_IpcCancellation"
+          ],
+          "name": "Vero_CNodeExecute",
+          "rationale": "invokeCNode combines cteDelete, move/swap/insert and badged-send cancellation; imported transitive facts cover each branch. Local revoke/rotate reductions may be proved only inside c0037. Decoder facts are not prerequisites for execution correspondence."
+        },
+        {
+          "contracts": [
+            "c0060"
+          ],
+          "imports": [],
+          "name": "Vero_Detype",
+          "rationale": "deleteObjects is a heap/extended-state restriction correspondence with untyped-range invariants. Establish directly from sanitized detype definitions and state relation, not by importing recursive capability deletion: the names refer to different operations. Supplies memory reset and ASID-pool creation."
+        },
+        {
+          "contracts": [
+            "c0143",
+            "c0145",
+            "c0250"
+          ],
+          "imports": [
+            "Vero_PageTableObjects",
+            "Vero_ThreadObjects",
+            "Vero_StateFields",
+            "Vero_CapReads"
+          ],
+          "name": "Vero_RetypeObjects",
+          "rationale": "createObjects-to-createObjects-prime bridge c0143, extended TCB domain initialization c0145 (using c0144/c0150 and extended-object updates), and insertNewCap c0250 supply object creation/retype building blocks. copyGlobalMappings c0142 is imported for architecture object creation. Full untyped execution remains a consumer."
+        },
+        {
+          "contracts": [
+            "c0252"
+          ],
+          "imports": [
+            "Vero_Detype",
+            "Vero_UntypedIndices",
+            "Vero_IrqPrimitives"
+          ],
+          "name": "Vero_UntypedReset",
+          "rationale": "resetUntypedCap combines deleteObjects, free-index writes, machine clearing and preemptionPoint. Preserve its nested original Arch context unchanged. This resource reset is isolated from decoding and bulk creation."
+        },
+        {
+          "contracts": [
+            "c0249"
+          ],
+          "imports": [
+            "Vero_CapLookup",
+            "Vero_CapDerivation",
+            "Vero_CorresCombinators"
+          ],
+          "name": "Vero_UntypedDecode",
+          "rationale": "decodeUntypedInvocation validates ranges, free space and destination CNode slots; reuse address resolution, empty/no-child checks and conditional error correspondence. No reset or object-creation import is needed to relate the returned invocation."
+        },
+        {
+          "contracts": [
+            "c0251"
+          ],
+          "imports": [
+            "Vero_UntypedReset",
+            "Vero_RetypeObjects"
+          ],
+          "name": "Vero_UntypedExecute",
+          "rationale": "invokeUntyped composes reset, free-index updates, object creation/extended TCB setup and insertNewCap. c0143 is only an implication bridge, not an unconditional createObjects correspondence; any missing creation helpers must be proved locally in this fixed slot."
+        },
+        {
+          "contracts": [
+            "c0276",
+            "c0029"
+          ],
+          "imports": [
+            "Vero_AsidPoolObjects",
+            "Vero_CapInsertion",
+            "Vero_Detype"
+          ],
+          "name": "Vero_AsidPoolExecute",
+          "rationale": "ASID-pool assignment uses pool get/set and cap reads; ASID-control MakePool additionally uses deleteObjects, updateFreeIndex and cteInsert. UntypedIndices is inherited through CapInsertion. Architecture cap-update/creation steps lacking fixed contracts remain local obligations, not assumed correspondence facts."
+        },
+        {
+          "contracts": [
+            "c0277",
+            "c0279",
+            "c0278"
+          ],
+          "imports": [
+            "Vero_VSpaceCleanup"
+          ],
+          "name": "Vero_VSpaceExecute",
+          "rationale": "Page-directory flush, page-table map/unmap and page invocation case analysis reuse VM roots, clearing/store primitives, mapping checks, unmapping and TLB invalidation. Capability field updates in these cases are local obligations; c0051 applies only to zombie/CNode/thread caps and must not be misused here."
+        },
+        {
+          "contracts": [
+            "c0025"
+          ],
+          "imports": [
+            "Vero_MappingEntries",
+            "Vero_CapLookup",
+            "Vero_CapDerivation",
+            "Vero_FinaliseSlot"
+          ],
+          "name": "Vero_ArchDecode",
+          "rationale": "Architecture invocation decoding uses alignment/mapping construction, safe-mapping and flush decoding, ASID/slot lookup, empty-slot validation and final-capability queries. Keeps decoders independent of VSpace execution and general finalisation; missing page-specific decoding helpers can be local."
+        },
+        {
+          "contracts": [
+            "c0026"
+          ],
+          "imports": [
+            "Vero_AsidPoolExecute",
+            "Vero_VSpaceExecute"
+          ],
+          "name": "Vero_ArchExecute",
+          "rationale": "Architecture performInvocation dispatch composes ASID-control, ASID-pool, page-directory, page-table and page execution correspondences. Imports exactly the two execution branches and does not depend on architecture decoding."
+        }
+      ],
+      "source_benchmark_id": "4a9653c8e4b28ccd9a68e0c9f2b35cd1a6a6d3fe0b664670bdb6ecdd44f18be8",
+      "strategy": "Organize fixed contracts by semantic providers: state and object access, capability and thread primitives, architecture operations, then composed invocations and kernel entry. Keep independent branches separate and import only reusable generated correspondence facts. Preserve every original context; unproved oops slots provide no facts.",
+      "version": 1
+    },
+    "max_iterations": 1,
+    "plan_preflight_seconds": 300,
+    "plan_public_benchmark": "/run/vero-plan/benchmark.json",
+    "plan_seconds": 600,
+    "planning_continuation": {
+      "previous_charged_plan_seconds": 600.0040490627289,
+      "previous_pipeline": "/results/pipeline",
+      "reason": "first planning call exhausted its allowance with 207 of 287 contracts; user requested complete PLAN before generation"
+    },
+    "resume_artifact": false,
+    "sandbox": "/sandbox",
+    "sandbox_uid": 1001,
+    "total_agent_seconds": 1800
+  },
+  "implementation_id": "26743f2cfdcb01fc3d14e67ce64e8bacb70456321ee584e6b5c07cac3de2e362",
+  "source_benchmark_id": "4a9653c8e4b28ccd9a68e0c9f2b35cd1a6a6d3fe0b664670bdb6ecdd44f18be8"
+}

@@ -1,0 +1,12 @@
+{
+  "elapsed_seconds": 600.0040490627289,
+  "event_count": 29,
+  "model": "gpt-6-astra",
+  "num_turns": 0,
+  "ok": false,
+  "reasoning_effort": "medium",
+  "returncode": -9,
+  "timed_out": true,
+  "total_cost_usd": null,
+  "usage": {}
+}

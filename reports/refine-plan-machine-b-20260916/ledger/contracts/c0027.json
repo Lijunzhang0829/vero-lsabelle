@@ -1,0 +1,32 @@
+{
+  "attempts": [
+    {
+      "body_sha256": "73b667f0e01980537ea7358db4d64fcc7519d2262cdbc91e7d9154c83d72d6b9",
+      "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_MappingEntries\")\n### theory \"Draft.Vero_Support\"\n### 0.183s elapsed time, 0.246s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_HeapObjects\" (required by \"Draft.Vero_MappingEntries\" via \"Draft.Vero_VSpaceLookup\" via \"Draft.Vero_AsidPoolObjects\")\nLoading theory \"Draft.Vero_PageTableObjects\" (required by \"Draft.Vero_MappingEntries\")\n### theory \"Draft.Vero_HeapObjects\"\n### 6.555s elapsed time, 12.225s cpu time, 0.173s GC time\nLoading theory \"Draft.Vero_AsidPoolObjects\" (required by \"Draft.Vero_MappingEntries\" via \"Draft.Vero_VSpaceLookup\")\n### theory \"Draft.Vero_PageTableObjects\"\n### 6.679s elapsed time, 12.504s cpu time, 0.298s GC time\n### theory \"Draft.Vero_AsidPoolObjects\"\n### 3.136s elapsed time, 3.295s cpu time, 0.125s GC time\nLoading theory \"Draft.Vero_VSpaceLookup\" (required by \"Draft.Vero_MappingEntries\")\n### theory \"Draft.Vero_VSpaceLookup\"\n### 2.970s elapsed time, 3.125s cpu time, 0.226s GC time\nLoading theory \"Draft.Vero_MappingEntries\"\n### Ignoring duplicate rewrite rule:\n### throw \\<equiv> throwError\n### Ignoring duplicate rewrite rule:\n### ser ?x ?y \\<equiv> ?y = syscall_error_map ?x\nVERO_RESULT c0027 prove clean\n### theory \"Draft.Vero_MappingEntries\"\n### 3.282s elapsed time, 3.428s cpu time, 0.221s GC time\nval it = (): unit\n",
+      "diagnostic_slot": null,
+      "outcome": "check_passed_provisional",
+      "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562863134326866-90bb2e8779c046dcb2c7cc684d4b0496",
+      "slot": "c0027:prove",
+      "submitted_at": 1789562863.1395404
+    }
+  ],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0027",
+  "last_attempt": {
+    "body_sha256": "73b667f0e01980537ea7358db4d64fcc7519d2262cdbc91e7d9154c83d72d6b9",
+    "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_MappingEntries\")\n### theory \"Draft.Vero_Support\"\n### 0.183s elapsed time, 0.246s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_HeapObjects\" (required by \"Draft.Vero_MappingEntries\" via \"Draft.Vero_VSpaceLookup\" via \"Draft.Vero_AsidPoolObjects\")\nLoading theory \"Draft.Vero_PageTableObjects\" (required by \"Draft.Vero_MappingEntries\")\n### theory \"Draft.Vero_HeapObjects\"\n### 6.555s elapsed time, 12.225s cpu time, 0.173s GC time\nLoading theory \"Draft.Vero_AsidPoolObjects\" (required by \"Draft.Vero_MappingEntries\" via \"Draft.Vero_VSpaceLookup\")\n### theory \"Draft.Vero_PageTableObjects\"\n### 6.679s elapsed time, 12.504s cpu time, 0.298s GC time\n### theory \"Draft.Vero_AsidPoolObjects\"\n### 3.136s elapsed time, 3.295s cpu time, 0.125s GC time\nLoading theory \"Draft.Vero_VSpaceLookup\" (required by \"Draft.Vero_MappingEntries\")\n### theory \"Draft.Vero_VSpaceLookup\"\n### 2.970s elapsed time, 3.125s cpu time, 0.226s GC time\nLoading theory \"Draft.Vero_MappingEntries\"\n### Ignoring duplicate rewrite rule:\n### throw \\<equiv> throwError\n### Ignoring duplicate rewrite rule:\n### ser ?x ?y \\<equiv> ?y = syscall_error_map ?x\nVERO_RESULT c0027 prove clean\n### theory \"Draft.Vero_MappingEntries\"\n### 3.282s elapsed time, 3.428s cpu time, 0.221s GC time\nval it = (): unit\n",
+    "diagnostic_slot": null,
+    "outcome": "check_passed_provisional",
+    "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562863134326866-90bb2e8779c046dcb2c7cc684d4b0496",
+    "slot": "c0027:prove",
+    "submitted_at": 1789562863.1395404
+  },
+  "last_legacy_target_evidence": null,
+  "legacy_evidence": [],
+  "module": "Vero_MappingEntries",
+  "module_checks_observed": [],
+  "name": "checkVPAlignment_corres",
+  "withdrawn_since_observed_candidate": false
+}

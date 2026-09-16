@@ -1,0 +1,59 @@
+{
+  "fresh_previous_proved": 39,
+  "fresh_plan_proved": 35,
+  "shared_proved": [
+    "c0001",
+    "c0027",
+    "c0031",
+    "c0032",
+    "c0035",
+    "c0038",
+    "c0039",
+    "c0074",
+    "c0076",
+    "c0078",
+    "c0080",
+    "c0081",
+    "c0084",
+    "c0087",
+    "c0089",
+    "c0107",
+    "c0132",
+    "c0133",
+    "c0134",
+    "c0135",
+    "c0144",
+    "c0149",
+    "c0150",
+    "c0152",
+    "c0182",
+    "c0183",
+    "c0194",
+    "c0198",
+    "c0206",
+    "c0215",
+    "c0270"
+  ],
+  "only_plan_proved": [
+    "c0143",
+    "c0156",
+    "c0181",
+    "c0234"
+  ],
+  "only_previous_proved": [
+    "c0062",
+    "c0065",
+    "c0071",
+    "c0171",
+    "c0193",
+    "c0216",
+    "c0225",
+    "c0281"
+  ],
+  "prior_two_run_proved": 56,
+  "plan_proved_outside_prior_two_runs": [
+    "c0143",
+    "c0181"
+  ],
+  "warning": "One fresh trial with extra PLAN budget; prior two-run 56 result was seeded and used cumulative ~3600 generation seconds. No causal claim."
+}

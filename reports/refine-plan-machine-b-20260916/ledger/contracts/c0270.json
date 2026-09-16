@@ -1,0 +1,32 @@
+{
+  "attempts": [
+    {
+      "body_sha256": "786ac344e6f097b6551c87a1874c9f3dfa7e87564ef098bf5d225d442ff04e9b",
+      "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_HardwareAsids\")\n### theory \"Draft.Vero_Support\"\n### 0.186s elapsed time, 0.249s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_HeapObjects\" (required by \"Draft.Vero_HardwareAsids\" via \"Draft.Vero_VSpaceLookup\" via \"Draft.Vero_AsidPoolObjects\")\n### theory \"Draft.Vero_HeapObjects\"\n### 4.848s elapsed time, 4.981s cpu time, 0.187s GC time\nLoading theory \"Draft.Vero_AsidPoolObjects\" (required by \"Draft.Vero_HardwareAsids\" via \"Draft.Vero_VSpaceLookup\")\n### theory \"Draft.Vero_AsidPoolObjects\"\n### 7.170s elapsed time, 7.179s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_VSpaceLookup\" (required by \"Draft.Vero_HardwareAsids\")\n### theory \"Draft.Vero_VSpaceLookup\"\n### 2.945s elapsed time, 3.047s cpu time, 0.150s GC time\nLoading theory \"Draft.Vero_HardwareAsids\"\nVERO_RESULT c0270 prove clean\n### theory \"Draft.Vero_HardwareAsids\"\n### 3.310s elapsed time, 3.469s cpu time, 0.220s GC time\nval it = (): unit\n",
+      "diagnostic_slot": null,
+      "outcome": "check_passed_provisional",
+      "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562873718208356-5e24015fa64444d3a9848e7070c4e8e4",
+      "slot": "c0270:prove",
+      "submitted_at": 1789562873.7231183
+    }
+  ],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0270",
+  "last_attempt": {
+    "body_sha256": "786ac344e6f097b6551c87a1874c9f3dfa7e87564ef098bf5d225d442ff04e9b",
+    "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_HardwareAsids\")\n### theory \"Draft.Vero_Support\"\n### 0.186s elapsed time, 0.249s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_HeapObjects\" (required by \"Draft.Vero_HardwareAsids\" via \"Draft.Vero_VSpaceLookup\" via \"Draft.Vero_AsidPoolObjects\")\n### theory \"Draft.Vero_HeapObjects\"\n### 4.848s elapsed time, 4.981s cpu time, 0.187s GC time\nLoading theory \"Draft.Vero_AsidPoolObjects\" (required by \"Draft.Vero_HardwareAsids\" via \"Draft.Vero_VSpaceLookup\")\n### theory \"Draft.Vero_AsidPoolObjects\"\n### 7.170s elapsed time, 7.179s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_VSpaceLookup\" (required by \"Draft.Vero_HardwareAsids\")\n### theory \"Draft.Vero_VSpaceLookup\"\n### 2.945s elapsed time, 3.047s cpu time, 0.150s GC time\nLoading theory \"Draft.Vero_HardwareAsids\"\nVERO_RESULT c0270 prove clean\n### theory \"Draft.Vero_HardwareAsids\"\n### 3.310s elapsed time, 3.469s cpu time, 0.220s GC time\nval it = (): unit\n",
+    "diagnostic_slot": null,
+    "outcome": "check_passed_provisional",
+    "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562873718208356-5e24015fa64444d3a9848e7070c4e8e4",
+    "slot": "c0270:prove",
+    "submitted_at": 1789562873.7231183
+  },
+  "last_legacy_target_evidence": null,
+  "legacy_evidence": [],
+  "module": "Vero_HardwareAsids",
+  "module_checks_observed": [],
+  "name": "invalidateHWASIDEntry_corres",
+  "withdrawn_since_observed_candidate": false
+}

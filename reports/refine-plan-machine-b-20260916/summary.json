@@ -1,0 +1,329 @@
+{
+  "benchmark_id": "a1f1f6dd7d9fbf927d700e65ae21d043cf5d1e29408c22ef36c78f7acfc617c0",
+  "status": "budget_exhausted",
+  "iterations": [
+    {
+      "iteration": 0,
+      "agent": {
+        "elapsed_seconds": 1800.0083298683167,
+        "event_count": 203,
+        "model": "gpt-6-astra",
+        "num_turns": 0,
+        "ok": false,
+        "reasoning_effort": "medium",
+        "returncode": -9,
+        "timed_out": true,
+        "total_cost_usd": null,
+        "usage": {}
+      },
+      "proved": 35,
+      "disproved": 0,
+      "total": 287,
+      "complete": false,
+      "evaluation_seconds": 200.05157925607637,
+      "modules": {
+        "Vero_CorresCombinators": {
+          "total": 6,
+          "proved": 6
+        },
+        "Vero_StateFields": {
+          "total": 11,
+          "proved": 10,
+          "unfilled": 1
+        },
+        "Vero_HeapObjects": {
+          "total": 5,
+          "unfilled": 5
+        },
+        "Vero_ThreadObjects": {
+          "total": 13,
+          "unfilled": 13
+        },
+        "Vero_CapReads": {
+          "total": 4,
+          "unfilled": 4
+        },
+        "Vero_CapLookup": {
+          "total": 6,
+          "unfilled": 6
+        },
+        "Vero_CapDerivation": {
+          "total": 4,
+          "proved": 1,
+          "unfilled": 3
+        },
+        "Vero_UntypedIndices": {
+          "total": 4,
+          "unfilled": 4
+        },
+        "Vero_CapInsertion": {
+          "total": 4,
+          "unfilled": 4
+        },
+        "Vero_CapMovement": {
+          "total": 3,
+          "unfilled": 3
+        },
+        "Vero_UserRegisters": {
+          "total": 11,
+          "unfilled": 11
+        },
+        "Vero_UserMemory": {
+          "total": 4,
+          "proved": 1,
+          "unfilled": 3
+        },
+        "Vero_MessageBuffers": {
+          "total": 6,
+          "unfilled": 6
+        },
+        "Vero_ReadyQueues": {
+          "total": 10,
+          "proved": 2,
+          "unfilled": 8
+        },
+        "Vero_ThreadState": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_NotificationBindings": {
+          "total": 3,
+          "unfilled": 3
+        },
+        "Vero_IpcCancellation": {
+          "total": 5,
+          "unfilled": 5
+        },
+        "Vero_IrqPrimitives": {
+          "total": 8,
+          "proved": 7,
+          "unfilled": 1
+        },
+        "Vero_FinaliseSlot": {
+          "total": 7,
+          "unfilled": 4,
+          "build_error": 3
+        },
+        "Vero_FastDelete": {
+          "total": 2,
+          "unfilled": 2
+        },
+        "Vero_AsidPoolObjects": {
+          "total": 4,
+          "unfilled": 4
+        },
+        "Vero_PageTableObjects": {
+          "total": 16,
+          "unfilled": 16
+        },
+        "Vero_VSpaceLookup": {
+          "total": 4,
+          "unfilled": 4
+        },
+        "Vero_MappingEntries": {
+          "total": 10,
+          "unfilled": 9,
+          "proved": 1
+        },
+        "Vero_HardwareAsids": {
+          "total": 12,
+          "proved": 1,
+          "unfilled": 11
+        },
+        "Vero_VMRoots": {
+          "total": 2,
+          "unfilled": 2
+        },
+        "Vero_VSpaceCleanup": {
+          "total": 6,
+          "unfilled": 6
+        },
+        "Vero_SchedulerSwitch": {
+          "total": 6,
+          "unfilled": 6
+        },
+        "Vero_Scheduler": {
+          "total": 4,
+          "unfilled": 4
+        },
+        "Vero_ThreadLifecycle": {
+          "total": 4,
+          "unfilled": 4
+        },
+        "Vero_ThreadActivation": {
+          "total": 2,
+          "unfilled": 2
+        },
+        "Vero_GeneralFinalise": {
+          "total": 2,
+          "unfilled": 2
+        },
+        "Vero_RecursiveDelete": {
+          "total": 2,
+          "unfilled": 2
+        },
+        "Vero_CNodeDecode": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_CNodeExecute": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_Detype": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_RetypeObjects": {
+          "total": 3,
+          "proved": 1,
+          "unfilled": 2
+        },
+        "Vero_UntypedReset": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_UntypedDecode": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_UntypedExecute": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_AsidPoolExecute": {
+          "total": 2,
+          "unfilled": 2
+        },
+        "Vero_VSpaceExecute": {
+          "total": 3,
+          "unfilled": 3
+        },
+        "Vero_ArchDecode": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_ArchExecute": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_TcbValidation": {
+          "total": 3,
+          "unfilled": 3
+        },
+        "Vero_TcbDecode": {
+          "total": 13,
+          "unfilled": 12,
+          "proved": 1
+        },
+        "Vero_CheckedCapInsertion": {
+          "total": 3,
+          "unfilled": 3
+        },
+        "Vero_TcbRegisterExecute": {
+          "total": 3,
+          "unfilled": 3
+        },
+        "Vero_TcbRootReplace": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_TcbExecute": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_IpcCapTransfer": {
+          "total": 4,
+          "unfilled": 4
+        },
+        "Vero_FaultMessages": {
+          "total": 6,
+          "unfilled": 6
+        },
+        "Vero_IpcMessages": {
+          "total": 4,
+          "unfilled": 4
+        },
+        "Vero_NotificationProtocol": {
+          "total": 3,
+          "unfilled": 3
+        },
+        "Vero_EndpointProtocol": {
+          "total": 3,
+          "unfilled": 3
+        },
+        "Vero_ReplyTransfer": {
+          "total": 2,
+          "unfilled": 2
+        },
+        "Vero_FaultDelivery": {
+          "total": 3,
+          "unfilled": 3
+        },
+        "Vero_IrqDecode": {
+          "total": 3,
+          "unfilled": 3
+        },
+        "Vero_IrqExecute": {
+          "total": 3,
+          "unfilled": 3
+        },
+        "Vero_TimerTick": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_InterruptDelivery": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_InvocationDecode": {
+          "total": 2,
+          "unfilled": 2
+        },
+        "Vero_InvocationExecute": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_SyscallReceive": {
+          "total": 3,
+          "unfilled": 3
+        },
+        "Vero_SyscallReply": {
+          "total": 2,
+          "unfilled": 2
+        },
+        "Vero_SyscallInvocation": {
+          "total": 3,
+          "unfilled": 3
+        },
+        "Vero_SyscallYield": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_EventDispatch": {
+          "total": 1,
+          "unfilled": 1
+        },
+        "Vero_ActiveIrq": {
+          "total": 4,
+          "proved": 4
+        },
+        "Vero_UserExecution": {
+          "total": 3,
+          "unfilled": 3
+        },
+        "Vero_KernelComposition": {
+          "total": 3,
+          "unfilled": 3
+        }
+      },
+      "shell_commands": {
+        "completed": 95,
+        "succeeded": 62,
+        "failed": 33,
+        "shell_commands_mentioning_check_tool": 45
+      },
+      "cli_errors": []
+    }
+  ]
+}

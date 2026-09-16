@@ -1,0 +1,58 @@
+{
+  "generation": {
+    "elapsed_agent_seconds": 1800.0083298683167,
+    "iterations": [
+      {
+        "agent": {
+          "elapsed_seconds": 1800.0083298683167,
+          "event_count": 203,
+          "model": "gpt-6-astra",
+          "num_turns": 0,
+          "ok": false,
+          "reasoning_effort": "medium",
+          "returncode": -9,
+          "timed_out": true,
+          "total_cost_usd": null,
+          "usage": {}
+        },
+        "artifact": "iter-000/artifact.json",
+        "complete": false,
+        "disproved_specs": 0,
+        "index": 0,
+        "proved_specs": 35,
+        "report_md": "iter-000/eval/report.md"
+      }
+    ],
+    "status": "budget_exhausted"
+  },
+  "plan_agent": {
+    "elapsed_seconds": 478.95769786834717,
+    "event_count": 20,
+    "model": "gpt-6-astra",
+    "num_turns": 1,
+    "ok": true,
+    "reasoning_effort": "medium",
+    "returncode": 0,
+    "timed_out": false,
+    "total_cost_usd": null,
+    "usage": {
+      "cache_write_input_tokens": 0,
+      "cached_input_tokens": 181632,
+      "input_tokens": 263539,
+      "output_tokens": 3453,
+      "reasoning_output_tokens": 96
+    }
+  },
+  "planning": {
+    "accepted_at": 1789561345.021941,
+    "benchmark_id": "a1f1f6dd7d9fbf927d700e65ae21d043cf5d1e29408c22ef36c78f7acfc617c0",
+    "plan_sha256": "3adbc25134338b2da45aebda40aab620754c4d1fbf237449461b159f78170a39",
+    "preflight": "ok",
+    "source_benchmark_id": "4a9653c8e4b28ccd9a68e0c9f2b35cd1a6a6d3fe0b664670bdb6ecdd44f18be8"
+  },
+  "planning_continuation": {
+    "previous_charged_plan_seconds": 600.0040490627289,
+    "previous_pipeline": "/results/pipeline",
+    "reason": "first planning call exhausted its allowance with 207 of 287 contracts; user requested complete PLAN before generation"
+  }
+}

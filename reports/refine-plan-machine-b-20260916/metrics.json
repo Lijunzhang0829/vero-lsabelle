@@ -1,0 +1,80 @@
+{
+  "planning_calls": [
+    {
+      "pipeline": "pipeline",
+      "agent": {
+        "elapsed_seconds": 600.0040490627289,
+        "event_count": 29,
+        "model": "gpt-6-astra",
+        "num_turns": 0,
+        "ok": false,
+        "reasoning_effort": "medium",
+        "returncode": -9,
+        "timed_out": true,
+        "total_cost_usd": null,
+        "usage": {}
+      },
+      "validation": {
+        "accepted": false,
+        "error": "each contract must occur exactly once"
+      },
+      "snapshots": 3,
+      "completed_commands": 12
+    },
+    {
+      "pipeline": "pipeline-02",
+      "agent": {
+        "elapsed_seconds": 478.95769786834717,
+        "event_count": 20,
+        "model": "gpt-6-astra",
+        "num_turns": 1,
+        "ok": true,
+        "reasoning_effort": "medium",
+        "returncode": 0,
+        "timed_out": false,
+        "total_cost_usd": null,
+        "usage": {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 181632,
+          "input_tokens": 263539,
+          "output_tokens": 3453,
+          "reasoning_output_tokens": 96
+        }
+      },
+      "validation": {
+        "accepted": true,
+        "accepted_at": 1789561345.021941,
+        "benchmark_id": "a1f1f6dd7d9fbf927d700e65ae21d043cf5d1e29408c22ef36c78f7acfc617c0",
+        "plan_sha256": "3adbc25134338b2da45aebda40aab620754c4d1fbf237449461b159f78170a39",
+        "preflight": "ok",
+        "source_benchmark_id": "4a9653c8e4b28ccd9a68e0c9f2b35cd1a6a6d3fe0b664670bdb6ecdd44f18be8"
+      },
+      "snapshots": 2,
+      "completed_commands": 7
+    }
+  ],
+  "total_plan_agent_seconds": 1078.961746931076,
+  "preflight_seconds": 152.6254805061035,
+  "modules": 71,
+  "contracts": 287,
+  "direct_imports": 152,
+  "max_import_path_modules": 14,
+  "fixed_contracts_unchanged": true,
+  "explicit_cross_module_references": [
+    {
+      "consumer": "c0065",
+      "provider": "c0076",
+      "consumer_status": "build_error",
+      "provider_status": "proved",
+      "consumer_module": "Vero_FinaliseSlot",
+      "provider_module": "Vero_IrqPrimitives"
+    }
+  ],
+  "attempt_submissions": 46,
+  "attempts_without_result": 1,
+  "status_counts": {
+    "proved": 35,
+    "unfilled": 249,
+    "build_error": 3
+  }
+}

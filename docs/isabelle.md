@@ -71,3 +71,5 @@ In the dedicated worker, set `plan_public_benchmark` to `/run/vero-plan/benchmar
 `--resume` requires the same pipeline binding. It does not silently restart an interrupted PLAN agent or reset its allowance; if a usable plan remains on disk it can be validated, otherwise an explicit repair/rebudget decision is required. Accepted plan/benchmark identity is rechecked, and the existing generation runner handles its own interruption recovery. Planning validation failures are saved and stop generation.
 
 An explicitly authorized new planning continuation may supply `initial_plan` and `planning_continuation` in a new bound pipeline configuration. The incomplete plan is an input, not an accepted plan; exact coverage and native preflight are still required. Previous charged planning time is retained in provenance and reported in addition to the new call.
+
+Completed machine-B PLAN experiment: [results and traces](../reports/refine-plan-machine-b-20260916/README.md). Intermediate attempt snapshots currently retain the checked module only, not imported dependency bodies; final extraction and evaluation retain the complete artifact.

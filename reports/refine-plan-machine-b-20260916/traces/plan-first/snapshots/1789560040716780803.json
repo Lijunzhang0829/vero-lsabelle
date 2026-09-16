@@ -1,0 +1,5 @@
+{
+  "at": 1789560040.7167838,
+  "content": "{\n  \"version\": 1,\n  \"source_benchmark_id\": \"4a9653c8e4b28ccd9a68e0c9f2b35cd1a6a6d3fe0b664670bdb6ecdd44f18be8\",\n  \"strategy\": \"Organize fixed contracts by semantic providers: state and object access, capability and thread primitives, architecture operations, then composed invocations and kernel entry. Keep independent branches separate and import only reusable generated correspondence facts. Preserve every original context; unproved oops slots provide no facts.\",\n  \"modules\": [],\n  \"execution_order\": []\n}\n",
+  "sha256": "0ac831844aa5f0440647aad5778091a6cbd6d99d08a7af100bc605f88644139e"
+}

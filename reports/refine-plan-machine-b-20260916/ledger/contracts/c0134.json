@@ -1,0 +1,32 @@
+{
+  "attempts": [
+    {
+      "body_sha256": "836d8d2070de70248528f75f1653970f9b90f6b0161f7658e3b09ae86b441742",
+      "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_ActiveIrq\")\n### theory \"Draft.Vero_Support\"\n### 0.185s elapsed time, 0.247s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_ActiveIrq\"\nVERO_RESULT c0134 prove clean\nVERO_RESULT c0132 prove clean\nVERO_RESULT c0133 prove clean\nVERO_RESULT c0135 prove clean\n### theory \"Draft.Vero_ActiveIrq\"\n### 6.029s elapsed time, 6.171s cpu time, 0.184s GC time\nval it = (): unit\n",
+      "diagnostic_slot": null,
+      "outcome": "check_passed_provisional",
+      "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562907882089900-880c8aaa7fc542c7887b53f31223097c",
+      "slot": "c0134:prove",
+      "submitted_at": 1789562907.886637
+    }
+  ],
+  "candidate_absent_at_final": false,
+  "current_state": "independently_proved",
+  "final_status": "proved",
+  "id": "c0134",
+  "last_attempt": {
+    "body_sha256": "836d8d2070de70248528f75f1653970f9b90f6b0161f7658e3b09ae86b441742",
+    "diagnostic": "Loading theory \"Draft.Vero_Support\" (required by \"Draft.Vero_ActiveIrq\")\n### theory \"Draft.Vero_Support\"\n### 0.185s elapsed time, 0.247s cpu time, 0.000s GC time\nLoading theory \"Draft.Vero_ActiveIrq\"\nVERO_RESULT c0134 prove clean\nVERO_RESULT c0132 prove clean\nVERO_RESULT c0133 prove clean\nVERO_RESULT c0135 prove clean\n### theory \"Draft.Vero_ActiveIrq\"\n### 6.029s elapsed time, 6.171s cpu time, 0.184s GC time\nval it = (): unit\n",
+    "diagnostic_slot": null,
+    "outcome": "check_passed_provisional",
+    "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789562907882089900-880c8aaa7fc542c7887b53f31223097c",
+    "slot": "c0134:prove",
+    "submitted_at": 1789562907.886637
+  },
+  "last_legacy_target_evidence": null,
+  "legacy_evidence": [],
+  "module": "Vero_ActiveIrq",
+  "module_checks_observed": [],
+  "name": "check_active_irq_corres'",
+  "withdrawn_since_observed_candidate": false
+}

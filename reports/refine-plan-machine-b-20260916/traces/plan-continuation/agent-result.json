@@ -1,0 +1,18 @@
+{
+  "elapsed_seconds": 478.95769786834717,
+  "event_count": 20,
+  "model": "gpt-6-astra",
+  "num_turns": 1,
+  "ok": true,
+  "reasoning_effort": "medium",
+  "returncode": 0,
+  "timed_out": false,
+  "total_cost_usd": null,
+  "usage": {
+    "cache_write_input_tokens": 0,
+    "cached_input_tokens": 181632,
+    "input_tokens": 263539,
+    "output_tokens": 3453,
+    "reasoning_output_tokens": 96
+  }
+}

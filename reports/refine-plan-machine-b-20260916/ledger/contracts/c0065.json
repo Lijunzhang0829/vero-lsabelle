@@ -1,0 +1,32 @@
+{
+  "attempts": [
+    {
+      "body_sha256": "2a3d4847ee48f3108f21f58a4ecacc6fd4c9df91a6813a7fa4f7fe4d6f4baaf4",
+      "diagnostic": "No completion record.",
+      "diagnostic_slot": null,
+      "outcome": "submitted_no_result",
+      "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789563142513285724-4b17374bec2a428e9b47b5e6417a9974",
+      "slot": "c0065:prove",
+      "submitted_at": 1789563142.518397
+    }
+  ],
+  "candidate_absent_at_final": false,
+  "current_state": "unresolved_with_attempt_records",
+  "final_status": "build_error",
+  "id": "c0065",
+  "last_attempt": {
+    "body_sha256": "2a3d4847ee48f3108f21f58a4ecacc6fd4c9df91a6813a7fa4f7fe4d6f4baaf4",
+    "diagnostic": "No completion record.",
+    "diagnostic_slot": null,
+    "outcome": "submitted_no_result",
+    "path": "../reports/vero-isabelle-refine-plan-20260916/pipeline-02/generation/iter-000/attempts/1789563142513285724-4b17374bec2a428e9b47b5e6417a9974",
+    "slot": "c0065:prove",
+    "submitted_at": 1789563142.518397
+  },
+  "last_legacy_target_evidence": null,
+  "legacy_evidence": [],
+  "module": "Vero_FinaliseSlot",
+  "module_checks_observed": [],
+  "name": "deletedIRQHandler_corres",
+  "withdrawn_since_observed_candidate": false
+}
