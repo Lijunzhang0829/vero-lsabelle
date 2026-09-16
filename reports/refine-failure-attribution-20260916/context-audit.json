@@ -1,0 +1,8 @@
+{
+  "withdrawal_event_line": 84,
+  "catalog_assertion_rules": 13,
+  "assertion_rule_shortnames_observed_before_withdrawal": [],
+  "corres_modify_returned_at_event": 15,
+  "stateAssert_definition_search_after_withdrawal_at_event": 93,
+  "limitations": "Visible emitted event stream only; no claim about internal model attention or full context retention. Catalog presence is not native applicability validation."
+}

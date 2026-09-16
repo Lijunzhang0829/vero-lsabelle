@@ -1,0 +1,98 @@
+{
+  "authority": "agent-side diagnostic only",
+  "benchmark_id": "a1f1f6dd7d9fbf927d700e65ae21d043cf5d1e29408c22ef36c78f7acfc617c0",
+  "candidate_sha256": "8187d3783fb3a7a35c0bd9ff80305c6b8bbdf5ea10ee24ab7ba6fd50ce20712f",
+  "file_errors": {},
+  "module": "Vero_StateFields",
+  "slots": {
+    "c0031:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0031:prove": {
+      "body": "by (auto simp: getCurThread_def corres_gets state_relation_def)",
+      "found": true
+    },
+    "c0032:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0032:prove": {
+      "body": "by (auto simp: getIdleThread_def corres_gets state_relation_def)",
+      "found": true
+    },
+    "c0081:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0081:prove": {
+      "body": "unfolding dec_domain_time_def decDomainTime_def\nby (fastforce intro: corres_modify simp: state_relation_def)",
+      "found": true
+    },
+    "c0144:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0144:prove": {
+      "body": "by (rule c0150_prove)",
+      "found": true
+    },
+    "c0149:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0149:prove": {
+      "body": "by (auto simp: curDomain_def corres_gets state_relation_def maxDomain_def Kernel_Config.numDomains_def corres_underlying_def gets_def get_def return_def bind_def)",
+      "found": true
+    },
+    "c0150:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0150:prove": {
+      "body": "by (auto simp: curDomain_def corres_gets state_relation_def)",
+      "found": true
+    },
+    "c0152:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0152:prove": {
+      "body": "by (auto simp: getDomainTime_def corres_gets state_relation_def)",
+      "found": true
+    },
+    "c0156:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0156:prove": {
+      "body": "unfolding next_domain_def nextDomain_def Let_def dschDomain_def dschLength_def\nby (fastforce intro: corres_modify simp: state_relation_def)",
+      "found": true
+    },
+    "c0162:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0162:prove": {
+      "body": "unfolding setCurThread_def\nby (fastforce intro: corres_modify simp: state_relation_def)",
+      "found": true
+    },
+    "c0194:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0194:prove": {
+      "body": "by (auto simp: getSchedulerAction_def corres_gets state_relation_def)",
+      "found": true
+    },
+    "c0206:disprove": {
+      "body": "oops",
+      "found": true
+    },
+    "c0206:prove": {
+      "body": "unfolding set_scheduler_action_def setSchedulerAction_def\nby (fastforce intro: corres_modify simp: state_relation_def)",
+      "found": true
+    }
+  },
+  "started_at": 1789561935.7868943
+}

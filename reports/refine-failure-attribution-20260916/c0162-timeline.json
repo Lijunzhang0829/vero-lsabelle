@@ -1,0 +1,52 @@
+[
+  {
+    "submission": "1789561914882297965-ae48065bf80645899ef653cd75f77049",
+    "seconds_since_generation_start": 569.8509488105774,
+    "ended_seconds_since_start": 579.2068452835083,
+    "candidate": "unfolding setCurThread_def\nby (fastforce intro: corres_modify simp: state_relation_def)",
+    "candidate_sha256": "16f557c6406f7938b2762cdf8bebab02be54d56951755fea3658a3c6ca71b1b1",
+    "diagnostic_slot": "c0149:prove",
+    "outcome": "module_check_incomplete_unattributed",
+    "checker_status": "build_error"
+  },
+  {
+    "submission": "1789561935781939089-d19d6810542646e6b48f6f2a6b111baf",
+    "seconds_since_generation_start": 590.7507171630859,
+    "ended_seconds_since_start": 600.7005496025085,
+    "candidate": "unfolding setCurThread_def\nby (fastforce intro: corres_modify simp: state_relation_def)",
+    "candidate_sha256": "16f557c6406f7938b2762cdf8bebab02be54d56951755fea3658a3c6ca71b1b1",
+    "diagnostic_slot": "c0081:prove",
+    "outcome": "module_check_incomplete_unattributed",
+    "checker_status": "build_error"
+  },
+  {
+    "submission": "1789561960495918495-8753a342fe9646909dab4c1eeb0118a4",
+    "seconds_since_generation_start": 615.4649064540863,
+    "ended_seconds_since_start": 624.880273103714,
+    "candidate": "unfolding setCurThread_def\napply (rule corres_modify)\nby (auto simp: state_relation_def)",
+    "candidate_sha256": "a0b3618e2018c2cb3048f53187e3f0393d5cbd2628092affbd300150eac0c67f",
+    "diagnostic_slot": "c0081:prove",
+    "outcome": "module_check_incomplete_unattributed",
+    "checker_status": "build_error"
+  },
+  {
+    "submission": "1789561978507909869-4dac836d61234905a2807e8b41c55282",
+    "seconds_since_generation_start": 633.4768884181976,
+    "ended_seconds_since_start": 643.1202898025513,
+    "candidate": "unfolding setCurThread_def\napply (rule corres_modify)\nby (auto simp: state_relation_def swp_def cte_wp_at_def)",
+    "candidate_sha256": "7d465db1e01bfa124ba425abc124df794346d12585cadce112b02a337f7dc8fb",
+    "diagnostic_slot": "c0162:prove",
+    "outcome": "diagnostic_at_this_contract",
+    "checker_status": "build_error"
+  },
+  {
+    "submission": "1789561994527494976-532af58253834e688b7b9a8e1b1b2666",
+    "seconds_since_generation_start": 649.4965760707855,
+    "ended_seconds_since_start": 659.434454202652,
+    "candidate": "oops",
+    "candidate_sha256": "d13f2eadd4ed5b027fa773a29520cc0d65ce374365d641112de786f8a029c2fe",
+    "diagnostic_slot": null,
+    "outcome": "no_candidate",
+    "checker_status": "ok"
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "only_changed_finalise_slot": "c0071:prove",
+  "c0062_body_identical": true,
+  "c0065_body_identical": true,
+  "benchmark_id": "a1f1f6dd7d9fbf927d700e65ae21d043cf5d1e29408c22ef36c78f7acfc617c0",
+  "original_score_preserved": 35,
+  "additional_targets_passing_isolated_module": [
+    "c0062",
+    "c0065"
+  ],
+  "full_287_reevaluation_performed": false,
+  "llm_calls": 0
+}

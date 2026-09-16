@@ -1,0 +1,54 @@
+[
+  {
+    "canonical_name": "Corres_UL.corres_stateAssert_no_fail",
+    "exact_statement": "\\<lbrakk>no_fail ?P (do v <- ?g;\n                        _ <- stateAssert ?X [];\n                        ?h v\n                     od);\n corres_underlying ?S False ?nf' ?r ?P ?Q (?g >>= ?h) ?f\\<rbrakk>\n\\<Longrightarrow> corres_underlying ?S False ?nf' ?r ?P ?Q\n                   (do v <- ?g;\n                       _ <- stateAssert ?X [];\n                       ?h v\n                    od)\n                   ?f"
+  },
+  {
+    "canonical_name": "Corres_UL.corres_underlying_stateAssert_stateAssert",
+    "exact_statement": "(\\<And>s s'.\n    \\<lbrakk>(s, s') \\<in> ?rf_sr; ?P s; ?P' s'\\<rbrakk>\n    \\<Longrightarrow> ?Q' s' = ?Q s) \\<Longrightarrow>\ncorres_underlying ?rf_sr ?nf False dc ?P ?P' (stateAssert ?Q [])\n (stateAssert ?Q' [])"
+  },
+  {
+    "canonical_name": "Corres_UL.corres_stateAssert_add_assertion",
+    "exact_statement": "\\<lbrakk>corres_underlying ?sr ?nf ?nf' ?r ?P (?Q and ?Q') ?f (?g ());\n \\<And>s s'.\n    \\<lbrakk>(s, s') \\<in> ?sr; ?P s; ?Q s'\\<rbrakk>\n    \\<Longrightarrow> ?Q' s'\\<rbrakk>\n\\<Longrightarrow> corres_underlying ?sr ?nf ?nf' ?r ?P ?Q ?f\n                   (stateAssert ?Q' [] >>= ?g)"
+  },
+  {
+    "canonical_name": "Corres_UL.corres_stateAssert_implied2",
+    "exact_statement": "\\<lbrakk>corres_underlying ?sr ?nf ?nf' ?r ?P ?Q ?f ?g;\n \\<And>s s'.\n    \\<lbrakk>(s, s') \\<in> ?sr; ?R s; ?R' s'\\<rbrakk>\n    \\<Longrightarrow> ?Q' s';\n \\<lbrace>?P\\<rbrace> ?f \\<lbrace>\\<lambda>_. ?R\\<rbrace>;\n \\<lbrace>?Q\\<rbrace> ?g \\<lbrace>\\<lambda>_. ?R'\\<rbrace>\\<rbrakk>\n\\<Longrightarrow> corres_underlying ?sr ?nf ?nf' dc ?P ?Q ?f\n                   (do _ <- ?g;\n                       stateAssert ?Q' []\n                    od)"
+  },
+  {
+    "canonical_name": "CorresK_Method.corres_stateAssert_implied_frame",
+    "exact_statement": "\\<lbrakk>\\<forall>s s'.\n            (s, s') \\<in> ?sr \\<longrightarrow>\n            ?F' \\<longrightarrow>\n            ?P' s \\<longrightarrow> ?Q' s' \\<longrightarrow> ?A s';\n \\<And>x. corres_underlyingK ?sr ?nf ?nf' ?F ?r ?P ?Q ?f (?g x)\\<rbrakk>\n\\<Longrightarrow> corres_underlyingK ?sr ?nf ?nf' (?F \\<and> ?F') ?r\n                   (?P and ?P') (?Q and ?Q') ?f (stateAssert ?A [] >>= ?g)"
+  },
+  {
+    "canonical_name": "Corres_UL.corres_stateAssert_implied",
+    "exact_statement": "\\<lbrakk>corres_underlying ?sr ?nf ?nf' ?r ?P ?Q ?f (?g ());\n \\<And>s s'.\n    \\<lbrakk>(s, s') \\<in> ?sr; ?P s; ?P' s; ?Q s'\\<rbrakk>\n    \\<Longrightarrow> ?Q' s'\\<rbrakk>\n\\<Longrightarrow> corres_underlying ?sr ?nf ?nf' ?r (?P and ?P') ?Q ?f\n                   (stateAssert ?Q' [] >>= ?g)"
+  },
+  {
+    "canonical_name": "Corres_UL.corres_stateAssert_assume",
+    "exact_statement": "\\<lbrakk>corres_underlying ?sr ?nf ?nf' ?r ?P ?Q ?f (?g ());\n \\<And>s. ?Q s \\<Longrightarrow> ?P' s\\<rbrakk>\n\\<Longrightarrow> corres_underlying ?sr ?nf ?nf' ?r ?P ?Q ?f\n                   (stateAssert ?P' [] >>= ?g)"
+  },
+  {
+    "canonical_name": "Corres_UL.corres_term(8)",
+    "exact_statement": "(\\<And>s s'.\n    (s, s') \\<in> ?rf_sr \\<Longrightarrow> ?Q' s' = ?Q s) \\<Longrightarrow>\ncorres_underlying ?rf_sr ?nf False dc (\\<lambda>_. True) (\\<lambda>_. True)\n (stateAssert ?Q []) (stateAssert ?Q' [])"
+  },
+  {
+    "canonical_name": "Corres_UL.corres_stateAssert_ignore",
+    "exact_statement": "\\<lbrakk>\\<And>s s'.\n            \\<lbrakk>(s, s') \\<in> ?sr; ?P s; ?P s; ?Q s'\\<rbrakk>\n            \\<Longrightarrow> ?Q' s';\n corres_underlying ?sr ?nf ?nf' ?r ?P ?Q ?f (?g ())\\<rbrakk>\n\\<Longrightarrow> corres_underlying ?sr ?nf ?nf' ?r ?P ?Q ?f\n                   (stateAssert ?Q' [] >>= ?g)"
+  },
+  {
+    "canonical_name": "Corres_UL.corres_state_assert",
+    "exact_statement": "\\<lbrakk>corres_underlying ?sr ?nf ?nf' ?rr ?P ?Q ?f (?g ());\n \\<And>s. ?Q s \\<Longrightarrow> ?R s\\<rbrakk>\n\\<Longrightarrow> corres_underlying ?sr ?nf ?nf' ?rr ?P ?Q ?f\n                   (state_assert ?R >>= ?g)"
+  },
+  {
+    "canonical_name": "Corres_UL.corres_stateAssert_r_cross",
+    "exact_statement": "\\<lbrakk>\\<forall>s s'.\n            (s, s') \\<in> ?sr \\<longrightarrow>\n            ?P' s \\<longrightarrow> ?Q' s' \\<longrightarrow> ?A s';\n corres_underlying ?sr ?nf ?nf' ?r ?P ?Q ?f (?g ())\\<rbrakk>\n\\<Longrightarrow> corres_underlying ?sr ?nf ?nf' ?r (?P and ?P')\n                   (?Q and ?Q') ?f (stateAssert ?A [] >>= ?g)"
+  },
+  {
+    "canonical_name": "Corres_Method.corres_underlying_stateAssert_stateAssert_trivial",
+    "exact_statement": "(\\<And>s s'.\n    (s, s') \\<in> ?rf_sr \\<Longrightarrow> ?Q' s' = ?Q s) \\<Longrightarrow>\ncorres_underlying ?rf_sr ?nf False dc (\\<lambda>_. True) (\\<lambda>_. True)\n (stateAssert ?Q []) (stateAssert ?Q' [])"
+  },
+  {
+    "canonical_name": "Corres_UL.corres_stateAssert_r",
+    "exact_statement": "corres_underlying ?sr ?nf ?nf' ?r ?P ?Q ?f (?g ()) \\<Longrightarrow>\ncorres_underlying ?sr ?nf ?nf' ?r ?P (?Q and ?P') ?f\n (stateAssert ?P' [] >>= ?g)"
+  }
+]

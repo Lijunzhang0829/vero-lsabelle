@@ -1,0 +1,52 @@
+{
+  "benchmark_id": "a1f1f6dd7d9fbf927d700e65ae21d043cf5d1e29408c22ef36c78f7acfc617c0",
+  "checker": {
+    "command_prefix": [
+      "runuser",
+      "-u",
+      "checker",
+      "--"
+    ],
+    "env": {
+      "HOME": "/home/checker",
+      "L4V_ARCH": "ARM",
+      "USER_HOME": "/home/checker"
+    },
+    "isabelle": "/workspace/verification/isabelle/bin/isabelle",
+    "session": "Semantic_Base",
+    "session_dirs": [
+      "/sel4-project/verification/l4v/lib/Word_Lib",
+      "/sel4-project/verification/l4v/lib/ML_Utils",
+      "/sel4-project/verification/l4v/lib/Basics",
+      "/sel4-project/verification/l4v/lib/Eisbach_Tools",
+      "/sel4-project/verification/l4v/lib/Monads",
+      "/sel4-project/verification/l4v/lib/sep_algebra",
+      "/sel4-project/verification/l4v/lib",
+      "/sel4-project/verification/l4v/tools/c-parser",
+      "/sel4-project/verification/l4v/tools/autocorres",
+      "/sel4-project/verification/l4v/tools/asmrefine",
+      "/sel4-project/verification/l4v/spec",
+      "/sel4-project/verification/l4v/proof",
+      "/semantic-base"
+    ],
+    "threads": 4,
+    "timeout_seconds": 120
+  },
+  "implementation": {
+    "__init__.py": "5163e0609d9fa7b7e3175b9c12e0f248eb983531ec8f0e07b9705b29835379ab",
+    "__main__.py": "43a9bad6b79ac7510dcf2e6288e480b7b93d5e1f55b065bed9d265b627d66e88",
+    "agent.py": "7d66c06bbd19e1f327bbcf45db4f676ac650d123b1a266e0d495eab501ca586a",
+    "attempts.py": "a2ca0c369c745abba26b559af0f21160f1ea4bc0480994d38dd352b0b514233a",
+    "benchmark.py": "6d402ffcd9357661f1c6ca43900d7fcf5d6338b6ed020c6904c36003f5ea6507",
+    "checker.py": "cc7227ef5b944277e72d63feda45cf49d1ace519ce4e4dc7173f01c5e507f1eb",
+    "environment.py": "241712cea4137d93edb0689680320f99667e8eff61433fa4859b0587d7a8614e",
+    "planned_run.py": "6b2ed34e53f0c46f23e198aed2b8c0d627ead41d2311d71ca7b188cc1b3ecb71",
+    "planning.py": "65c715231beb1c4abe0e844244f1d3e2ab09af88d97527fbd5cdd272d48d9cc5",
+    "processes.py": "519aa0be5b5a4a830a021660b65ee28c512a385e341ba0d3b3db7e87d709e0a7",
+    "runner.py": "5417f74a0e0818d4cb9d4cb9e85a09c2d1a45177f4fda8f8279c0fc5d5cda218",
+    "tool.py": "8fcf7fda0e6cf75eaecda4e9d8ca7a4902564b2540750f3dc3222898fcb5411f"
+  },
+  "intervention": "post-hoc checker-only; no new proof bodies",
+  "model_calls": 0,
+  "original_artifact_sha256": "b31a1c0d0de5ae1023d847579d53e31fda547c3685ec177fb883b15d6d517254"
+}

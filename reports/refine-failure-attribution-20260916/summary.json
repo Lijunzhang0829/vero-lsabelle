@@ -1,0 +1,52 @@
+[
+  {
+    "audited": [
+      "c0074:prove",
+      "c0076:prove",
+      "c0084:prove",
+      "c0087:prove",
+      "c0080:prove",
+      "c0089:prove",
+      "c0078:prove",
+      "c0062:prove",
+      "c0065:prove"
+    ],
+    "case": "finalise-original",
+    "elapsed_seconds": 20.463132466189563,
+    "status": "build_error"
+  },
+  {
+    "audited": [
+      "c0074:prove",
+      "c0076:prove",
+      "c0084:prove",
+      "c0087:prove",
+      "c0080:prove",
+      "c0089:prove",
+      "c0078:prove",
+      "c0062:prove",
+      "c0065:prove"
+    ],
+    "case": "finalise-without-c0071",
+    "elapsed_seconds": 20.46761691523716,
+    "status": "ok"
+  },
+  {
+    "audited": [],
+    "case": "c0162-candidate-1",
+    "elapsed_seconds": 8.972905130125582,
+    "status": "build_error"
+  },
+  {
+    "audited": [],
+    "case": "c0162-candidate-2",
+    "elapsed_seconds": 8.890902137383819,
+    "status": "build_error"
+  },
+  {
+    "audited": [],
+    "case": "c0162-candidate-3",
+    "elapsed_seconds": 9.011480681132525,
+    "status": "build_error"
+  }
+]
