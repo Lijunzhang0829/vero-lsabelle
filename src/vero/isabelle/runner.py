@@ -142,6 +142,16 @@ def _run_locked(benchmark_path, config_path, root, *, resume):
             INSTRUCTION.format(count=len(bench["contracts"]), seconds=int(remaining))
             + feedback
         )
+        if "planning" in bench:
+            instruction = instruction.replace(
+                "there is no separate planner or per-contract model.",
+                "a separately accepted PLAN is provided; there is no per-contract model.",
+            )
+            instruction = instruction.replace(
+                "Owner\nmodules are independent: no hidden original proof dependency graph is supplied.",
+                "The accepted PLAN supplies real theory imports. Imported completed generated facts may be referenced using their qualified theory names. Unfilled goals supply no facts.",
+            )
+            instruction += "\n# Accepted PLAN\nRead .vero/plan.json and follow its execution_order and contract order. Prioritize providers before consumers, retain successful providers, and check dependency chains. Only frozen imports are available; do not edit them.\n"
         (workspace / "INSTRUCTION.md").write_text(instruction)
         if cfg.get("sandbox_uid") is not None:
             uid = cfg["sandbox_uid"]

@@ -1,5 +1,9 @@
 # Worklog
 
+## 2026-09-16
+
+- Added separate artifact-driven Isabelle PLAN, native declaration preflight, actual generated-theory imports and dependency-aware evaluation. All 29 tests passed on machine B including real cross-theory proof reuse. Started a fresh Refine PLAN (600 seconds) then generation (1,800 seconds) experiment without importing earlier generated proofs; results pending.
+
 ## 2026-09-15
 
 - Added per-contract diagnostic check snapshots, rendered-source attribution, interrupted submissions, supervisor archives and automatic post-evaluation ledgers. Backfilled all 287 contracts conservatively: 56 independently proved, 2 unresolved with explicit legacy slot evidence, 229 unresolved with incomplete per-contract history. See [current ledger](reports/refine-contract-ledger-20260915/README.md).

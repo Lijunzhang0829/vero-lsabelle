@@ -146,8 +146,10 @@ def evaluate(bench, artifact, output, checker):
                 statuses[c["id"]] = {"status": "pending", "polarity": polarity}
                 bodies[c["id"] + ":" + polarity] = slot["body"]
     render(bench, output / "source", bodies)
+    from .planning import dependencies, module_order
+
     module_results = {}
-    for module in sorted({c["module"] for c in bench["contracts"]}):
+    for module in module_order(bench):
         pending = [
             c
             for c in bench["contracts"]
@@ -155,7 +157,20 @@ def evaluate(bench, artifact, output, checker):
         ]
         if not pending:
             continue
-        result = checker.check(output / "source", module)
+        blocked = sorted(
+            d
+            for d in dependencies(bench, module)
+            if module_results.get(d, {}).get("status") not in {None, "ok"}
+        )
+        if blocked:
+            result = {
+                "status": "blocked_dependency",
+                "audited": [],
+                "log": "Blocked by failed imported theories: " + ", ".join(blocked),
+                "blocked_by": blocked,
+            }
+        else:
+            result = checker.check(output / "source", module)
         (output / (module + ".log")).write_text(result["log"])
         module_results[module] = {k: v for k, v in result.items() if k != "log"}
         for c in pending:

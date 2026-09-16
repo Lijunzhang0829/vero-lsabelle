@@ -28,6 +28,11 @@ def main():
     x.add_argument("--artifact", required=True)
     x.add_argument("--checker", required=True)
     x.add_argument("--output", required=True)
+    x = s.add_parser("plan-run")
+    x.add_argument("--benchmark", required=True)
+    x.add_argument("--config", required=True)
+    x.add_argument("--output", required=True)
+    x.add_argument("--resume", action="store_true")
     x = s.add_parser("run")
     x.add_argument("--benchmark", required=True)
     x.add_argument("--config", required=True)
@@ -47,6 +52,10 @@ def main():
         result = evaluate(
             read(a.benchmark), read(a.artifact), a.output, Checker(read(a.checker))
         )
+    elif a.command == "plan-run":
+        from .planned_run import execute
+
+        result = execute(a.benchmark, a.config, a.output, resume=a.resume)
     else:
         result = run(a.benchmark, a.config, a.output, resume=a.resume)
     print(json.dumps(result, ensure_ascii=False, indent=2))

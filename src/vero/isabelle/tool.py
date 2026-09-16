@@ -12,6 +12,7 @@ sys.path.insert(0, os.environ.get("VERO_SRC", "/vero-src"))
 from vero.isabelle.attempts import begin, finish
 from vero.isabelle.benchmark import extract, read, render
 from vero.isabelle.checker import Checker, filled, hygiene
+from vero.isabelle.planning import check_plan_file, dependencies
 
 
 def main():
@@ -19,6 +20,8 @@ def main():
     sub = p.add_subparsers(dest="cmd", required=True)
     ck = sub.add_parser("check")
     ck.add_argument("module")
+    plan = sub.add_parser("validate-plan")
+    plan.add_argument("path")
     se = sub.add_parser("search")
     se.add_argument("query")
     se.add_argument("--limit", type=int, default=20)
@@ -26,6 +29,22 @@ def main():
     sub.add_parser("progress")
     a = p.parse_args()
     bench = read(os.environ.get("VERO_BENCHMARK", "/benchmark/benchmark.json"))
+    if a.cmd == "validate-plan":
+        try:
+            compiled = check_plan_file(bench, a.path)
+            print(
+                json.dumps(
+                    {
+                        "valid": True,
+                        "contracts": len(compiled["contracts"]),
+                        "planning": compiled["planning"],
+                    }
+                )
+            )
+        except (ValueError, OSError, KeyError, TypeError) as exc:
+            print(json.dumps({"valid": False, "error": str(exc)}))
+            raise SystemExit(1) from exc
+        return
     if a.cmd == "search":
         found = 0
         printed = 0
@@ -70,9 +89,10 @@ def main():
     if a.module not in modules:
         raise SystemExit("unknown module")
     attempt = begin(Path.cwd() / ".vero-attempts", bench, a.module, artifact)
+    closure = dependencies(bench, a.module) | {a.module}
     bodies = {}
     for c in bench["contracts"]:
-        if c["module"] != a.module:
+        if c["module"] not in closure:
             continue
         for polarity in ["prove", "disprove"]:
             key = c["id"] + ":" + polarity

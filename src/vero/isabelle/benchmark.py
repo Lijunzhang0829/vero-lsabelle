@@ -121,7 +121,9 @@ def render(bench, destination, bodies=None, *, support_path=None):
     support = support.replace("IMPORT_BASE", bench["base_import"])
     (destination / "Vero_Support.thy").write_text(support)
     for module in modules:
-        chunks = [f"theory {module}\nimports Vero_Support\nbegin\n"]
+        dependencies = bench.get("planning", {}).get("imports", {}).get(module, [])
+        imports = " ".join(["Vero_Support", *dependencies])
+        chunks = [f"theory {module}\nimports {imports}\nbegin\n"]
         active_context = []
         for c in bench["contracts"]:
             if c["module"] != module:
