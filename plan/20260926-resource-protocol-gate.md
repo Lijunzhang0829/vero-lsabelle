@@ -1,0 +1,2 @@
+# Common resource tools protocol gate
+Freeze exact A native/high-level reference and the new common facade. Conformance requires matching source identities, native A/B evidence across all operation/negative cases, and explicit A/B adapter activation bindings. Do not relabel the existing A graph runner as already using the new common facade. Tests reject unvalidated manifests, source drift, failed receipts, and missing activation.

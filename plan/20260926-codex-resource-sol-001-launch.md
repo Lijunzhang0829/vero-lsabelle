@@ -1,0 +1,3 @@
+# Fresh formal Codex resource-v2 launch
+
+User explicitly authorizes the formal experiment with gpt-5.6-sol; retain approved medium reasoning and the verified r2 profile. First stage86400 wall seconds, unlimited tokens,8 CPUs/32GiB; preserve all artifacts/auth and same-session continuation only under later authorization. Verify immutable release/config, prepare a fresh dedicated worker and287 original declaration fingerprints, then launch the actual resource_runtime detached and verify real session/model/usage events. Do not expose historical proofs or alter the old paused run. Record the actual proxy and startup results, including any bootstrap failure; no ad hoc proof hints or patches from the supervisor. Approved branch remains feat/codex-autonomous-baseline.

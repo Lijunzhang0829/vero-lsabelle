@@ -1,0 +1,5 @@
+# Mandatory agent-owned theory planning and seal visibility
+
+On the already authorized feature branch, add the user's requested planning discipline to the actual agent prompt: map every contract exactly once into planned theories, record imports and full declaration stubs before candidate checking, keep the plan synchronized, and inspect automatic theory sealing after all own contract/helper nodes become GREEN. Reuse existing supervisor sealing; do not introduce a fixed planner or change attempt semantics. Verify original-theory metadata visibility in actual input projection and disclose names versus removed proof bodies accurately. This is a prompt requirement, not a claim that a JSON plan validator already exists. No model/worker launch.
+
+Completed prompt update, source/seal logic inspection and actual input projection audit.17 existing protocol tests passed; Python/Isabelle implementation unchanged. Original theory names visible, removed proof bodies excluded. No new experiment started.
