@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "backend": "a-shared-incremental-v1",
+  "origin_worktree": "/home/lijun/seL4-docker-main/.worktrees/semantic-base-theory-regrouping",
+  "files": {
+    "a_persistent_core.py": {
+      "source": "regen/execution/persistent_checker.py",
+      "sha256": "87bb7f35487bd5322b62ae445f808ad992a2c6ce5120634039c0a788d9d00951"
+    },
+    "a_incremental_core.ML": {
+      "source": "regen/execution/incremental_checker.ML",
+      "sha256": "5811ff9f724bdf4f03a68c05d4ce9facf2a4a4d1da2cbb8cbad150b9b3169fc1"
+    }
+  },
+  "adaptations": "Exact A Python transport and incremental ML files. Local launcher supplies paths/imports; ML runtime substitution changes /worker and /candidate paths only. Native mathematical execute/check/advance logic is unchanged."
+}

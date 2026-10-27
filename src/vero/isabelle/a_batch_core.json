@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "backend": "a-shared-batch-v2",
+  "origin_worktree": "/home/lijun/seL4-docker-main/.worktrees/semantic-base-repository-planning",
+  "files": {
+    "a_batch_core.ML": {
+      "source": "regen/execution/batch_checker.ML",
+      "sha256": "205451fe9a4bbbe9a58f68c91878224bcbbfe069a7be871d6a2dd4bb347feaac"
+    },
+    "a_batch_audit.py": {
+      "source": "regen/execution/batch_audit.py",
+      "sha256": "cba1a9b81fe49fed5a3fd36e781aaae20e8cc5592bcfe5aa2b33d534bffef569"
+    }
+  },
+  "adaptations": "Exact current A batch ML and XML audit validator. Python adapter changes local launch/path ownership, phase/global deadlines and frozen VERO proposition audit. ML path substitutions only; execute, audit, check and commit remain unchanged."
+}
