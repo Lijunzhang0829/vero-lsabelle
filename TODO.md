@@ -1,5 +1,7 @@
 # TODO
 
+- Minimal seven-service entry implemented; bind external official launch, common resources/telemetry and three-method native conformance before deployment. Legacy modules remain historical variants outside the minimal path. See docs/minimal-harness.md.
+
 - 2026-11-07: Snapshot display adjustment complete and tested; use progress.json/progress.md for current versus historical-best counts. Development-only change; bind a new release for future experiments, preserving historical frozen code. See [plan](plan/20261106-progress-display.md).
 
 - 2026-11-06: Contextual refutation and resolved-mode recovery implemented on `feat/contextual-refutation-robustness`. Independent candidate `contextual-refutation-20261106-003` is validated on machine B (125-case native/fault base, 113 final runtime cases); new experiments must freeze this implementation rather than historical `db0d68f`. Preserve historical runs and recheck inherited refutations. See [semantics and deployment](docs/contextual-refutation.md).

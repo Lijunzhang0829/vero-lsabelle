@@ -2,6 +2,8 @@
 
 ## 2026-11-07
 
+- Added minimal harness and minimal agent-tool entry points reusing preparation/render/extract/grading; no model runner import or strategy commands. Reject retry-controller socket dispatch and label progress as candidate occupancy. Seven boundary checks and eight legacy session tests passed; external shared-resource/telemetry deployment is still pending. See docs/minimal-harness.md.
+
 - User authorized grouped publication to the personal vero-lsabelle repository. Group shared source, optional baseline modes, scripts and optimization records; exclude tests and experiment/report artifacts. Publication regressions30 passed/12 native skips, in addition to prior display/session/recovery16; no frozen release was replaced. See docs/implementation-publication-20261107.md.
 
 - Completed display-only checkpoint progress: explicit best-snapshot headline, current/best identity, final integration identity and Markdown sidecar. Rebuilt both completed intervaltree trials separately; each reports85 proved/6 refuted/91 resolved. Preserved frozen experiments and all acceptance/scheduling decisions. Progress4, session8 and recovery4 tests passed.

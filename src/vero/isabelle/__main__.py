@@ -4,10 +4,9 @@ import json
 from .benchmark import extract, prepare, read, render, save
 from .checker import Checker, evaluate
 from .environment import verify
-from .runner import run
 
 
-def main():
+def main(argv=None, *, minimal=False):
     p = argparse.ArgumentParser(description="Vero Isabelle proof-mode backend")
     s = p.add_subparsers(dest="command", required=True)
     x = s.add_parser("verify-environment")
@@ -32,22 +31,23 @@ def main():
     x.add_argument("--artifact", required=True)
     x.add_argument("--checker", required=True)
     x.add_argument("--output", required=True)
-    x = s.add_parser("evaluate-samples")
-    x.add_argument("--benchmark", required=True)
-    x.add_argument("--samples", required=True)
-    x.add_argument("--checker", required=True)
-    x.add_argument("--output", required=True)
-    x = s.add_parser("plan-run")
-    x.add_argument("--benchmark", required=True)
-    x.add_argument("--config", required=True)
-    x.add_argument("--output", required=True)
-    x.add_argument("--resume", action="store_true")
-    x = s.add_parser("run")
-    x.add_argument("--benchmark", required=True)
-    x.add_argument("--config", required=True)
-    x.add_argument("--output", required=True)
-    x.add_argument("--resume", action="store_true")
-    a = p.parse_args()
+    if not minimal:
+        x = s.add_parser("evaluate-samples")
+        x.add_argument("--benchmark", required=True)
+        x.add_argument("--samples", required=True)
+        x.add_argument("--checker", required=True)
+        x.add_argument("--output", required=True)
+        x = s.add_parser("plan-run")
+        x.add_argument("--benchmark", required=True)
+        x.add_argument("--config", required=True)
+        x.add_argument("--output", required=True)
+        x.add_argument("--resume", action="store_true")
+        x = s.add_parser("run")
+        x.add_argument("--benchmark", required=True)
+        x.add_argument("--config", required=True)
+        x.add_argument("--output", required=True)
+        x.add_argument("--resume", action="store_true")
+    a = p.parse_args(argv)
     if a.command == "verify-environment":
         result = verify(a.environment)
     elif a.command == "prepare":
@@ -77,6 +77,8 @@ def main():
 
         result = execute(a.benchmark, a.config, a.output, resume=a.resume)
     else:
+        from .runner import run
+
         result = run(a.benchmark, a.config, a.output, resume=a.resume)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 

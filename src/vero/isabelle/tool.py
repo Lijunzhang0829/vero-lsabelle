@@ -17,24 +17,27 @@ from vero.isabelle.planning import check_plan_file, dependencies
 from vero.isabelle.slots import context, schedule, slot_hygiene
 
 
-def main():
+def main(argv=None, *, minimal=False):
     p = argparse.ArgumentParser()
     sub = p.add_subparsers(dest="cmd", required=True)
     ck = sub.add_parser("check")
     ck.add_argument("module")
     ck.add_argument("--request-id")
-    result_parser = sub.add_parser("result")
-    result_parser.add_argument("request_id")
-    feedback_parser = sub.add_parser("feedback")
-    feedback_parser.add_argument("contract", nargs="?")
-    plan = sub.add_parser("validate-plan")
-    plan.add_argument("path")
+    if not minimal:
+        result_parser = sub.add_parser("result")
+        result_parser.add_argument("request_id")
+        feedback_parser = sub.add_parser("feedback")
+        feedback_parser.add_argument("contract", nargs="?")
+        plan = sub.add_parser("validate-plan")
+        plan.add_argument("path")
     se = sub.add_parser("search")
     se.add_argument("query")
     se.add_argument("--limit", type=int, default=20)
     se.add_argument("--offset", type=int, default=0)
     sub.add_parser("progress")
-    a = p.parse_args()
+    a = p.parse_args(argv)
+    if minimal and os.environ.get("VERO_RETRY_SOCKET"):
+        p.error("minimal harness does not permit retry-controller dispatch")
     bench = read(os.environ.get("VERO_BENCHMARK", "/benchmark/benchmark.json"))
     if a.cmd == "validate-plan":
         try:
@@ -114,6 +117,7 @@ def main():
         print(
             json.dumps(
                 {
+                    "basis": "candidate slot occupancy; not independently accepted proofs",
                     "total_specs": len(bench["contracts"]),
                     "filled_slots": sum(
                         s["found"] and filled(s["body"])
