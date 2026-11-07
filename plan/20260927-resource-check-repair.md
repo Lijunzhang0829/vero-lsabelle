@@ -1,0 +1,7 @@
+# Resource check repair and current A/B parity
+
+User requests diagnosis and repair; experiment remains paused. Existing approved branch feat/codex-autonomous-baseline continues. Three bounded agents own (1) status/cancellation, (2) declaration scope/cache, (3) current A backend parity; parent integrates, reviews and validates against preserved 21-theory/four-target request. No production model calls, frozen release mutations, automatic experiment restart, or artifact/auth deletion.
+
+Inspect exact A current checker policies and runtime, freeze the chosen snapshot, correct B per-operation settings, and require matching native acceptance evidence. Scope declaration certification to relevant context without trusting unproved goals; preserve complete kernel/statement/command audits. Make result/progress nonblocking and bounded, request cancellation effective for checker children, and reserve operations durably. Verify old false-status/usage visibility cannot mask active or paused runtime.
+
+Validation: focused regressions for each change, independent cross-review, live B replay of preserved request in separate validation namespace, real checker cancellation and status responsiveness, native positive/negative/check/seal/import controls, and full appropriate regression. Publish code/evidence to a new staging release on B with no switch of paused run. Report remaining parity limitations rather than claiming unsupported equivalence.

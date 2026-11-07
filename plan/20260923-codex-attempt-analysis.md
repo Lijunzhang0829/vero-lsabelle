@@ -1,0 +1,3 @@
+# Read-only analysis of Codex freeform attempts
+
+On the approved feat/codex-autonomous-baseline branch, analyze the completed codex-freeform-astra-001 ledger, native logs, accepted source snapshots and agent-authored search scripts. Preserve the official score and all original evidence. Distinguish mathematical failures, audit-stage rejections, native interrupt exceptions and uncharged timeouts. Explain adaptive proofs versus bulk template rotation, proof reuse, temporal diminishing returns and remaining verification limits. No new model calls, proof generation, replay or checker correction in this analysis.

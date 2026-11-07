@@ -1,0 +1,9 @@
+# Isabelle implementation publication, 2026-11-07
+
+The user authorized grouped commits and push to Lijunzhang0829/vero-lsabelle on feat/contextual-refutation-robustness. This branch starts at db0d68f and collects previously uncommitted work; it is separate from the October source-publication branch. Source is grouped into shared Isabelle checking/runtime/accounting (including closed-context refutation and snapshot display), optional Codex/freeform/repository/resource modes, deployment/analysis scripts, and design/optimization records. Intermediate commits are review groups; use the final branch tree for execution.
+
+Local test changes, experiments, report artifacts, historical report deletions, logs, heaps and credentials are excluded. The broader optional modes are not all enabled in the completed intervaltree trials. In particular, current slot-based Codex uses a prompt adapter over the shared finite runner; older freeform/resource protocols remain distinct and do not inherit contextual-refutation support automatically.
+
+Publication validation: contextual-refutation policy9, run invariants2 and experiment metrics19 tests passed;12 native contextual tests skipped because this publication invocation did not configure an Isabelle executable. The preceding display/session/recovery check passed16 tests. These are affected non-native regressions, not a full-suite or fresh native validation. Historical native validation is described separately in contextual-refutation.md. Python source syntax and patch whitespace were checked. No new paid/model experiment, frozen deployment replacement, or upstream-main push is part of publication.
+
+Resolved counts distinguish proved and refuted contracts. An85-proved/6-refuted artifact resolves91 targets but does not establish that all91 original positive specifications hold. Snapshot display retains current and historical-best coherent artifacts separately and is not a permanent GREEN ledger.

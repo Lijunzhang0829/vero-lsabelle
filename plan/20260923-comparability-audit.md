@@ -1,0 +1,5 @@
+# Experiment comparability and failure audit
+
+Read-only comparison of frozen B VERO / independent Codex settings and current local repo-level settings. Inspect model identity and lineage, exact contract/environment identity, legal proof visibility, attempt/helper/GRA budgets, tool and feedback affordances, transport recovery, native checker/audit semantics, timing/resource settings and terminal scoring. Reconcile original outcomes with the two offline correction replays without treating partial coverage as a full rerun. Classify confirmed harness defects, resource/infrastructure failures, experimental confounders and genuine candidate proof failures separately. Save machine-readable matrices, failure coverage and a concrete controlled-comparison protocol. Preserve source ledgers and avoid new model calls or proof edits.
+
+Completed the evidence-backed comparison and failure coverage report; remaining full cross-system semantic/resource equivalence checks are explicitly open. No changes to runtime behavior or historical scores.

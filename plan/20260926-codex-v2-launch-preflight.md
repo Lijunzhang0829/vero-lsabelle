@@ -1,0 +1,3 @@
+# Codex v2 launch preflight
+
+Use the approved feat/codex-autonomous-baseline branch. Check B resource-fairness-v2 requirements against actual deployed controller, staged config and evidence. User authorizes a fresh gpt-5.6-sol/medium experiment only after conformance. Freeze the newly specified 86400-second wall-clock stage with explicitly unlimited tokens; deadline pauses retain all artifacts and allow separately authorized same-run continuation without resetting cumulative costs. Record unmet runtime requirements; never bypass the staged launch guard. Publish a preflight report/config revision while preserving old releases and historical runs.
