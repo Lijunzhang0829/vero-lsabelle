@@ -1,12 +1,19 @@
 theory Vero_Support
 imports IMPORT_BASE
 keywords "vero_prove" "vero_disprove" :: thy_goal
+  and "vero_refute_capture" :: thy_decl
 begin
 
 ML \<open>
 local
 val trusted_axioms = sort_strings (map #1 (Thm.all_axioms_of \<^theory>));
 val trusted_defs = Theory.defs_of \<^theory>;
+structure Captured_Targets = Theory_Data
+(
+  type T = term Symtab.table;
+  val empty = Symtab.empty;
+  fun merge tables = Symtab.merge (op aconv) tables;
+);
 
 fun safe_def_axioms thy =
   Defs.dest_constdefs [trusted_defs] (Theory.defs_of thy)
@@ -17,6 +24,7 @@ fun audit id polarity baseline results lthy =
   let
     val thms = flat results;
     val _ = if null thms then error "Vero: no theorem produced" else ();
+    val _ = Thm.consolidate thms;
     val _ = if Thm_Deps.has_skip_proof thms then error "Vero: skip_proof dependency" else ();
     val _ = if null (Thm_Deps.all_oracles thms) then () else error "Vero: oracle dependency";
     val thy = Proof_Context.theory_of lthy;
@@ -48,32 +56,56 @@ fun positive id (long, binding, includes, elems, concl) int lthy =
   in Specification.theorem_cmd long Thm.theoremK NONE
        (audit id "prove" baseline) binding includes elems concl int lthy end;
 
-fun negative id (_, binding, includes, elems, concl) int lthy =
+fun capture id (_, _, includes, elems, concl) lthy =
   let
     val _ = if null includes then () else error "Vero: disprove includes not supported";
     val _ = (case concl of Element.Shows _ => () | _ => error "Vero: disprove obtains not supported");
     val (statements, ctxt) = Expression.read_statement elems concl lthy;
     val goals = maps (map fst o snd) statements;
-    val premises = map Thm.term_of (Assumption.local_assms_of ctxt lthy);
-    val conclusion = Logic.mk_conjunction_list goals;
-    val proposition = Logic.list_implies (premises, conclusion);
-    val frees = Term.add_frees proposition []
-      |> filter_out (fn (name, _) => Variable.is_fixed lthy name);
-    val closed = fold_rev (fn v => fn t => Logic.all (Free v) t) frees proposition;
+    val outer = Proof_Context.init_global (Proof_Context.theory_of ctxt);
+    val premises = map Thm.term_of (Assumption.local_assms_of ctxt outer);
+    val proposition = Logic.list_implies (premises, Logic.mk_conjunction_list goals);
+    val exported = proposition |> Assumption.export_term ctxt outer
+      |> singleton (Variable.export_terms ctxt outer);
+    val ([imported], global_ctxt) = Variable.import_terms true [exported] outer;
+    val closed = fold_rev (fn v => fn t => Logic.all (Free v) t)
+      (Term.add_frees imported []) imported;
+    val _ = if null (Term.add_frees closed []) andalso null (Term.add_vars closed [])
+      then () else error "Vero: unclosed contextual target";
+    val _ = Thm.cterm_of global_ctxt closed;
+    val _ = Thm.cterm_of global_ctxt (HOLogic.mk_Trueprop (HOLogic.mk_not (hol_prop closed)));
+  in Local_Theory.background_theory
+       (Captured_Targets.map (Symtab.update (id, closed))) lthy end;
+
+fun negative id name int lthy =
+  let
+    val closed = (case Symtab.lookup (Captured_Targets.get (Proof_Context.theory_of lthy)) id of
+        SOME term => term | NONE => error "Vero: refutation target not captured");
+    val _ = if null (Assumption.all_assms_of lthy) then ()
+      else error "Vero: refutation must run outside owned assumptions";
     val negation = HOLogic.mk_Trueprop (HOLogic.mk_not (hol_prop closed));
-    val name = if Binding.is_empty (#1 binding)
-      then (case statements of (b, _) :: _ => #1 b | _ => Binding.empty)
-      else #1 binding;
-    val baseline = trusted_axioms;
-  in Specification.theorem false Thm.theoremK NONE (audit id "disprove" baseline)
+    fun checked results ctxt =
+      let
+        val thms = flat results;
+        val _ = Thm.consolidate thms;
+        val thm = (case thms of [thm] => thm | _ => error "Vero: expected one negative theorem");
+        val _ = if null (Thm.hyps_of thm) then () else error "Vero: residual hypotheses";
+        val actual = Thm.full_prop_of thm;
+        val _ = if actual aconv negation orelse actual aconv Logic.varify_global negation
+          then () else error "Vero: theorem differs from closed negation";
+      in audit id "disprove" trusted_axioms results ctxt end;
+  in Specification.theorem false Thm.theoremK NONE checked
        (name, []) [] [] (Element.Shows [(Binding.empty_atts, [(negation, [])])]) int lthy end;
 
 val _ = Outer_Syntax.local_theory_to_proof' \<^command_keyword>\<open>vero_prove\<close>
   "prove a frozen Vero contract and audit its kernel dependencies"
   (Parse.name -- (long_statement || short_statement) >> (fn (id, spec) => positive id spec));
 val _ = Outer_Syntax.local_theory_to_proof' \<^command_keyword>\<open>vero_disprove\<close>
-  "prove the negation of the universally closed contract, including its own assumptions"
-  (Parse.name -- (long_statement || short_statement) >> (fn (id, spec) => negative id spec));
+  "prove the closed negation outside the captured contract context"
+  (Parse.name -- Parse.binding >> (fn (id, name) => negative id name));
+val _ = Outer_Syntax.local_theory \<^command_keyword>\<open>vero_refute_capture\<close>
+  "export a fixed contextual contract without proving or assuming it"
+  (Parse.name -- (long_statement || short_statement) >> (fn (id, spec) => capture id spec));
 in end
 \<close>
 end

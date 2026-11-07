@@ -57,7 +57,10 @@ def prepare(
     *,
     base_import="Semantic_Base.Semantic_Root",
     provenance=None,
+    isabelle_api="legacy",
 ):
+    if isabelle_api not in {"legacy", "2026"}:
+        raise ValueError("unsupported Isabelle API")
     records = [
         json.loads(x)
         for x in Path(contracts_path).read_text().splitlines()
@@ -93,6 +96,8 @@ def prepare(
             "editable_generated_imports": True,
         },
     }
+    if isabelle_api != "legacy":
+        body["policy"]["isabelle_api"] = isabelle_api
     bench = {**body, "benchmark_id": digest(body)}
     validate(bench)
     save(Path(output) / "benchmark.json", bench)
@@ -105,7 +110,7 @@ def slot_key(c, polarity):
 
 def declaration(c, polarity):
     # Only the binding is changed. Types, context, attributes and proposition stay frozen.
-    command = "vero_prove" if polarity == "prove" else "vero_disprove"
+    command = "vero_prove" if polarity == "prove" else "vero_refute_capture"
     statement = NAME.sub(
         lambda m: command + ' "' + c["id"] + '" ' + c["id"] + "_" + polarity,
         c["statement"],
@@ -126,6 +131,17 @@ def render(bench, destination, bodies=None, *, support_path=None):
         support_path or Path(__file__).with_name("Vero_Support.thy")
     ).read_text()
     support = support.replace("IMPORT_BASE", bench["base_import"])
+    if bench.get("policy", {}).get("isabelle_api") == "2026":
+        support = support.replace("fun positive id (long, binding, includes, elems, concl) int lthy =",
+                                  "fun positive id (long, binding, includes, elems, concl) lthy =")
+        support = support.replace("fun negative id name int lthy =", "fun negative id name lthy =")
+        support = support.replace("Specification.theorem_cmd long Thm.theoremK NONE",
+                                  "Specification.theorem_cmd {verbose = false, long = long, kind = Thm.theoremK} NONE")
+        support = support.replace("Specification.theorem false Thm.theoremK NONE",
+                                  "Specification.theorem {verbose = false, long = false, kind = Thm.theoremK} NONE")
+        support = support.replace("concl int lthy end;", "concl lthy end;")
+        support = support.replace("]) int lthy end;", "]) lthy end;")
+        support = support.replace("Outer_Syntax.local_theory_to_proof'", "Outer_Syntax.local_theory_to_proof")
     (destination / "Vero_Support.thy").write_text(support)
     for module in modules:
         dependencies = bench.get("planning", {}).get("imports", {}).get(module, [])
@@ -136,6 +152,7 @@ def render(bench, destination, bodies=None, *, support_path=None):
             else ""
         )
         chunks = [f"theory {module}\nimports {imports}{extra}\nbegin\n"]
+        chunks.append(f'ML \\<open>writeln "VERO_THEORY_ENTER {module}"\\<close>')
         if enabled(bench):
             chunks.append(
                 block(module + ":global_aux", bodies.get(module + ":global_aux", ""))
@@ -152,9 +169,15 @@ def render(bench, destination, bodies=None, *, support_path=None):
                 if enabled(bench):
                     key = slot_key(c, polarity) + "_aux"
                     chunks.append(block(key, bodies.get(key, "")))
+                chunks.append(declaration(c, polarity))
+                if polarity == "disprove":
+                    # Export first, then leave all owned contexts. A proof of
+                    # negation under the original assumptions is not a refutation.
+                    chunks.extend("end" for _ in active_context)
+                    active_context = []
+                    chunks.append(f'vero_disprove "{c["id"]}" {c["id"]}_disprove')
                 chunks.extend(
                     [
-                        declaration(c, polarity),
                         f"(* VERO START {c['id']} {polarity} *)",
                         bodies.get(slot_key(c, polarity), "oops").strip(),
                         f"(* VERO END {c['id']} {polarity} *)",
@@ -166,7 +189,7 @@ def render(bench, destination, bodies=None, *, support_path=None):
     (destination / "Vero_All.thy").write_text(
         "theory Vero_All\nimports\n"
         + "\n".join("  " + m for m in modules)
-        + "\nbegin\nend\n"
+        + '\nbegin\nML \\<open>writeln "VERO_THEORY_ENTER Vero_All"\\<close>\nend\n'
     )
     save(destination / "benchmark.json", bench)
     return modules

@@ -7,14 +7,36 @@ writable sandbox. No per-contract planner is introduced here.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
+import re
 import subprocess
 import time
 from pathlib import Path
 
 from .benchmark import save
 from .processes import kill_tree
+from .response_usage import ResponseUsageCollector
+from .telemetry import EventLog
+
+
+def thread_id_from_events(path):
+    """Only an unambiguous main-thread event can bind a continuation."""
+    path = Path(path)
+    if not path.is_file():
+        return None
+    threads = set()
+    for line in path.read_text().splitlines():
+        try:
+            event = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(event, dict) and event.get("type") == "thread.started":
+            ident = event.get("thread_id")
+            if isinstance(ident, str) and re.fullmatch(r"[A-Za-z0-9_-]+", ident):
+                threads.add(ident)
+    return next(iter(threads)) if len(threads) == 1 else None
 
 
 class CodexAgent:
@@ -24,8 +46,9 @@ class CodexAgent:
         self.config = dict(config)
         self.log_dir = Path(log_dir)
 
-    def run(self, *, sandbox_dir, instruction_file):
+    def run(self, *, sandbox_dir, instruction_file, monitor=None):
         cfg = self.config
+        metrics = EventLog.from_config(cfg)
         mode = cfg.get("sandbox_mode", "workspace-write")
         if mode == "danger-full-access" and not (
             cfg.get("external_isolation") == "docker-nonroot"
@@ -64,13 +87,16 @@ class CodexAgent:
             "hooks",
             "-",
         ]
-        if cfg.get("persistent_session"):
+        if cfg.get("persistent_session") or metrics is not None:
             command.remove("--ephemeral")
         if cfg.get("resume_session"):
             if not cfg.get("persistent_session"):
                 raise ValueError("session resume requires persistent_session")
+            thread = cfg.get("resume_thread_id")
+            if not isinstance(thread, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", thread):
+                raise ValueError("session resume requires an explicit bound thread ID")
             i = command.index("exec")
-            command[i + 1 : i + 1] = ["resume", "--last"]
+            command[i + 1 : i + 1] = ["resume", thread]
             # Installed resume CLI does not accept exec's --sandbox/--add-dir.
             for flag in ("--sandbox", "--add-dir"):
                 i = command.index(flag)
@@ -109,47 +135,177 @@ class CodexAgent:
             },
         )
         started = time.time()
+        invocation_id = hashlib.sha256(str(self.log_dir.resolve()).encode()).hexdigest()
+        collector = None
+        prompt = Path(instruction_file).read_text()
+        if metrics:
+            metrics.emit(
+                "invocation_started",
+                event_id="invocation-start:" + invocation_id,
+                timestamp=started,
+                invocation_id=invocation_id,
+                requested_model=cfg["model"],
+                reasoning_effort=cfg.get("reasoning_effort", "medium"),
+                role=cfg.get("role", "repository_agent"),
+                agent_id=cfg.get("agent_id", "codex"),
+                source=str(self.log_dir),
+                instruction_sha256=hashlib.sha256(prompt.encode()).hexdigest(),
+                accounting_scope=cfg.get("accounting_scope", {}),
+                accounting_exclusive_home=bool(cfg.get("accounting_exclusive_home")),
+                persistent_session=bool(cfg.get("persistent_session")),
+                resume_session=bool(cfg.get("resume_session")),
+            )
+            collector = ResponseUsageCollector(
+                metrics,
+                codex_home=env["CODEX_HOME"],
+                cli_events=self.log_dir / "agent_events.jsonl",
+                accounting_scope=cfg.get("accounting_scope"),
+                exclusive_home=cfg.get("accounting_exclusive_home", False),
+                invocation_id=invocation_id,
+                model=cfg["model"],
+                reasoning_effort=cfg.get("reasoning_effort", "medium"),
+                role=cfg.get("role", "repository_agent"),
+            )
         save(
             self.log_dir / "state.json",
-            {"status": "running", "started_at": started, "model": cfg["model"]},
+            {
+                "status": "running",
+                "started_at": started,
+                "model": cfg["model"],
+                "invocation_id": invocation_id,
+            },
         )
         timeout = False
-        with (
-            (self.log_dir / "agent_events.jsonl").open("w") as stdout,
-            (self.log_dir / "agent.stderr").open("w") as stderr,
-        ):
-            proc = subprocess.Popen(
-                command,
-                stdin=subprocess.PIPE,
-                stdout=stdout,
-                stderr=stderr,
-                cwd=sandbox_dir,
-                env=env,
-                text=True,
-                start_new_session=True,
-            )
-            save(
-                self.log_dir / "state.json",
-                {
-                    "status": "running",
-                    "started_at": started,
-                    "pid": proc.pid,
-                    "process_start_ticks": Path("/proc/" + str(proc.pid) + "/stat")
-                    .read_text()
-                    .rsplit(")", 1)[1]
-                    .split()[19],
-                    "max_seconds": cfg["timeout_seconds"],
-                    "model": cfg["model"],
-                },
-            )
-            try:
-                proc.communicate(
-                    Path(instruction_file).read_text(), timeout=cfg["timeout_seconds"]
+        stop_reason = None
+        forced_kill = False
+        proc = None
+        failure = None
+        accounting = None
+        try:
+            with (
+                (self.log_dir / "agent_events.jsonl").open("w") as stdout,
+                (self.log_dir / "agent.stderr").open("w") as stderr,
+            ):
+                registry = getattr(self, "process_registry", None)
+                popen = registry.popen if registry is not None else subprocess.Popen
+                proc = popen(
+                    command,
+                    stdin=subprocess.PIPE,
+                    stdout=stdout,
+                    stderr=stderr,
+                    cwd=sandbox_dir,
+                    env=env,
+                    text=True,
+                    start_new_session=True,
+                    **({"kind": "model"} if registry is not None else {}),
                 )
-            except subprocess.TimeoutExpired:
-                timeout = True
+                save(
+                    self.log_dir / "state.json",
+                    {
+                        "status": "running",
+                        "started_at": started,
+                        "pid": proc.pid,
+                        "process_start_ticks": Path("/proc/" + str(proc.pid) + "/stat")
+                        .read_text()
+                        .rsplit(")", 1)[1]
+                        .split()[19],
+                        "max_seconds": cfg["timeout_seconds"],
+                        "model": cfg["model"],
+                        "invocation_id": invocation_id,
+                    },
+                )
+                while True:
+                    try:
+                        poll = cfg.get("monitor_poll_seconds", 1)
+                        interval = (
+                            poll
+                            if monitor is not None or collector
+                            else cfg["timeout_seconds"]
+                        )
+                        proc.communicate(prompt, timeout=interval)
+                        break
+                    except subprocess.TimeoutExpired:
+                        prompt = None  # stdin was already delivered on the first call
+                        if collector:
+                            collector.poll()
+                        now = time.time()
+                        state = json.loads((self.log_dir / "state.json").read_text())
+                        state["last_observed_at"] = now
+                        save(self.log_dir / "state.json", state)
+                        stop_reason = monitor() if monitor is not None else None
+                        timeout = (
+                            cfg["timeout_seconds"] is not None
+                            and now - started >= cfg["timeout_seconds"]
+                        )
+                        if not stop_reason and not timeout:
+                            continue
+                        proc.terminate()
+                        try:
+                            proc.communicate(
+                                timeout=cfg.get("shutdown_grace_seconds", 30)
+                            )
+                        except subprocess.TimeoutExpired:
+                            forced_kill = True
+                            kill_tree(proc.pid)
+                            proc.wait()
+                        break
+        except BaseException as error:
+            failure = error
+            raise
+        finally:
+            # Interrupted callers must not leave an unaccounted child producing
+            # proofs; persisted session records survive SIGKILL for later import.
+            if proc is not None and proc.poll() is None:
+                forced_kill = True
                 kill_tree(proc.pid)
                 proc.wait()
+            status = (
+                "interrupted"
+                if failure or timeout or stop_reason
+                else "completed"
+                if proc is not None and proc.returncode == 0
+                else "failed"
+            )
+            if collector:
+                try:
+                    accounting = collector.finish(status)
+                except Exception as error:
+                    metrics.emit(
+                        "usage_missing",
+                        event_id="collector-failure:" + invocation_id,
+                        invocation_id=invocation_id,
+                        usage=None,
+                        reason="collector_failed",
+                        error_type=type(error).__name__,
+                    )
+                    if failure is None:
+                        raise
+                finally:
+                    metrics.emit(
+                        "invocation_finished",
+                        event_id="invocation-end:" + invocation_id,
+                        invocation_id=invocation_id,
+                        status=status,
+                        returncode=proc.returncode if proc is not None else None,
+                        elapsed_seconds=time.time() - started,
+                        timed_out=timeout,
+                        stop_reason=stop_reason,
+                        forced_kill=forced_kill,
+                        error_type=type(failure).__name__ if failure else None,
+                        accounting=accounting,
+                    )
+            if failure:
+                save(
+                    self.log_dir / "state.json",
+                    {
+                        "status": "interrupted",
+                        "started_at": started,
+                        "finished_at": time.time(),
+                        "invocation_id": invocation_id,
+                        "error_type": type(failure).__name__,
+                        "accounting": accounting,
+                    },
+                )
         usage, events, turns = {}, 0, 0
         for line in (self.log_dir / "agent_events.jsonl").read_text().splitlines():
             try:
@@ -166,13 +322,22 @@ class CodexAgent:
             "ok": proc.returncode == 0 and not timeout,
             "returncode": proc.returncode,
             "timed_out": timeout,
+            "stop_reason": stop_reason,
+            "forced_kill": forced_kill,
             "elapsed_seconds": time.time() - started,
             "usage": usage,
             "num_turns": turns,
             "event_count": events,
+            "thread_id": thread_id_from_events(self.log_dir / "agent_events.jsonl")
+            or (cfg.get("resume_thread_id") if cfg.get("resume_session") else None),
             "total_cost_usd": None,
             "model": cfg["model"],
             "reasoning_effort": cfg.get("reasoning_effort", "medium"),
         }
+        if accounting is not None:
+            # Legacy usage remains a CLI summary for existing consumers. The
+            # common event log and response_accounting are authoritative metrics.
+            result["response_accounting"] = accounting
+            result["invocation_id"] = invocation_id
         save(self.log_dir / "state.json", {"status": "finished", **result})
         return result

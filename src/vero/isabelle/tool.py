@@ -6,11 +6,12 @@ import json
 import os
 import sys
 import tempfile
+import uuid
 from pathlib import Path
 
 sys.path.insert(0, os.environ.get("VERO_SRC", "/vero-src"))
 from vero.isabelle.attempts import begin, finish
-from vero.isabelle.benchmark import extract, read, render
+from vero.isabelle.benchmark import extract, read, render, save
 from vero.isabelle.checker import Checker, filled
 from vero.isabelle.planning import check_plan_file, dependencies
 from vero.isabelle.slots import context, schedule, slot_hygiene
@@ -21,6 +22,11 @@ def main():
     sub = p.add_subparsers(dest="cmd", required=True)
     ck = sub.add_parser("check")
     ck.add_argument("module")
+    ck.add_argument("--request-id")
+    result_parser = sub.add_parser("result")
+    result_parser.add_argument("request_id")
+    feedback_parser = sub.add_parser("feedback")
+    feedback_parser.add_argument("contract", nargs="?")
     plan = sub.add_parser("validate-plan")
     plan.add_argument("path")
     se = sub.add_parser("search")
@@ -70,6 +76,39 @@ def main():
                     found += 1
         print(json.dumps({"matches": found, "returned": printed}))
         return
+    endpoint = os.environ.get("VERO_RETRY_SOCKET")
+    if endpoint and a.cmd in {"progress", "check", "result", "feedback"}:
+        from vero.isabelle.retry_policy import request
+
+        payload = {"cmd": a.cmd}
+        if a.cmd == "check":
+            rid = a.request_id or uuid.uuid4().hex
+            payload.update(
+                artifact=extract(bench, Path.cwd()), module=a.module, request_id=rid
+            )
+            # Local filenames use a generated name; an untrusted explicit ID
+            # never becomes a filesystem path on the client.
+            save(Path.cwd() / ".vero-requests" / (uuid.uuid4().hex + ".json"), payload)
+            print("VERO_REQUEST_ID " + rid, file=sys.stderr, flush=True)
+        elif a.cmd == "result":
+            payload["request_id"] = a.request_id
+        elif a.cmd == "feedback":
+            payload["contract"] = a.contract
+        result = request(endpoint, payload)
+        print(json.dumps(result, indent=2, ensure_ascii=False), flush=True)
+        if result.get("request_id"):
+            request(endpoint, {"cmd": "ack", "request_id": result["request_id"]})
+        failed = result.get("status") in {
+            "controller_error",
+            "extraction_error",
+            "invalid_context",
+        } or any(
+            r["status"] not in {"proved", "already_proved"}
+            for r in result.get("outcomes", [])
+        )
+        raise SystemExit(1 if failed else 0)
+    if a.cmd in {"result", "feedback"}:
+        raise SystemExit("durable feedback requires the supervisor controller")
     artifact = extract(bench, Path.cwd())
     if a.cmd == "progress":
         print(

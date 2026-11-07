@@ -16,6 +16,7 @@ def main():
     x.add_argument("--contracts", required=True)
     x.add_argument("--output", required=True)
     x.add_argument("--base-import", default="Semantic_Base.Semantic_Root")
+    x.add_argument("--isabelle-api", choices=["legacy", "2026"], default="legacy")
     x = s.add_parser("upgrade-slots")
     x.add_argument("--benchmark", required=True)
     x.add_argument("--output", required=True)
@@ -29,6 +30,11 @@ def main():
     x = s.add_parser("evaluate")
     x.add_argument("--benchmark", required=True)
     x.add_argument("--artifact", required=True)
+    x.add_argument("--checker", required=True)
+    x.add_argument("--output", required=True)
+    x = s.add_parser("evaluate-samples")
+    x.add_argument("--benchmark", required=True)
+    x.add_argument("--samples", required=True)
     x.add_argument("--checker", required=True)
     x.add_argument("--output", required=True)
     x = s.add_parser("plan-run")
@@ -45,7 +51,7 @@ def main():
     if a.command == "verify-environment":
         result = verify(a.environment)
     elif a.command == "prepare":
-        result = prepare(a.contracts, a.output, base_import=a.base_import)
+        result = prepare(a.contracts, a.output, base_import=a.base_import, isabelle_api=a.isabelle_api)
     elif a.command == "upgrade-slots":
         from .slots import upgrade
 
@@ -59,6 +65,12 @@ def main():
     elif a.command == "evaluate":
         result = evaluate(
             read(a.benchmark), read(a.artifact), a.output, Checker(read(a.checker))
+        )
+    elif a.command == "evaluate-samples":
+        from .sampling import grade_samples
+
+        result = grade_samples(
+            read(a.benchmark), a.samples, a.output, Checker(read(a.checker))
         )
     elif a.command == "plan-run":
         from .planned_run import execute

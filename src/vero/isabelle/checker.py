@@ -12,7 +12,7 @@ from .benchmark import digest, render, save, validate_artifact
 from .processes import kill_tree
 
 FORBIDDEN = re.compile(
-    r"\b(?:sorry|axiomatization|axioms|oracle|ML\w*|SML\w*|setup|local_setup|method_setup|attribute_setup|simproc_setup|tactic|use|external_file|code_printing|code_reserved|code_identifier|export_code|export_generated_files|generate_file|compile_generated_files|SML_export|declare|lemmas|bundle|unbundle|include|notation|no_notation|syntax|no_syntax|translations|no_translations|judgment|typedecl|typedef|datatype|codatatype|fun|function|primrec|partial_function|class|instantiation|instance|lemma|theorem|corollary|proposition|definition|abbreviation|end|context|theory|locale|interpretation|sublocale|overloading)\b"
+    r"\b(?:vero_prove|vero_disprove|vero_refute_capture|sorry|axiomatization|axioms|oracle|ML\w*|SML\w*|setup|local_setup|method_setup|attribute_setup|simproc_setup|tactic|use|external_file|code_printing|code_reserved|code_identifier|export_code|export_generated_files|generate_file|compile_generated_files|SML_export|declare|lemmas|bundle|unbundle|include|notation|no_notation|syntax|no_syntax|translations|no_translations|judgment|typedecl|typedef|datatype|codatatype|fun|function|primrec|partial_function|class|instantiation|instance|lemma|theorem|corollary|proposition|definition|abbreviation|end|context|theory|locale|interpretation|sublocale|overloading)\b"
 )
 
 
@@ -63,6 +63,26 @@ def hygiene(body):
 class Checker:
     def __init__(self, config):
         self.config = dict(config)
+        self._shared = None
+        self.process_registry = None
+        backend = self.config.get("backend")
+        if backend is not None and backend not in {"fresh-process-v1", "a-shared-incremental-v1", "a-shared-batch-v2"}:
+            raise ValueError("unknown Isabelle backend: " + str(backend))
+        if backend == "a-shared-incremental-v1":
+            from .shared_native import SharedNativeBackend
+            self._shared = SharedNativeBackend(self.config, self._cold_check)
+        elif backend == "a-shared-batch-v2":
+            from .a_batch_native import BatchNativeBackend
+            self._shared = BatchNativeBackend(self.config, self._cold_check)
+
+    def close(self):
+        if self._shared is not None:
+            self._shared.close()
+
+    def build_session(self, directory, theories, session_name="Generated_Refine", timeout=None):
+        if self._shared is None:
+            raise ValueError("session builds require the explicitly configured shared backend")
+        return self._shared.build_session(directory, theories, session_name, timeout)
 
     def command(self, directory, theory):
         cfg = self.config
@@ -70,55 +90,112 @@ class Checker:
             cfg.get("isabelle", "/workspace/verification/isabelle/bin/isabelle"),
             "process",
             "-o",
-            "threads=" + str(cfg.get("threads", 4)),
+            "threads=" + str(cfg.get("threads", 8 if cfg.get("backend") == "a-shared-incremental-v1" else 4)),
             "-l",
             cfg.get("session", "Semantic_Base"),
         ]
         for directory_arg in cfg.get("session_dirs", []):
             argv += ["-d", directory_arg]
-        argv += ["-T", str(Path(directory) / theory)]
+        if cfg.get("backend") in {"a-shared-incremental-v1", "a-shared-batch-v2"}:
+            from .shared_native import ml_string
+            qualifier = cfg.get("source_qualifier", "Generated_Refine")
+            if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", qualifier):
+                raise ValueError("invalid shared source qualifier")
+            call = "(ignore (Thy_Info.use_theories (Options.default ()) "
+            call += ml_string(qualifier) + " [(" + ml_string(Path(directory).resolve() / theory)
+            call += ", Position.none)]); OS.Process.exit OS.Process.success) handle exn => "
+            call += "(writeln (Runtime.exn_message exn); OS.Process.exit OS.Process.failure)"
+            argv += ["-e", call]
+        else:
+            argv += ["-T", str(Path(directory) / theory)]
         return cfg.get("command_prefix", []) + argv
 
     def check(self, directory, theory, timeout=None):
+        if self._shared is not None:
+            return self._shared.check(directory, theory, timeout)
+        return self._cold_check(directory, theory, timeout)
+
+    def _cold_check(self, directory, theory, timeout=None):
         started = time.monotonic()
         command = self.command(directory, theory)
         env = os.environ.copy()
         env.update(self.config.get("env", {}))
+        phases = {}
+        phased = self.config.get("dependency_timeout_seconds") is not None and timeout is None
         try:
-            p = subprocess.Popen(
+            launch = subprocess.Popen if self.process_registry is None else self.process_registry.popen
+            registration = {} if self.process_registry is None else {"kind": "prover"}
+            p = launch(
                 command,
-                text=True,
+                text=not phased,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 env=env,
                 start_new_session=True,
+                **registration,
             )
-            try:
-                log, _ = p.communicate(
-                    timeout=timeout or self.config.get("timeout_seconds", 120)
+            if phased:
+                from .phase_process import communicate_phases
+
+                log, phases = communicate_phases(
+                    p, theory,
+                    load_seconds=self.config["dependency_timeout_seconds"],
+                    owner_seconds=self.config.get("timeout_seconds", 120),
+                    total_seconds=self.config.get("total_timeout_seconds"),
+                    started_at=started,
                 )
                 rc = p.returncode
-                status = "ok" if rc == 0 else "build_error"
-            except subprocess.TimeoutExpired:
-                kill_tree(p.pid)
-                log, _ = p.communicate()
-                rc, status = None, "timeout"
+                status = "timeout" if phases["timeout_phase"] else ("ok" if rc == 0 else "build_error")
+                if status == "timeout":
+                    log += "\nVERO_TIMEOUT phase=" + phases["timeout_phase"] + "\n"
+                elif status == "ok" and not phases["owner_started"]:
+                    status = "infrastructure_error"
+                    log += "\nMissing trusted owner-theory entry marker\n"
+            else:
+                budget = timeout or self.config.get("timeout_seconds", 120)
+                total = self.config.get("total_timeout_seconds") if timeout is None else None
+                if total is not None:
+                    budget = min(budget, total)
+                    phases = {"total_timeout_seconds": total, "timeout_limit": None}
+                try:
+                    log, _ = p.communicate(
+                        timeout=max(0.001, budget - (time.monotonic() - started))
+                    )
+                    rc = p.returncode
+                    status = "ok" if rc == 0 else "build_error"
+                except subprocess.TimeoutExpired:
+                    kill_tree(p.pid)
+                    log, _ = p.communicate()
+                    rc, status = None, "timeout"
+                    if total is not None:
+                        phases["timeout_limit"] = "total_check" if total <= budget else "whole_process"
         except OSError as exc:
             rc, log, status = None, str(exc), "infrastructure_error"
+        failure_kind = None
+        if "Warning - Unable to increase stack - interrupting thread" in log:
+            failure_kind = "stack_exhausted"
+            if status != "timeout":
+                status = "resource_exhausted"
+        elif "exception Interrupt_Breakdown raised" in log:
+            failure_kind = "native_interrupt"
+            if status != "timeout":
+                status = "infrastructure_error"
         evidence = re.findall(
-            r"^VERO_RESULT (c\d{4}) (prove|disprove) clean$", log, re.MULTILINE
+            r"^VERO_RESULT ([ch]\d{4}) (prove|disprove) clean$", log, re.MULTILINE
         )
         return {
             "status": status,
             "returncode": rc,
+            "failure_kind": failure_kind,
             "elapsed_seconds": time.monotonic() - started,
             "audited": [cid + ":" + kind for cid, kind in evidence],
             "log": log,
             "command": command,
+            **phases,
         }
 
 
-def evaluate(bench, artifact, output, checker):
+def evaluate(bench, artifact, output, checker, *, incremental=None):
     validate_artifact(bench, artifact)
     output = Path(output)
     if output.exists():
@@ -209,7 +286,11 @@ def evaluate(bench, artifact, output, checker):
                 "blocked_by": blocked,
             }
         else:
-            result = checker.check(output / "source", module)
+            result = (
+                incremental.check(output / "source", effective, module, pending, statuses)
+                if incremental is not None
+                else checker.check(output / "source", module)
+            )
         (output / (module + ".log")).write_text(result["log"])
         module_results[module] = {k: v for k, v in result.items() if k != "log"}
         for c in pending:
@@ -221,19 +302,31 @@ def evaluate(bench, artifact, output, checker):
                 rec["status"] = (
                     result["status"] if result["status"] != "ok" else "missing_theorem"
                 )
+    seals = (incremental.seal_complete(output / "source", effective, statuses, output)
+             if incremental is not None else None)
     positive = sum(s["status"] == "proved" for s in statuses.values())
     negative = sum(s["status"] == "disproved" for s in statuses.values())
-    complete = positive == len(statuses)
+    complete = False
     integration = None
     if (
         positive + negative == len(statuses)
         and not context_error
         and not auxiliary_errors
         and all(r["status"] == "ok" for r in module_results.values())
+        and (seals is None or all(s["status"] == "sealed" for s in seals.values()))
     ):
         integration = checker.check(output / "source", "Vero_All")
         (output / "integration.log").write_text(integration["log"])
-        complete = complete and integration["status"] == "ok"
+        if integration["status"] == "ok" and getattr(checker, "config", {}).get("backend") in {"a-shared-incremental-v1", "a-shared-batch-v2"}:
+            build = checker.build_session(
+                output / "source", ["Vero_All"],
+                timeout=checker.config.get("integration_build_timeout_seconds", 900),
+            )
+            (output / "integration-build.log").write_text(build["log"])
+            integration["build"] = {k: v for k, v in build.items() if k != "log"}
+            if build["status"] != "ok":
+                integration["status"] = "integration_build_failed"
+        complete = positive == len(statuses) and integration["status"] == "ok"
         integration = {k: v for k, v in integration.items() if k != "log"}
     report = {
         "schema_version": 1,
@@ -252,6 +345,8 @@ def evaluate(bench, artifact, output, checker):
         "contracts": statuses,
         "modules": module_results,
         "integration": integration,
+        "verification_mode": "incremental" if incremental is not None else "full",
+        "seals": seals,
         "context_error": context_error,
         "auxiliary_errors": auxiliary_errors,
         "effective_imports": effective.get("planning", {}).get("imports", {}),

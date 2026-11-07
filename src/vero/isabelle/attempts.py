@@ -65,7 +65,7 @@ def finish(path, result, source):
                     auxiliary_location = start[2] + ":" + start[3]
             declarations = list(
                 re.finditer(
-                    r'^vero_(?:prove|disprove)\s+"c\d{4}"\s+(c\d{4})_(prove|disprove)\b',
+                    r'^vero_(?:prove|disprove|refute_capture)\s+"c\d{4}"\s+(c\d{4})_(prove|disprove)\b',
                     text,
                     re.MULTILINE,
                 )
