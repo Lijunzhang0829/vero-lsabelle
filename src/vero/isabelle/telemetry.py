@@ -254,6 +254,7 @@ def initialize_run(directory, config, benchmark, method, implementation):
         "token_accounting": "individual_reported_response_usage",
         "acceptance": "committed_original_contracts",
         **settings.get("manifest", {}),
+        "result_scope": benchmark.get("policy", {}).get("result_scope", "strict-global-v1"),
     }
     return EventLog(directory, identity)
 

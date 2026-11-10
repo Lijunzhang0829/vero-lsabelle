@@ -79,6 +79,8 @@ def run(benchmark_path, config_path, run_dir, *, resume=False):
     from .run_metrics import segment, setup_metrics
 
     cfg, bench = read(config_path), validate(read(benchmark_path))
+    if bench.get("policy", {}).get("result_scope"):
+        cfg.setdefault("completion_metric", "resolved")
     telemetry = setup_metrics(run_dir, cfg, bench, "vero")
     with segment(telemetry, resume=resume) as lifecycle:
         result = _run(
@@ -142,6 +144,8 @@ def _run_locked(benchmark_path, config_path, root, *, resume, stack, telemetry=N
 
     bench = validate(read(benchmark_path))
     cfg = read(config_path)
+    if bench.get("policy", {}).get("result_scope"):
+        cfg.setdefault("completion_metric", "resolved")
     if "max_contract_retries" in cfg:
         for key in (
             "total_agent_seconds",
@@ -334,7 +338,10 @@ def _run_locked(benchmark_path, config_path, root, *, resume, stack, telemetry=N
                 "only independently checked positive proofs complete the Refine task.",
                 "independently checked proofs or refutations resolve targets; full repository integration is required for completion.",
             )
-        instruction += "\n# Contextual refutation\nA disprove slot runs OUTSIDE the target's owned contexts. The checker captures and universally closes every owned assumption, parameter and local definition before negation. Original context assumptions are not available in a negative proof. Do not reuse a refutation as a positive theorem.\n"
+        if bench.get("policy", {}).get("result_scope"):
+            instruction += "\n# Contextual refutation\nThe default negative obligation is E implies not (ALL x. A x implies Q x), with E from the exact owned context and A from the original contract. A disprove slot physically runs OUTSIDE that context against the trusted exported obligation. Prove a complete checked counterexample satisfying A; do not move A into E. This obligation does not require establishing fixed E globally. A contextual certificate does not establish environment satisfiability or a deployment. Do not reuse it as a positive theorem.\n"
+        else:
+            instruction += "\n# Contextual refutation\nA disprove slot runs OUTSIDE the target's owned contexts. The checker captures and universally closes every owned assumption, parameter and local definition before negation. Original context assumptions are not available in a negative proof. Do not reuse a refutation as a positive theorem.\n"
         if "planning" in bench:
             instruction = instruction.replace(
                 "there is no separate planner or per-contract model.",

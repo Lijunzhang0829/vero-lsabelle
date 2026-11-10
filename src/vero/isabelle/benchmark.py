@@ -40,6 +40,8 @@ def validate(bench):
     body = {k: v for k, v in bench.items() if k != "benchmark_id"}
     if bench.get("benchmark_id") != digest(body):
         raise ValueError("benchmark identity mismatch")
+    if bench.get("policy", {}).get("result_scope") not in (None, "owned-context-outcomes-v1"):
+        raise ValueError("unsupported frozen result scope")
     ids = [c["id"] for c in bench["contracts"]]
     if len(ids) != len(set(ids)):
         raise ValueError("duplicate contract id")
@@ -89,6 +91,7 @@ def prepare(
         "contracts": contracts,
         "provenance": provenance or {},
         "policy": {
+            "result_scope": "owned-context-outcomes-v1",
             "unfilled": "oops",
             "reference_proofs_visible": False,
             "cross_module_proof_imports": True,
@@ -128,7 +131,9 @@ def render(bench, destination, bodies=None, *, support_path=None):
     bodies = bodies or {}
     modules = sorted({c["module"] for c in bench["contracts"]})
     support = Path(
-        support_path or Path(__file__).with_name("Vero_Support.thy")
+        support_path or Path(__file__).with_name(
+            "Vero_Support.thy" if bench.get("policy", {}).get("result_scope")
+            else "Vero_Support_Strict_Global.thy")
     ).read_text()
     support = support.replace("IMPORT_BASE", bench["base_import"])
     if bench.get("policy", {}).get("isabelle_api") == "2026":
@@ -171,8 +176,8 @@ def render(bench, destination, bodies=None, *, support_path=None):
                     chunks.append(block(key, bodies.get(key, "")))
                 chunks.append(declaration(c, polarity))
                 if polarity == "disprove":
-                    # Export first, then leave all owned contexts. A proof of
-                    # negation under the original assumptions is not a refutation.
+                    # Export a closed obligation before leaving the owned context.
+                    # Its meaning is frozen by the benchmark result scope.
                     chunks.extend("end" for _ in active_context)
                     active_context = []
                     chunks.append(f'vero_disprove "{c["id"]}" {c["id"]}_disprove')

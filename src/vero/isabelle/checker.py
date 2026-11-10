@@ -60,6 +60,28 @@ def hygiene(body):
     return None
 
 
+def negative_scope_evidence(log):
+    """Native AST evidence emitted only by the trusted negative command."""
+    import xml.etree.ElementTree as ET
+    scopes = {}
+    for cid, encoded in re.findall(r"^VERO_NEGATIVE_SCOPE ([ch]\d{4}) ([0-9a-f]+)$", log, re.MULTILINE):
+        node = ET.fromstring(bytes.fromhex(encoded).decode())
+        if node.tag != "vero_scope" or node.attrib != {"id": cid}:
+            raise ValueError("negative scope identity mismatch")
+        fields = {child.tag: child.text or "" for child in node}
+        if fields.get("result_scope") != "owned-context-outcomes-v1":
+            raise ValueError("unexpected native negative scope")
+        for key in ("environment", "statement_assumptions", "local_target", "positive_obligation", "negative_obligation"):
+            term = bytes.fromhex(fields[key + "_term"])
+            if not term:
+                raise ValueError("empty native negative obligation")
+            fields[key + "_term_sha256"] = __import__("hashlib").sha256(term).hexdigest()
+        if cid in scopes and scopes[cid] != fields:
+            raise ValueError("conflicting native negative scope")
+        scopes[cid] = fields
+    return scopes
+
+
 class Checker:
     def __init__(self, config):
         self.config = dict(config)
@@ -293,10 +315,18 @@ def evaluate(bench, artifact, output, checker, *, incremental=None):
             )
         (output / (module + ".log")).write_text(result["log"])
         module_results[module] = {k: v for k, v in result.items() if k != "log"}
+        scopes = negative_scope_evidence(result["log"])
         for c in pending:
             rec = statuses[c["id"]]
             key = c["id"] + ":" + rec["polarity"]
             if result["status"] == "ok" and key in result["audited"]:
+                if rec["polarity"] == "disprove" and bench.get("policy", {}).get("result_scope"):
+                    if c["id"] not in scopes:
+                        rec["status"] = "missing_scope_evidence"
+                        continue
+                    rec["scope_evidence"] = scopes[c["id"]]
+                    rec["environment_evidence_status"] = "not_established_by_negative_certificate"
+                rec["result_scope"] = bench.get("policy", {}).get("result_scope", "strict-global-v1")
                 rec["status"] = "proved" if rec["polarity"] == "prove" else "disproved"
             else:
                 rec["status"] = (
@@ -335,6 +365,9 @@ def evaluate(bench, artifact, output, checker, *, incremental=None):
         "total_specs": len(statuses),
         "proved_specs": positive,
         "disproved_specs": negative,
+        "result_scope": bench.get("policy", {}).get("result_scope", "strict-global-v1"),
+        "context_disproved_specs": negative if bench.get("policy", {}).get("result_scope") else 0,
+        "strict_global_disproved_specs": 0 if bench.get("policy", {}).get("result_scope") else negative,
         "resolved_specs": positive + negative,
         "passed_specs": positive + negative,
         "all_specs_resolved": positive + negative == len(statuses)

@@ -1,5 +1,7 @@
 # TODO
 
+- 2026-11-10: New shared VERO/official-Codex benchmarks default to owned-context negative outcomes without a scope flag. Generic native semantics and legacy controls passed. Freeze and preflight a fresh deployment before any new experiment; all current experiments remain paused. See plan/20261110-default-owned-context.md.
+
 - Minimal seven-service entry implemented; bind external official launch, common resources/telemetry and three-method native conformance before deployment. Legacy modules remain historical variants outside the minimal path. See docs/minimal-harness.md.
 
 - 2026-11-07: Snapshot display adjustment complete and tested; use progress.json/progress.md for current versus historical-best counts. Development-only change; bind a new release for future experiments, preserving historical frozen code. See [plan](plan/20261106-progress-display.md).

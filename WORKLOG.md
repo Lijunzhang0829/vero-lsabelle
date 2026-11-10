@@ -1,5 +1,10 @@
 # Worklog
 
+## 2026-11-10
+
+- Made owned-context refutation the default for newly prepared shared VERO/official-Codex benchmarks, separating E from contract assumptions A natively and binding AST scope evidence to acceptance. Kept the strict-global support template for legacy benchmark identities and split contextual/strict counts. No agent strategy, historical experiment or deployed runtime changed; no model calls. Validation: 61 shared unit regressions (2 skipped), 7 runtime and 4 observer regressions passed; 7 real Isabelle2026 controls passed, including locale and incremental cases.
+
+
 ## 2026-11-07
 
 - Added minimal harness and minimal agent-tool entry points reusing preparation/render/extract/grading; no model runner import or strategy commands. Reject retry-controller socket dispatch and label progress as candidate occupancy. Seven boundary checks and eight legacy session tests passed; external shared-resource/telemetry deployment is still pending. See docs/minimal-harness.md.
