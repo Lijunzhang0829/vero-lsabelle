@@ -1,4 +1,4 @@
-"""Minimal agent tools: native check, legal search and candidate occupancy."""
+"""Minimal agent tools: native check, legal search, candidate occupancy and budget."""
 from .tool import main
 
 if __name__ == "__main__":

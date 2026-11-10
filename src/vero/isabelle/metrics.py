@@ -149,11 +149,19 @@ def _cost_quality(responses, events, cutoff):
 
 
 def export_metrics(
-    log, *, token_thresholds=(), milestones=(10, 30, 50, 75, 100), as_of=None
+    log, *, token_thresholds=(), milestones=(10, 30, 50, 75, 100), as_of=None, budget_clock=None
 ):
     """Return JSON-safe tables; do not mutate experiment state or event files."""
     if not isinstance(log, EventLog):
         log = EventLog.open(log)
+    if budget_clock is not None and as_of is not None:
+        raise ValueError("current budget clock cannot reconstruct a historical as_of export")
+    runtime_clock = None
+    if budget_clock is not None:
+        from .budget import snapshot
+        runtime_clock = snapshot(budget_clock)
+        if runtime_clock.get("schema") != "experiment-budget-v2" or runtime_clock["run_id"] != log.run_id:
+            raise ValueError("normal-runtime clock schema/run identity mismatch")
     as_of = time.time() if as_of is None else float(as_of)
     events = [row for row in log.events() if row["timestamp"] <= as_of]
     responses = [row for row in events if row["kind"] == "response_usage"]
@@ -308,6 +316,24 @@ def export_metrics(
             "An open current segment is assumed running and explicitly labelled; its end is not an observed fact.",
         ],
     }
+    if runtime_clock is not None:
+        summary.update(
+            experiment_clock_policy=runtime_clock["policy"],
+            normal_runtime_clock=runtime_clock,
+            effective_experiment_seconds=(runtime_clock["effective_seconds"]
+                if runtime_clock["accounting_complete"] else None),
+            observed_effective_seconds_lower_bound=runtime_clock["effective_seconds"],
+            experiment_wall_seconds=(runtime_clock["wall_seconds"]
+                if runtime_clock["accounting_complete"] else None),
+            excluded_experiment_seconds=(runtime_clock["excluded_seconds"]
+                if runtime_clock["accounting_complete"] else None),
+            lifecycle_active_seconds_basis="lifecycle intervals only; not the effective experiment budget",
+        )
+        for rows in (coverage, milestones_out, threshold_rows):
+            for row in rows:
+                row["active_seconds_basis"] = "lifecycle intervals, not effective experiment time"
+        summary["limitations"].append(
+            "Lifecycle coverage curves do not reconstruct runtime exclusions; use trusted clock history for effective-time curves.")
     return {
         "manifest": log.manifest,
         "summary": summary,

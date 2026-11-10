@@ -35,9 +35,21 @@ def main(argv=None, *, minimal=False):
     se.add_argument("--limit", type=int, default=20)
     se.add_argument("--offset", type=int, default=0)
     sub.add_parser("progress")
+    sub.add_parser("budget")
     a = p.parse_args(argv)
     if minimal and os.environ.get("VERO_RETRY_SOCKET"):
         p.error("minimal harness does not permit retry-controller dispatch")
+    if a.cmd == "budget":
+        from vero.isabelle.budget import snapshot
+
+        try:
+            result = snapshot(os.environ.get("VERO_BUDGET_FILE", "/run/experiment-budget.json"))
+        except (OSError, ValueError, KeyError, TypeError, OverflowError) as exc:
+            print(json.dumps({"status": "unavailable", "remaining_seconds": None,
+                              "error": str(exc)}))
+            raise SystemExit(1) from exc
+        print(json.dumps(result, indent=2))
+        return
     bench = read(os.environ.get("VERO_BENCHMARK", "/benchmark/benchmark.json"))
     if a.cmd == "validate-plan":
         try:
@@ -131,7 +143,7 @@ def main(argv=None, *, minimal=False):
         )
         return
     modules = {c["module"] for c in bench["contracts"]}
-    if a.module not in modules:
+    if a.module not in modules and a.module != "Vero_All":
         raise SystemExit("unknown module")
     attempt = begin(Path.cwd() / ".vero-attempts", bench, a.module, artifact)
     all_bodies = {k: v["body"] for k, v in artifact["slots"].items() if v["found"]}
@@ -140,7 +152,7 @@ def main(argv=None, *, minimal=False):
     except ValueError as exc:
         finish(attempt, {"status": "rejected", "log": str(exc), "audited": []}, None)
         raise SystemExit(str(exc)) from exc
-    closure = dependencies(effective, a.module) | {a.module}
+    closure = modules if a.module == "Vero_All" else dependencies(effective, a.module) | {a.module}
     errors = {m: e for m, e in artifact.get("file_errors", {}).items() if m in closure}
     if errors:
         finish(
