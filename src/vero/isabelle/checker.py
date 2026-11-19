@@ -11,6 +11,39 @@ from pathlib import Path
 from .benchmark import digest, render, save, validate_artifact
 from .processes import kill_tree
 
+def mathematical_status(status):
+    """Canonical three-way result shared with the ours harness."""
+    if status == 'proved':
+        return 'proved'
+    if status == 'disproved':
+        return 'refuted'
+    return 'unknown'
+
+
+_SUCCESS_STATUSES = frozenset({'ok', 'green', 'proved', 'disproved'})
+_TIMEOUT_STATUSES = frozenset({'timeout'})
+_INFRASTRUCTURE_STATUSES = frozenset({'infrastructure_error', 'stack_exhausted', 'resource_exhausted', 'native_interrupt'})
+_BLOCKED_STATUSES = frozenset({'blocked_dependency'})
+
+
+def classify_status(status):
+    """Canonical native-attempt class shared with the ours harness."""
+    if status in _SUCCESS_STATUSES:
+        return 'success'
+    if status in _TIMEOUT_STATUSES:
+        return 'timeout'
+    if status in _INFRASTRUCTURE_STATUSES:
+        return 'infrastructure'
+    if status in _BLOCKED_STATUSES:
+        return 'blocked'
+    return 'proof_failure'
+
+
+def charged_attempt(status):
+    """Only proof failures and timeouts consume an attempt."""
+    return classify_status(status) in {'timeout', 'proof_failure'}
+
+
 FORBIDDEN = re.compile(
     r"\b(?:vero_prove|vero_disprove|vero_refute_capture|sorry|axiomatization|axioms|oracle|ML\w*|SML\w*|setup|local_setup|method_setup|attribute_setup|simproc_setup|tactic|use|external_file|code_printing|code_reserved|code_identifier|export_code|export_generated_files|generate_file|compile_generated_files|SML_export|declare|lemmas|bundle|unbundle|include|notation|no_notation|syntax|no_syntax|translations|no_translations|judgment|typedecl|typedef|datatype|codatatype|fun|function|primrec|partial_function|class|instantiation|instance|lemma|theorem|corollary|proposition|definition|abbreviation|end|context|theory|locale|interpretation|sublocale|overloading)\b"
 )
@@ -102,9 +135,32 @@ class Checker:
             self._shared.close()
 
     def build_session(self, directory, theories, session_name="Generated_Refine", timeout=None):
-        if self._shared is None:
-            raise ValueError("session builds require the explicitly configured shared backend")
-        return self._shared.build_session(directory, theories, session_name, timeout)
+        if self._shared is not None:
+            return self._shared.build_session(directory, theories, session_name, timeout)
+        started = time.monotonic()
+        command = self.build_command(directory, session_name)
+        env = os.environ.copy()
+        env.update(self.config.get("env", {}))
+        try:
+            p = subprocess.Popen(
+                command, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                start_new_session=True, env=env,
+            )
+            log, _ = p.communicate(timeout=timeout or self.config.get("integration_build_timeout_seconds", 900))
+            rc = p.returncode
+            status = "ok" if rc == 0 else "build_error"
+        except subprocess.TimeoutExpired:
+            kill_tree(p.pid)
+            log, _ = p.communicate()
+            rc, status = None, "timeout"
+        except OSError as exc:
+            rc, log, status = None, str(exc), "infrastructure_error"
+        return {
+            "status": status,
+            "returncode": rc,
+            "elapsed_seconds": time.monotonic() - started,
+            "log": log or "",
+        }
 
     def command(self, directory, theory):
         cfg = self.config
@@ -130,6 +186,21 @@ class Checker:
             argv += ["-e", call]
         else:
             argv += ["-T", str(Path(directory) / theory)]
+        return cfg.get("command_prefix", []) + argv
+
+    def build_command(self, directory, session_name="Generated_Refine"):
+        """Fresh-process full-session build command for final integration."""
+        cfg = self.config
+        argv = [
+            cfg.get("isabelle", "/workspace/verification/isabelle/bin/isabelle"),
+            "build",
+            "-b",
+            "-o",
+            "threads=" + str(cfg.get("threads", 4)),
+        ]
+        for directory_arg in cfg.get("session_dirs", []):
+            argv += ["-d", directory_arg]
+        argv.append(session_name)
         return cfg.get("command_prefix", []) + argv
 
     def check(self, directory, theory, timeout=None):
@@ -347,7 +418,7 @@ def evaluate(bench, artifact, output, checker, *, incremental=None):
     ):
         integration = checker.check(output / "source", "Vero_All")
         (output / "integration.log").write_text(integration["log"])
-        if integration["status"] == "ok" and getattr(checker, "config", {}).get("backend") in {"a-shared-incremental-v1", "a-shared-batch-v2"}:
+        if integration["status"] == "ok":
             build = checker.build_session(
                 output / "source", ["Vero_All"],
                 timeout=checker.config.get("integration_build_timeout_seconds", 900),

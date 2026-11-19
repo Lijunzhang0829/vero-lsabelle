@@ -37,6 +37,11 @@ def main(argv=None, *, minimal=False):
     sub.add_parser("progress")
     sub.add_parser("budget")
     a = p.parse_args(argv)
+    from vero.isabelle.run_record import record_api_usage
+    try:
+        record_api_usage(a.cmd)
+    except (OSError, ValueError):
+        pass
     if minimal and os.environ.get("VERO_RETRY_SOCKET"):
         p.error("minimal harness does not permit retry-controller dispatch")
     if a.cmd == "budget":
@@ -182,6 +187,16 @@ def main(argv=None, *, minimal=False):
         (attempt / "source.thy").write_text(source.read_text())
         result = Checker(read("/benchmark/checker.json")).check(tmp, a.module)
         finish(attempt, result, source)
+        from vero.isabelle.run_record import record_progress_event
+        try:
+            record_progress_event(
+                "check_finished",
+                module=a.module,
+                status=result["status"],
+                audited=result.get("audited", []),
+            )
+        except (OSError, ValueError):
+            pass
         print(result["log"])
         print(
             json.dumps(
