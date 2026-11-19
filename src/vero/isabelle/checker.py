@@ -134,7 +134,9 @@ class Checker:
         if self._shared is not None:
             self._shared.close()
 
-    def build_session(self, directory, theories, session_name="Generated_Refine", timeout=None):
+    def build_session(self, directory, theories, session_name=None, timeout=None):
+        if session_name is None:
+            session_name = self.config.get("session", "Generated_Refine")
         if self._shared is not None:
             return self._shared.build_session(directory, theories, session_name, timeout)
         started = time.monotonic()
