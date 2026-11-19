@@ -15,7 +15,8 @@ import threading
 
 POLICY = 'normal-wall-minus-confirmed-interruptions-v1'
 SCHEMA = 'experiment-budget-v2'
-REASONS = frozenset({'experiment_pause', 'provider_interruption', 'native_unresponsive', 'offline'})
+CLOCK_EXCLUSION_REASONS = frozenset({'experiment_pause', 'provider_interruption', 'native_unresponsive', 'offline', 'provider_recovery', 'provider_stream_retry', 'stream_retry'})
+REASONS = CLOCK_EXCLUSION_REASONS
 
 
 def number(value):

@@ -60,6 +60,7 @@ def prepare(
     base_import="Semantic_Base.Semantic_Root",
     provenance=None,
     isabelle_api="legacy",
+    owner_blind=False,
 ):
     if isabelle_api not in {"legacy", "2026"}:
         raise ValueError("unsupported Isabelle API")
@@ -72,15 +73,25 @@ def prepare(
     for i, item in enumerate(records, 1):
         statement = item["exact_statement"]
         if not NAME.match(statement):
-            raise ValueError("unsupported declaration: " + item["contract_id"])
+            raise ValueError("unsupported declaration: " + item.get("contract_id", f"c{i:04d}"))
+        module = (
+            "Vero_Fixed_Targets"
+            if owner_blind
+            else "Vero_" + re.sub(r"[^A-Za-z0-9_]", "_", item["owner_theory"])
+        )
+        source_id = (
+            "goal:" + digest({"statement": statement, "context": item.get("contract_owned_context", [])})[:24]
+            if owner_blind
+            else item["contract_id"]
+        )
         contracts.append(
             {
                 "id": f"c{i:04d}",
-                "source_id": item["contract_id"],
+                "source_id": source_id,
                 "name": item["name"],
                 "statement": statement,
                 "context": item.get("contract_owned_context", []),
-                "module": "Vero_" + re.sub(r"[^A-Za-z0-9_]", "_", item["owner_theory"]),
+                "module": module,
             }
         )
     body = {

@@ -7,6 +7,17 @@ from pathlib import Path
 from .benchmark import read
 
 
+BUDGET_CONTRACT = {
+    'attribution': 'shared-run-only',
+    'per_contract_split': False,
+    'per_helper_split': False,
+    'timeout_accounting': 'charged',
+    'proof_failure_charged': True,
+    'infrastructure_charged': False,
+    'blocked_charged': False,
+}
+
+
 def duration(value):
     if type(value) not in (float, int) or not math.isfinite(value) or value <= 0:
         raise ValueError("budget_seconds must be a positive finite number")
